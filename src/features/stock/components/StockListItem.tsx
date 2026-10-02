@@ -15,7 +15,7 @@ export function StockListItem({ product }: StockListItemProps) {
 
   return (
     <Link
-      to={`/stok/${product.id}/sesuaikan`}
+      to={`/stok/${product.id}`}
       state={{ search: location.search }}
       className="flex min-h-11 items-center justify-between gap-4 px-4 py-3"
     >

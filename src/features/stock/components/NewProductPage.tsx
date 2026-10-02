@@ -20,7 +20,7 @@ export function NewProductPage() {
 
   if (isPending) {
     return (
-      <StockSubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo}>
+      <StockSubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
         <NewProductSkeleton />
       </StockSubpageLayout>
     );
@@ -28,14 +28,14 @@ export function NewProductPage() {
 
   if (error) {
     return (
-      <StockSubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo}>
+      <StockSubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
         <StockListError error={error} onRetry={handleRetry} />
       </StockSubpageLayout>
     );
   }
 
   return (
-    <StockSubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo}>
+    <StockSubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
       <NewProductForm categories={getCategories(products)} units={getUnits(products)} />
     </StockSubpageLayout>
   );

@@ -13,7 +13,7 @@ export function AdjustStockPage() {
   const { productId = '' } = useParams();
   const location = useLocation();
   const { data: product, isPending, error, refetch } = useProduct(productId);
-  const backTo = getListPath(location.state);
+  const detailPath = `/stok/${productId}`;
 
   function handleRetry() {
     void refetch();
@@ -21,7 +21,7 @@ export function AdjustStockPage() {
 
   if (isPending) {
     return (
-      <StockSubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" backTo={backTo}>
+      <StockSubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" backTo={detailPath} backLabel="Kembali ke detail barang">
         <AdjustStockSkeleton />
       </StockSubpageLayout>
     );
@@ -29,7 +29,7 @@ export function AdjustStockPage() {
 
   if (error) {
     return (
-      <StockSubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" backTo={backTo}>
+      <StockSubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" backTo={detailPath} backLabel="Kembali ke detail barang">
         <StockListError error={error} onRetry={handleRetry} />
       </StockSubpageLayout>
     );
@@ -37,14 +37,14 @@ export function AdjustStockPage() {
 
   if (!product) {
     return (
-      <StockSubpageLayout heading="Penyesuaian Stok" title="Barang tidak ditemukan" backTo={backTo}>
+      <StockSubpageLayout heading="Penyesuaian Stok" title="Barang tidak ditemukan" backTo={getListPath(location.state)} backLabel="Kembali ke daftar stok">
         <ProductNotFound />
       </StockSubpageLayout>
     );
   }
 
   return (
-    <StockSubpageLayout heading="Penyesuaian Stok" title={`Sesuaikan ${product.name}`} backTo={backTo}>
+    <StockSubpageLayout heading="Penyesuaian Stok" title={`Sesuaikan ${product.name}`} backTo={detailPath} backLabel="Kembali ke detail barang">
       <AdjustStockSummary product={product} />
       <AdjustStockForm product={product} />
     </StockSubpageLayout>
