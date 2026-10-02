@@ -1,6 +1,6 @@
 import type { Product } from './schema';
 
-type SeedProduct = Pick<
+export type SeedProduct = Pick<
   Product,
   'sku' | 'name' | 'category' | 'unit' | 'stockQuantity' | 'minStock' | 'purchasePrice' | 'sellingPrice'
 >;

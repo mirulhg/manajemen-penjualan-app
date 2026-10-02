@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from 'react-router';
+import { createBrowserRouter, Navigate, Outlet } from 'react-router';
 
 import { PageShell } from '../components/layout/PageShell';
 
@@ -10,6 +10,15 @@ export const router = createBrowserRouter([
       </PageShell>
     ),
     children: [
+      { index: true, element: <Navigate to="/stok" replace /> },
+      {
+        path: 'stok',
+        lazy: async () => {
+          // Impor langsung (bukan lewat features/stock/index.ts): main.tsx sudah memuat barrel itu untuk seed, jadi lewat barrel tidak akan jadi chunk terpisah.
+          const { StockListPage } = await import('../features/stock/components/StockListPage');
+          return { Component: StockListPage };
+        },
+      },
       {
         path: '*',
         lazy: async () => {

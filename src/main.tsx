@@ -17,8 +17,9 @@ const root = createRoot(rootElement);
 
 async function start() {
   try {
-    if (getEnv().VITE_SEED_SAMPLE_DATA) {
-      await seedSampleProducts();
+    const env = getEnv();
+    if (env.VITE_SEED_SAMPLE_DATA) {
+      await seedSampleProducts(env.VITE_SEED_EXTRA_PRODUCTS);
     }
   } catch (error) {
     root.render(
