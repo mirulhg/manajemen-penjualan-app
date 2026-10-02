@@ -1,9 +1,4 @@
-import type { Product } from './schema';
-
-export type SeedProduct = Pick<
-  Product,
-  'sku' | 'name' | 'category' | 'unit' | 'stockQuantity' | 'minStock' | 'purchasePrice' | 'sellingPrice'
->;
+import type { NewProductFields } from './build-product-records';
 
 const SEMBAKO = 'Sembako';
 const MINUMAN = 'Minuman';
@@ -13,7 +8,7 @@ const PERLENGKAPAN_MANDI = 'Perlengkapan Mandi';
 const KEBUTUHAN_RUMAH = 'Kebutuhan Rumah';
 
 // Sumber: Docs/Data Contoh Produk.md. minStock null = memakai batas default global.
-export const SEED_PRODUCTS: SeedProduct[] = [
+export const SEED_PRODUCTS: NewProductFields[] = [
   { sku: 'SBK-001', name: 'Beras Premium 5 kg', category: SEMBAKO, unit: 'sak', stockQuantity: 18, minStock: 5, purchasePrice: 68000, sellingPrice: 74000 },
   { sku: 'SBK-002', name: 'Minyak Goreng 2 L', category: SEMBAKO, unit: 'pouch', stockQuantity: 3, minStock: 10, purchasePrice: 34000, sellingPrice: 38000 },
   { sku: 'SBK-003', name: 'Gula Pasir 1 kg', category: SEMBAKO, unit: 'bungkus', stockQuantity: 25, minStock: 10, purchasePrice: 16500, sellingPrice: 18500 },

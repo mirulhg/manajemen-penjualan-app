@@ -1,12 +1,12 @@
+import type { NewProductFields } from './build-product-records';
 import { SEED_PRODUCTS } from './seed-data';
-import type { SeedProduct } from './seed-data';
 
 const CATEGORIES = [...new Set(SEED_PRODUCTS.map((product) => product.category))];
 // Stok 0, 3, 10, 40 dipadukan dengan batas 10 atau default (null) agar ketiga status muncul.
 const STOCK_CYCLE = [0, 3, 10, 40];
 
 // Deterministik (tanpa random) supaya data uji sama di setiap perangkat dan setiap kali dibuat ulang.
-export function generateExtraProducts(count: number): SeedProduct[] {
+export function generateExtraProducts(count: number): NewProductFields[] {
   return Array.from({ length: count }, (_, offset) => {
     const number = offset + 1;
     const label = String(number).padStart(4, '0');

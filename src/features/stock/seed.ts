@@ -1,8 +1,7 @@
 import { db } from '../../lib/db';
-import { DEFAULT_ACTOR } from './actor';
+import { buildProductRecords } from './build-product-records';
 import { generateExtraProducts } from './generate-extra-products';
 import { SEED_PRODUCTS } from './seed-data';
-import { productSchema, stockMovementSchema } from './schema';
 
 export async function seedSampleProducts(extraCount = 0): Promise<void> {
   // Cek tabel kosong di dalam transaksi yang sama dengan penulisan, supaya dua pemanggilan bersamaan tidak menggandakan data.
@@ -10,23 +9,11 @@ export async function seedSampleProducts(extraCount = 0): Promise<void> {
     if ((await db.products.count()) > 0) return;
 
     const now = new Date().toISOString();
-    const products = [...SEED_PRODUCTS, ...generateExtraProducts(extraCount)].map((seed) =>
-      productSchema.parse({ ...seed, id: crypto.randomUUID(), createdAt: now, updatedAt: now }),
-    );
-    const movements = products.map((product) =>
-      stockMovementSchema.parse({
-        id: crypto.randomUUID(),
-        productId: product.id,
-        type: 'awal',
-        quantityBefore: 0,
-        quantityAfter: product.stockQuantity,
-        reason: 'Stok awal',
-        actor: DEFAULT_ACTOR,
-        createdAt: now,
-      }),
+    const records = [...SEED_PRODUCTS, ...generateExtraProducts(extraCount)].map((fields) =>
+      buildProductRecords(fields, now),
     );
 
-    await db.products.bulkAdd(products);
-    await db.stockMovements.bulkAdd(movements);
+    await db.products.bulkAdd(records.map((record) => record.product));
+    await db.stockMovements.bulkAdd(records.map((record) => record.movement));
   });
 }
