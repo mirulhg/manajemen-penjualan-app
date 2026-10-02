@@ -1,9 +1,8 @@
 import { db } from '../../lib/db';
+import { DEFAULT_ACTOR } from './actor';
 import { generateExtraProducts } from './generate-extra-products';
 import { SEED_PRODUCTS } from './seed-data';
 import { productSchema, stockMovementSchema } from './schema';
-
-const SEED_ACTOR = 'Pemilik';
 
 export async function seedSampleProducts(extraCount = 0): Promise<void> {
   // Cek tabel kosong di dalam transaksi yang sama dengan penulisan, supaya dua pemanggilan bersamaan tidak menggandakan data.
@@ -22,7 +21,7 @@ export async function seedSampleProducts(extraCount = 0): Promise<void> {
         quantityBefore: 0,
         quantityAfter: product.stockQuantity,
         reason: 'Stok awal',
-        actor: SEED_ACTOR,
+        actor: DEFAULT_ACTOR,
         createdAt: now,
       }),
     );

@@ -1,3 +1,5 @@
+import { Link, useLocation } from 'react-router';
+
 import { formatNumber } from '../../../utils/format-number';
 import type { Product } from '../schema';
 import { getStockStatus } from '../stock-status';
@@ -8,10 +10,15 @@ type StockListItemProps = {
 };
 
 export function StockListItem({ product }: StockListItemProps) {
+  const location = useLocation();
   const status = getStockStatus(product.stockQuantity, product.minStock);
 
   return (
-    <div className="flex items-center justify-between gap-4 px-4 py-3">
+    <Link
+      to={`/stok/${product.id}/sesuaikan`}
+      state={{ search: location.search }}
+      className="flex min-h-11 items-center justify-between gap-4 px-4 py-3"
+    >
       <div className="min-w-0">
         <p className="font-medium">{product.name}</p>
         <p className="text-sm text-text-muted">
@@ -24,6 +31,6 @@ export function StockListItem({ product }: StockListItemProps) {
         </p>
         <StockStatusBadge status={status} />
       </div>
-    </div>
+    </Link>
   );
 }

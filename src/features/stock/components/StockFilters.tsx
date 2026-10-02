@@ -1,3 +1,4 @@
+import { FIELD_CLASS, LABEL_CLASS } from '../../../components/ui/field-styles';
 import type { StockFilters as StockFiltersValue } from '../parse-filter-params';
 import type { StockStatus } from '../stock-status';
 
@@ -14,9 +15,6 @@ const STATUS_OPTIONS: { value: StockStatus; label: string }[] = [
   { value: 'menipis', label: 'Menipis' },
   { value: 'habis', label: 'Habis' },
 ];
-
-const CONTROL_CLASS = 'mt-1 min-h-11 w-full rounded-md border border-border bg-surface px-3';
-const LABEL_CLASS = 'text-sm font-medium';
 
 function parseStatus(value: string): StockStatus | null {
   return STATUS_OPTIONS.find((option) => option.value === value)?.value ?? null;
@@ -41,7 +39,7 @@ export function StockFilters({
           placeholder="Nama atau SKU"
           value={filters.query ?? ''}
           onChange={(event) => onChange({ query: event.target.value || null })}
-          className={CONTROL_CLASS}
+          className={FIELD_CLASS}
         />
       </div>
       <div>
@@ -52,7 +50,7 @@ export function StockFilters({
           id="stock-category"
           value={filters.category ?? ''}
           onChange={(event) => onChange({ category: event.target.value || null })}
-          className={CONTROL_CLASS}
+          className={FIELD_CLASS}
         >
           <option value="">Semua kategori</option>
           {categories.map((category) => (
@@ -70,7 +68,7 @@ export function StockFilters({
           id="stock-status"
           value={filters.status ?? ''}
           onChange={(event) => onChange({ status: parseStatus(event.target.value) })}
-          className={CONTROL_CLASS}
+          className={FIELD_CLASS}
         >
           <option value="">Semua status</option>
           {STATUS_OPTIONS.map((option) => (

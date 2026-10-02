@@ -33,3 +33,32 @@ export const stockMovementSchema = z.object({
 
 export type Product = z.infer<typeof productSchema>;
 export type StockMovement = z.infer<typeof stockMovementSchema>;
+
+export const MAX_ADJUSTMENT_QUANTITY = 100_000;
+
+const adjustmentQuantitySchema = z
+  .string()
+  .trim()
+  .min(1, 'Isi jumlah barang.')
+  .regex(/^\d+$/, 'Jumlah harus bilangan bulat tanpa koma.')
+  .transform(Number)
+  .pipe(z.number().max(MAX_ADJUSTMENT_QUANTITY, 'Jumlah terlalu besar. Periksa kembali angkanya.'));
+
+// Jumlah diterima sebagai teks karena form memakai input teks; konversi ke angka terjadi di sini.
+export const stockAdjustmentSchema = z
+  .object({
+    type: z.enum(['masuk', 'koreksi']),
+    quantity: adjustmentQuantitySchema,
+    reason: z
+      .string()
+      .trim()
+      .min(3, 'Tulis alasan minimal 3 karakter.')
+      .max(200, 'Alasan maksimal 200 karakter.'),
+  })
+  .refine((adjustment) => adjustment.type !== 'masuk' || adjustment.quantity >= 1, {
+    path: ['quantity'],
+    message: 'Jumlah masuk minimal 1.',
+  });
+
+export type StockAdjustmentInput = z.input<typeof stockAdjustmentSchema>;
+export type StockAdjustment = z.output<typeof stockAdjustmentSchema>;

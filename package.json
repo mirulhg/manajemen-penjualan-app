@@ -11,12 +11,14 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-query": "^5.104.1",
     "@tanstack/react-virtual": "^3.14.13",
     "dexie": "^4.4.6",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "react-hook-form": "^7.89.0",
     "react-router": "^8.4.0",
     "tailwindcss": "^4.3.3",
     "zod": "^4.6.5"
