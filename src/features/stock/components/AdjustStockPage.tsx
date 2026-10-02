@@ -3,11 +3,11 @@ import { useLocation, useParams } from 'react-router';
 import { useProduct } from '../api/use-product';
 import { getListPath } from '../list-return-state';
 import { AdjustStockForm } from './AdjustStockForm';
-import { AdjustStockLayout } from './AdjustStockLayout';
 import { AdjustStockSkeleton } from './AdjustStockSkeleton';
 import { AdjustStockSummary } from './AdjustStockSummary';
 import { ProductNotFound } from './ProductNotFound';
 import { StockListError } from './StockListError';
+import { StockSubpageLayout } from './StockSubpageLayout';
 
 export function AdjustStockPage() {
   const { productId = '' } = useParams();
@@ -21,32 +21,32 @@ export function AdjustStockPage() {
 
   if (isPending) {
     return (
-      <AdjustStockLayout title="Sesuaikan stok" backTo={backTo}>
+      <StockSubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" backTo={backTo}>
         <AdjustStockSkeleton />
-      </AdjustStockLayout>
+      </StockSubpageLayout>
     );
   }
 
   if (error) {
     return (
-      <AdjustStockLayout title="Sesuaikan stok" backTo={backTo}>
+      <StockSubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" backTo={backTo}>
         <StockListError error={error} onRetry={handleRetry} />
-      </AdjustStockLayout>
+      </StockSubpageLayout>
     );
   }
 
   if (!product) {
     return (
-      <AdjustStockLayout title="Barang tidak ditemukan" backTo={backTo}>
+      <StockSubpageLayout heading="Penyesuaian Stok" title="Barang tidak ditemukan" backTo={backTo}>
         <ProductNotFound />
-      </AdjustStockLayout>
+      </StockSubpageLayout>
     );
   }
 
   return (
-    <AdjustStockLayout title={`Sesuaikan ${product.name}`} backTo={backTo}>
+    <StockSubpageLayout heading="Penyesuaian Stok" title={`Sesuaikan ${product.name}`} backTo={backTo}>
       <AdjustStockSummary product={product} />
       <AdjustStockForm product={product} />
-    </AdjustStockLayout>
+    </StockSubpageLayout>
   );
 }

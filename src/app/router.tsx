@@ -20,6 +20,13 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: 'stok/baru',
+        lazy: async () => {
+          const { NewProductPage } = await import('../features/stock/components/NewProductPage');
+          return { Component: NewProductPage };
+        },
+      },
+      {
         path: 'stok/:productId/sesuaikan',
         lazy: async () => {
           const { AdjustStockPage } = await import('../features/stock/components/AdjustStockPage');

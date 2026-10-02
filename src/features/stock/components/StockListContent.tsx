@@ -2,6 +2,7 @@ import { formatNumber } from '../../../utils/format-number';
 import { useProducts } from '../api/use-products';
 import { filterProducts, getCategories, normalizeFilters } from '../filter-products';
 import { useStockFilters } from '../hooks/use-stock-filters';
+import { AddProductLink } from './AddProductLink';
 import { StockEmptyState } from './StockEmptyState';
 import { StockFilters } from './StockFilters';
 import { StockList } from './StockList';
@@ -29,6 +30,7 @@ export function StockListContent() {
 
   return (
     <div className="space-y-4">
+      <AddProductLink />
       <StockFilters
         filters={filters}
         categories={categories}
