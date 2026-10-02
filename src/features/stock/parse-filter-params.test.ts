@@ -44,3 +44,20 @@ describe('serializeFilterParams', () => {
     expect(serializeFilterParams({ query: null, category: null, status: null, sort: 'nama' }).toString()).toBe('');
   });
 });
+
+describe('parameter urut', () => {
+  it('nilai tidak valid atau tidak ada menjadi nama', () => {
+    expect(parseFilterParams(new URLSearchParams('urut=ngawur')).sort).toBe('nama');
+    expect(parseFilterParams(new URLSearchParams()).sort).toBe('nama');
+  });
+
+  it('nilai valid dibaca', () => {
+    expect(parseFilterParams(new URLSearchParams('urut=stok-sedikit')).sort).toBe('stok-sedikit');
+  });
+
+  it('nama tidak ditulis ke URL, urutan lain ditulis', () => {
+    const base = { query: null, category: null, status: null } as const;
+    expect(serializeFilterParams({ ...base, sort: 'nama' }).has('urut')).toBe(false);
+    expect(serializeFilterParams({ ...base, sort: 'terbaru' }).toString()).toBe('urut=terbaru');
+  });
+});
