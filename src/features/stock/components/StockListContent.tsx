@@ -27,7 +27,7 @@ export function StockListContent() {
   const filters = normalizeFilters(urlFilters, categories);
   const hasActiveFilters =
     filters.query !== null || filters.category !== null || filters.status !== null;
-  const visibleProducts = sortProducts(filterProducts(products, filters), 'nama');
+  const visibleProducts = sortProducts(filterProducts(products, filters), filters.sort);
 
   return (
     <div className="space-y-4">

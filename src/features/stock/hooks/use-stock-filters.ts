@@ -11,8 +11,10 @@ export function useStockFilters() {
     setSearchParams(serializeFilterParams({ ...filters, ...patch }), { replace: true });
   }
 
+  // Urutan bukan filter, jadi tetap dipertahankan saat filter dihapus.
   function clearFilters() {
-    setSearchParams(new URLSearchParams(), { replace: true });
+    const cleared = { query: null, category: null, status: null, sort: filters.sort };
+    setSearchParams(serializeFilterParams(cleared), { replace: true });
   }
 
   return { filters, setFilters, clearFilters };

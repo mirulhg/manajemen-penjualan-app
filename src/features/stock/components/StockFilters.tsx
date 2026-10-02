@@ -1,5 +1,6 @@
 import { FIELD_CLASS, LABEL_CLASS } from '../../../components/ui/field-styles';
 import type { StockFilters as StockFiltersValue } from '../parse-filter-params';
+import type { StockSort } from '../sort-products';
 import type { StockStatus } from '../stock-status';
 
 type StockFiltersProps = {
@@ -16,6 +17,17 @@ const STATUS_OPTIONS: { value: StockStatus; label: string }[] = [
   { value: 'habis', label: 'Habis' },
 ];
 
+const SORT_OPTIONS: { value: StockSort; label: string }[] = [
+  { value: 'nama', label: 'Nama A–Z' },
+  { value: 'stok-sedikit', label: 'Stok paling sedikit' },
+  { value: 'stok-banyak', label: 'Stok paling banyak' },
+  { value: 'terbaru', label: 'Terakhir diperbarui' },
+];
+
+function parseSort(value: string): StockSort {
+  return SORT_OPTIONS.find((option) => option.value === value)?.value ?? 'nama';
+}
+
 function parseStatus(value: string): StockStatus | null {
   return STATUS_OPTIONS.find((option) => option.value === value)?.value ?? null;
 }
@@ -28,8 +40,8 @@ export function StockFilters({
   onClear,
 }: StockFiltersProps) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
-      <div className="sm:col-span-2">
+    <div className="grid gap-4 sm:grid-cols-3">
+      <div className="sm:col-span-3">
         <label htmlFor="stock-search" className={LABEL_CLASS}>
           Cari barang
         </label>
@@ -78,8 +90,25 @@ export function StockFilters({
           ))}
         </select>
       </div>
+      <div>
+        <label htmlFor="stock-sort" className={LABEL_CLASS}>
+          Urutkan
+        </label>
+        <select
+          id="stock-sort"
+          value={filters.sort}
+          onChange={(event) => onChange({ sort: parseSort(event.target.value) })}
+          className={FIELD_CLASS}
+        >
+          {SORT_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
       {hasActiveFilters && (
-        <div className="sm:col-span-2">
+        <div className="sm:col-span-3">
           <button
             type="button"
             onClick={onClear}
