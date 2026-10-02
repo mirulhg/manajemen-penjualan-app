@@ -2,6 +2,7 @@ import { formatNumber } from '../../../utils/format-number';
 import { useProducts } from '../api/use-products';
 import { filterProducts, getCategories, normalizeFilters } from '../filter-products';
 import { useStockFilters } from '../hooks/use-stock-filters';
+import { sortProducts } from '../sort-products';
 import { AddProductLink } from './AddProductLink';
 import { StockEmptyState } from './StockEmptyState';
 import { StockFilters } from './StockFilters';
@@ -26,7 +27,7 @@ export function StockListContent() {
   const filters = normalizeFilters(urlFilters, categories);
   const hasActiveFilters =
     filters.query !== null || filters.category !== null || filters.status !== null;
-  const visibleProducts = filterProducts(products, filters);
+  const visibleProducts = sortProducts(filterProducts(products, filters), 'nama');
 
   return (
     <div className="space-y-4">

@@ -18,8 +18,7 @@ export function filterProducts(products: Product[], filters: StockFilters): Prod
         filters.status === null ||
         getStockStatus(product.stockQuantity, product.minStock) === filters.status;
       return matchesQuery && matchesCategory && matchesStatus;
-    })
-    .sort((a, b) => compareId(a.name, b.name));
+    });
 }
 
 export function getCategories(products: Product[]): string[] {

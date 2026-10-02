@@ -2,17 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { filterProducts, getCategories, normalizeFilters } from './filter-products';
 import type { StockFilters } from './parse-filter-params';
-import type { Product } from './schema';
-import { SEED_PRODUCTS } from './seed-data';
-
-const NOW = '2026-10-02T00:00:00.000Z';
-
-const products: Product[] = SEED_PRODUCTS.map((seed, index) => ({
-  ...seed,
-  id: `00000000-0000-4000-8000-${String(index).padStart(12, '0')}`,
-  createdAt: NOW,
-  updatedAt: NOW,
-}));
+import { SEED_AS_PRODUCTS as products } from '../../test/seed-products';
 
 const NO_FILTER: StockFilters = { query: null, category: null, status: null };
 
@@ -49,11 +39,8 @@ describe('filterProducts', () => {
     expect(search({ status: 'aman' })).toHaveLength(18);
   });
 
-  it('mengurutkan berdasarkan nama', () => {
-    const result = search({});
-    expect(result).toHaveLength(30);
-    expect(result[0]?.name).toBe('Air Mineral 600 ml');
-    expect(result.at(-1)?.name).toBe('Tisu Wajah 250 lembar');
+  it('tanpa filter mengembalikan semua produk', () => {
+    expect(search({})).toHaveLength(30);
   });
 
   it('tidak mengubah array asal', () => {
