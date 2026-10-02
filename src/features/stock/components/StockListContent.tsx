@@ -10,6 +10,7 @@ import { StockList } from './StockList';
 import { StockListError } from './StockListError';
 import { StockListSkeleton } from './StockListSkeleton';
 import { StockNoResults } from './StockNoResults';
+import { StockSummary } from './StockSummary';
 
 export function StockListContent() {
   const { data: products, isPending, error, refetch } = useProducts();
@@ -31,6 +32,7 @@ export function StockListContent() {
 
   return (
     <div className="space-y-4">
+      <StockSummary products={products} />
       <AddProductLink />
       <StockFilters
         filters={filters}
