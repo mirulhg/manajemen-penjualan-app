@@ -1,0 +1,69 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-*: initial;
+
+  --color-background: #fafaf9;
+  --color-surface: #ffffff;
+  --color-text: #1c1917;
+  --color-text-muted: #57534e;
+  --color-border: #d6d3d1;
+  --color-primary: #1d4ed8;
+  --color-on-primary: #ffffff;
+  --color-focus: #1d4ed8;
+
+  --color-status-aman-text: #14532d;
+  --color-status-aman-bg: #dcfce7;
+  --color-status-menipis-text: #713f12;
+  --color-status-menipis-bg: #fef3c7;
+  --color-status-habis-text: #7f1d1d;
+  --color-status-habis-bg: #fee2e2;
+}
+
+/* Tailwind v4 tidak punya namespace tema untuk z-index, jadi skala bernama dibuat lewat utility sendiri. */
+@theme static {
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-overlay: 20;
+  --z-modal: 30;
+  --z-toast: 40;
+}
+
+@utility z-base {
+  z-index: var(--z-base);
+}
+@utility z-sticky {
+  z-index: var(--z-sticky);
+}
+@utility z-overlay {
+  z-index: var(--z-overlay);
+}
+@utility z-modal {
+  z-index: var(--z-modal);
+}
+@utility z-toast {
+  z-index: var(--z-toast);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-text;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+}
+
+/* Di luar @layer agar menang atas utility animasi tanpa perlu !important. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
+  }
+}
