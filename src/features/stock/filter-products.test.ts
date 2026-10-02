@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { filterProducts, getCategories } from './filter-products';
+import { filterProducts, getCategories, normalizeFilters } from './filter-products';
 import type { StockFilters } from './parse-filter-params';
 import type { Product } from './schema';
 import { SEED_PRODUCTS } from './seed-data';
@@ -73,5 +73,19 @@ describe('getCategories', () => {
       'Perlengkapan Mandi',
       'Sembako',
     ]);
+  });
+});
+
+describe('normalizeFilters', () => {
+  const categories = getCategories(products);
+
+  it('mengubah kategori yang tidak dikenal menjadi null', () => {
+    const result = normalizeFilters({ ...NO_FILTER, category: 'ngawur' }, categories);
+    expect(result.category).toBeNull();
+  });
+
+  it('mempertahankan kategori valid dan filter lainnya', () => {
+    const filters: StockFilters = { query: 'mi', category: 'Sembako', status: 'habis' };
+    expect(normalizeFilters(filters, categories)).toEqual(filters);
   });
 });

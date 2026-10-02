@@ -25,3 +25,9 @@ export function filterProducts(products: Product[], filters: StockFilters): Prod
 export function getCategories(products: Product[]): string[] {
   return [...new Set(products.map((product) => product.category))].sort(compareId);
 }
+
+// Kategori dari URL bisa saja tidak ada di data; anggap "Semua" agar dropdown dan daftar tetap konsisten.
+export function normalizeFilters(filters: StockFilters, categories: string[]): StockFilters {
+  if (filters.category === null || categories.includes(filters.category)) return filters;
+  return { ...filters, category: null };
+}

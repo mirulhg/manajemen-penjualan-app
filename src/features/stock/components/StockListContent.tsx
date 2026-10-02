@@ -1,6 +1,6 @@
 import { formatNumber } from '../../../utils/format-number';
 import { useProducts } from '../api/use-products';
-import { filterProducts, getCategories } from '../filter-products';
+import { filterProducts, getCategories, normalizeFilters } from '../filter-products';
 import { useStockFilters } from '../hooks/use-stock-filters';
 import { StockEmptyState } from './StockEmptyState';
 import { StockFilters } from './StockFilters';
@@ -11,7 +11,7 @@ import { StockNoResults } from './StockNoResults';
 
 export function StockListContent() {
   const { data: products, isPending, error, refetch } = useProducts();
-  const { filters, hasActiveFilters, setFilters, clearFilters } = useStockFilters();
+  const { filters: urlFilters, setFilters, clearFilters } = useStockFilters();
 
   function handleRetry() {
     void refetch();
@@ -21,13 +21,17 @@ export function StockListContent() {
   if (error) return <StockListError error={error} onRetry={handleRetry} />;
   if (products.length === 0) return <StockEmptyState />;
 
+  const categories = getCategories(products);
+  const filters = normalizeFilters(urlFilters, categories);
+  const hasActiveFilters =
+    filters.query !== null || filters.category !== null || filters.status !== null;
   const visibleProducts = filterProducts(products, filters);
 
   return (
     <div className="space-y-4">
       <StockFilters
         filters={filters}
-        categories={getCategories(products)}
+        categories={categories}
         hasActiveFilters={hasActiveFilters}
         onChange={setFilters}
         onClear={clearFilters}
