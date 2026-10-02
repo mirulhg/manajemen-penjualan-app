@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { db } from '../../lib/db';
 import { adjustStock, StockAdjustmentError } from './api/adjust-stock';
@@ -120,6 +120,66 @@ describe('adjustStock', () => {
 
     expect(updated.updatedAt).not.toBe(OLD_TIMESTAMP);
     expect((await findBySku('SBK-001')).updatedAt).toBe(updated.updatedAt);
+  });
+});
+
+describe('adjustStock: konsistensi data', () => {
+  beforeEach(async () => {
+    await db.products.clear();
+    await db.stockMovements.clear();
+    await seedSampleProducts();
+  });
+
+  it('membatalkan perubahan stok bila pencatatan pergerakan gagal', async () => {
+    const product = await findBySku('SBK-001');
+    const addSpy = vi
+      .spyOn(db.stockMovements, 'add')
+      .mockRejectedValueOnce(new Error('penyimpanan penuh'));
+
+    try {
+      await expect(
+        adjustStock(product.id, { type: 'masuk', quantity: '7', reason: 'Kiriman supplier' }),
+      ).rejects.toThrow('penyimpanan penuh');
+    } finally {
+      addSpy.mockRestore();
+    }
+
+    expect((await findBySku('SBK-001')).stockQuantity).toBe(18);
+    expect(await db.stockMovements.count()).toBe(30);
+  });
+
+  it('dua penyesuaian bersamaan terjumlah dan rantai before/after-nya bersambung', async () => {
+    const product = await findBySku('SBK-001');
+
+    await Promise.all([
+      adjustStock(product.id, { type: 'masuk', quantity: '5', reason: 'Kiriman pertama' }),
+      adjustStock(product.id, { type: 'masuk', quantity: '3', reason: 'Kiriman kedua' }),
+    ]);
+
+    expect((await findBySku('SBK-001')).stockQuantity).toBe(26);
+    const added = await db.stockMovements
+      .where('productId')
+      .equals(product.id)
+      .filter((movement) => movement.type === 'masuk')
+      .sortBy('createdAt');
+    expect(added).toHaveLength(2);
+    const [first, second] = added;
+    expect(first?.quantityBefore).toBe(18);
+    expect(first?.quantityAfter).toBe(second?.quantityBefore);
+    expect(second?.quantityAfter).toBe(26);
+  });
+
+  it('menipis turun dari 8 menjadi 7 setelah Teh Celup dikoreksi ke 9', async () => {
+    const countMenipis = async () =>
+      (await db.products.toArray()).filter(
+        (item) => getStockStatus(item.stockQuantity, item.minStock) === 'menipis',
+      ).length;
+    expect(await countMenipis()).toBe(8);
+
+    const product = await findBySku('MNM-003');
+    await adjustStock(product.id, { type: 'koreksi', quantity: '9', reason: 'Hasil stock opname' });
+
+    expect(await countMenipis()).toBe(7);
   });
 });
 
