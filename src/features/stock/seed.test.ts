@@ -53,3 +53,29 @@ describe('seedSampleProducts', () => {
     expect(statusCount).toEqual({ aman: 18, menipis: 8, habis: 4 });
   });
 });
+
+describe('seedSampleProducts dengan produk tambahan', () => {
+  beforeEach(async () => {
+    await db.products.clear();
+    await db.stockMovements.clear();
+  });
+
+  it('1970 produk tambahan menjadi total 2.000 dengan SKU unik', async () => {
+    await seedSampleProducts(1970);
+
+    const products = await db.products.toArray();
+    expect(products).toHaveLength(2000);
+    expect(new Set(products.map((product) => product.sku)).size).toBe(2000);
+    expect(await db.stockMovements.count()).toBe(2000);
+  });
+
+  it('produk tambahan memunculkan ketiga status', async () => {
+    await seedSampleProducts(100);
+
+    const extra = (await getProducts()).filter((product) => product.sku.startsWith('GEN-'));
+    const statuses = new Set(
+      extra.map((product) => getStockStatus(product.stockQuantity, product.minStock)),
+    );
+    expect(statuses).toEqual(new Set(['aman', 'menipis', 'habis']));
+  });
+});
