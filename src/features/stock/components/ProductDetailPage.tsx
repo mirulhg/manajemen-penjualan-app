@@ -7,6 +7,7 @@ import { ProductArchiveSection } from './ProductArchiveSection';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
 import { ProductInfo } from './ProductInfo';
 import { ProductNotFound } from './ProductNotFound';
+import { ProductPhoto } from './ProductPhoto';
 import { StockListError } from './StockListError';
 import { StockMovementHistory } from './StockMovementHistory';
 import { SubpageLayout } from '../../../components/layout/SubpageLayout';
@@ -49,6 +50,7 @@ export function ProductDetailPage() {
 
   return (
     <SubpageLayout title={product.name} heading="Detail Barang" backTo={listPath} backLabel="Kembali ke daftar stok">
+      <ProductPhoto productId={product.id} productName={product.name} />
       <ProductInfo product={product} />
       <Link
         to={`/stok/${product.id}/sesuaikan`}

@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Link } from 'react-router';
@@ -6,11 +7,15 @@ import { Link } from 'react-router';
 import { formatNumber } from '../../../utils/format-number';
 import { CreateProductError } from '../api/create-product';
 import { useCreateProduct } from '../api/use-create-product';
+import { UNCHANGED_PHOTO } from '../photo/photo-draft';
+import type { PhotoDraft } from '../photo/photo-draft';
+import { useApplyPhotoDraft } from '../photo/use-apply-photo-draft';
 import { newProductSchema } from '../schema';
 import type { NewProduct, NewProductInput } from '../schema';
 import { IdentityFields } from './IdentityFields';
 import { InitialStockField } from './InitialStockField';
 import { PriceAndLimitFields } from './PriceAndLimitFields';
+import { ProductPhotoField } from './ProductPhotoField';
 import { SoldAtLossWarning } from './SoldAtLossWarning';
 
 type NewProductFormProps = {
@@ -36,20 +41,31 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
       defaultValues: EMPTY_FORM,
     });
   const mutation = useCreateProduct();
+  const { applyPhotoDraft, hasFailed: hasPhotoFailed } = useApplyPhotoDraft();
+  // Foto bukan teks yang divalidasi skema, jadi pilihannya disimpan terpisah dari RHF.
+  const [photoDraft, setPhotoDraft] = useState<PhotoDraft>(UNCHANGED_PHOTO);
 
   const purchasePriceText = useWatch({ control, name: 'purchasePrice' });
   const sellingPriceText = useWatch({ control, name: 'sellingPrice' });
+  const nameText = useWatch({ control, name: 'name' });
   const isSaving = formState.isSubmitting || mutation.isPending;
-  const hasSaved = mutation.isSuccess && !formState.isDirty;
+  const hasSaved = mutation.isSuccess && !formState.isDirty && photoDraft.kind === 'unchanged';
   const hasUnexpectedError = mutation.isError && !(mutation.error instanceof CreateProductError);
   const buttonLabel = isSaving ? 'Menyimpan…' : hasSaved ? 'Tersimpan' : 'Simpan barang';
 
   // Dipanggil hanya bila skema lolos; nilai mentah (teks) dikirim ke API, yang memvalidasi ulang dengan skema yang sama.
   async function onSubmit() {
     try {
-      await mutation.mutateAsync(getValues());
+      const created = await mutation.mutateAsync(getValues());
+      const draft = photoDraft;
       reset(EMPTY_FORM);
+      setPhotoDraft(UNCHANGED_PHOTO);
       setFocus('name');
+      try {
+        await applyPhotoDraft(created.id, draft);
+      } catch {
+        // Barang sudah tersimpan; kegagalan foto ditampilkan lewat hasPhotoFailed di bawah.
+      }
     } catch (error) {
       if (error instanceof CreateProductError) {
         setError('sku', { message: error.message });
@@ -72,6 +88,7 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
       <InitialStockField register={register} errors={formState.errors} />
       <PriceAndLimitFields register={register} errors={formState.errors} />
       <SoldAtLossWarning purchasePriceText={purchasePriceText} sellingPriceText={sellingPriceText} />
+      <ProductPhotoField productId={null} productName={nameText} draft={photoDraft} onChange={setPhotoDraft} />
       {hasSaved && (
         <div role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
           <p>
@@ -89,6 +106,11 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
       {hasUnexpectedError && (
         <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
           Penyimpanan di perangkat ini gagal. Isian Anda masih ada; coba simpan lagi.
+        </p>
+      )}
+      {hasPhotoFailed && (
+        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+          Barang tersimpan, tetapi foto gagal disimpan. Buka Ubah barang untuk mencoba lagi.
         </p>
       )}
       <button

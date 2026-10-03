@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { Link } from 'react-router';
@@ -6,10 +7,14 @@ import { Link } from 'react-router';
 import { formatNumber } from '../../../utils/format-number';
 import { UpdateProductError } from '../api/update-product';
 import { useUpdateProduct } from '../api/use-update-product';
+import { UNCHANGED_PHOTO } from '../photo/photo-draft';
+import type { PhotoDraft } from '../photo/photo-draft';
+import { useApplyPhotoDraft } from '../photo/use-apply-photo-draft';
 import { editProductSchema } from '../schema';
 import type { EditProduct, Product, ProductFieldsInput } from '../schema';
 import { IdentityFields } from './IdentityFields';
 import { PriceAndLimitFields } from './PriceAndLimitFields';
+import { ProductPhotoField } from './ProductPhotoField';
 import { SoldAtLossWarning } from './SoldAtLossWarning';
 
 type EditProductFormProps = {
@@ -37,23 +42,44 @@ export function EditProductForm({ product, categories, units }: EditProductFormP
     EditProduct
   >({ resolver: zodResolver(editProductSchema), defaultValues: toFormValues(product) });
   const mutation = useUpdateProduct(product.id);
+  const { applyPhotoDraft, hasFailed: hasPhotoFailed } = useApplyPhotoDraft();
+  // Foto bukan teks yang divalidasi skema, jadi pilihannya disimpan terpisah dari RHF.
+  const [photoDraft, setPhotoDraft] = useState<PhotoDraft>(UNCHANGED_PHOTO);
+  const [savedName, setSavedName] = useState<string | null>(null);
 
   const purchasePriceText = useWatch({ control, name: 'purchasePrice' });
   const sellingPriceText = useWatch({ control, name: 'sellingPrice' });
   const isSaving = formState.isSubmitting || mutation.isPending;
-  const hasSaved = mutation.isSuccess && !formState.isDirty;
+  const hasSaved = savedName !== null && !formState.isDirty && photoDraft.kind === 'unchanged';
   const updateError = mutation.error instanceof UpdateProductError ? mutation.error : null;
   // Pesan "tidak ada perubahan" hilang begitu pengguna mengubah isian lagi.
-  const hasNoChange = updateError?.code === 'NO_CHANGE' && !formState.isDirty;
+  const hasNoChange =
+    updateError?.code === 'NO_CHANGE' && !formState.isDirty && photoDraft.kind === 'unchanged';
   const hasUnexpectedError =
-    mutation.isError && (updateError === null || updateError.code === 'PRODUCT_NOT_FOUND');
+    hasPhotoFailed ||
+    (mutation.isError && (updateError === null || updateError.code === 'PRODUCT_NOT_FOUND'));
   const buttonLabel = isSaving ? 'Menyimpan…' : hasSaved ? 'Tersimpan' : 'Simpan perubahan';
+
+  // Tanpa perubahan data tetapi dengan foto baru, "tidak ada perubahan" bukan kegagalan: hanya fotonya yang disimpan.
+  async function saveFields(): Promise<Product | null> {
+    try {
+      return await mutation.mutateAsync(getValues());
+    } catch (error) {
+      const isPhotoOnly =
+        error instanceof UpdateProductError && error.code === 'NO_CHANGE' && photoDraft.kind !== 'unchanged';
+      if (isPhotoOnly) return null;
+      throw error;
+    }
+  }
 
   // Dipanggil hanya bila skema lolos; nilai mentah (teks) dikirim ke API, yang memvalidasi ulang.
   async function onSubmit() {
     try {
-      const updated = await mutation.mutateAsync(getValues());
-      reset(toFormValues(updated));
+      const updated = await saveFields();
+      await applyPhotoDraft(product.id, photoDraft);
+      setPhotoDraft(UNCHANGED_PHOTO);
+      setSavedName((updated ?? product).name);
+      if (updated) reset(toFormValues(updated));
     } catch (error) {
       if (error instanceof UpdateProductError && error.code === 'DUPLICATE_SKU') {
         setError('sku', { message: error.message });
@@ -70,9 +96,15 @@ export function EditProductForm({ product, categories, units }: EditProductFormP
       <IdentityFields register={register} errors={formState.errors} categories={categories} units={units} />
       <PriceAndLimitFields register={register} errors={formState.errors} />
       <SoldAtLossWarning purchasePriceText={purchasePriceText} sellingPriceText={sellingPriceText} />
+      <ProductPhotoField
+        productId={product.id}
+        productName={product.name}
+        draft={photoDraft}
+        onChange={setPhotoDraft}
+      />
       {hasSaved && (
         <div role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
-          <p>Tersimpan. Perubahan {mutation.data.name} dicatat.</p>
+          <p>Tersimpan. Perubahan {savedName} dicatat.</p>
           <Link to={`/stok/${product.id}`} className="inline-flex min-h-11 items-center font-medium underline">
             Lihat detail barang
           </Link>
