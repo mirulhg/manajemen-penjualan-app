@@ -18,7 +18,7 @@ export const productSchema = z.object({
   updatedAt: z.iso.datetime(),
 });
 
-export const stockMovementTypeSchema = z.enum(['awal', 'masuk', 'koreksi', 'jual']);
+export const stockMovementTypeSchema = z.enum(['awal', 'masuk', 'koreksi', 'jual', 'retur', 'batal']);
 
 // Selisih tidak disimpan; dihitung dari quantityAfter - quantityBefore.
 // seq naik terus untuk seluruh pergerakan; memberi urutan pasti walau createdAt sama.
@@ -47,17 +47,49 @@ const money = z.number().int().nonnegative();
 
 export const paymentMethodSchema = z.enum(['tunai', 'transfer', 'qris']);
 
-export const saleSchema = z.object({
+export const saleStatusSchema = z.enum(['selesai', 'dibatalkan']);
+
+export const saleSchema = z
+  .object({
+    id: z.uuid(),
+    number: z.string().regex(/^TRX-\d{8}-\d{4,}$/),
+    paymentMethod: paymentMethodSchema,
+    subtotal: money,
+    itemDiscountTotal: money,
+    transactionDiscount: money,
+    total: money,
+    amountPaid: money,
+    change: money,
+    itemCount: z.number().int().min(1),
+    actor: z.string().min(1),
+    createdAt: z.iso.datetime(),
+    status: saleStatusSchema,
+    // Total uang yang sudah dikembalikan lewat retur; disimpan di kepala agar ringkasan omzet tidak menjumlah ulang.
+    refundedTotal: money,
+    cancelledAt: z.iso.datetime().optional(),
+    cancelReason: z.string().min(3).optional(),
+    cancelledBy: z.string().min(1).optional(),
+  })
+  .refine((sale) => sale.refundedTotal <= sale.total, {
+    path: ['refundedTotal'],
+    message: 'Total retur tidak boleh melebihi total transaksi.',
+  });
+
+export const saleReturnSchema = z.object({
   id: z.uuid(),
-  number: z.string().regex(/^TRX-\d{8}-\d{4,}$/),
-  paymentMethod: paymentMethodSchema,
-  subtotal: money,
-  itemDiscountTotal: money,
-  transactionDiscount: money,
-  total: money,
-  amountPaid: money,
-  change: money,
-  itemCount: z.number().int().min(1),
+  number: z.string().regex(/^RTR-\d{8}-\d{4,}$/),
+  saleId: z.uuid(),
+  items: z
+    .array(
+      z.object({
+        saleItemId: z.uuid(),
+        quantity: z.number().int().min(1),
+        refundAmount: money,
+      }),
+    )
+    .min(1),
+  refundTotal: money,
+  reason: z.string().min(3),
   actor: z.string().min(1),
   createdAt: z.iso.datetime(),
 });
@@ -87,3 +119,4 @@ export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
 export type Sale = z.infer<typeof saleSchema>;
 export type SaleItem = z.infer<typeof saleItemSchema>;
 export type Setting = z.infer<typeof settingSchema>;
+export type SaleReturn = z.infer<typeof saleReturnSchema>;

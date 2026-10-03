@@ -12,3 +12,11 @@ export function getSaleCounterName(date: Date): string {
 export function formatSaleNumber(date: Date, sequence: number): string {
   return `TRX-${getDateKey(date)}-${String(sequence).padStart(4, '0')}`;
 }
+
+export function getReturnCounterName(date: Date): string {
+  return `saleReturn:${getDateKey(date)}`;
+}
+
+export function formatReturnNumber(date: Date, sequence: number): string {
+  return `RTR-${getDateKey(date)}-${String(sequence).padStart(4, '0')}`;
+}

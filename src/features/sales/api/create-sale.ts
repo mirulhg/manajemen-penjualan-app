@@ -108,6 +108,8 @@ export async function createSale(input: CreateSaleInput): Promise<Sale> {
         itemCount: totals.itemCount,
         actor: DEFAULT_ACTOR,
         createdAt: nowIso,
+        status: 'selesai',
+        refundedTotal: 0,
       });
 
       const saleItems = lines.map((line) =>

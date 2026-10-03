@@ -12,6 +12,8 @@ const TYPE_LABELS = {
   masuk: 'Stok masuk',
   koreksi: 'Koreksi',
   jual: 'Penjualan',
+  retur: 'Retur',
+  batal: 'Pembatalan',
 } as const;
 
 function formatDelta(delta: number): string {

@@ -2,9 +2,13 @@ import Dexie from 'dexie';
 import type { EntityTable } from 'dexie';
 
 import { STOCK_MOVEMENT_COUNTER } from './records';
-import type { Counter, Product, Sale, SaleItem, Setting, StockMovement } from './records';
+import type { Counter, Product, Sale, SaleItem, SaleReturn, Setting, StockMovement } from './records';
 
 type LegacyStockMovement = Omit<StockMovement, 'seq'>;
+type LegacySale = Omit<Sale, 'status' | 'refundedTotal'> & {
+  status?: Sale['status'];
+  refundedTotal?: number;
+};
 
 class StockDatabase extends Dexie {
   products!: EntityTable<Product, 'id'>;
@@ -13,6 +17,7 @@ class StockDatabase extends Dexie {
   sales!: EntityTable<Sale, 'id'>;
   saleItems!: EntityTable<SaleItem, 'id'>;
   settings!: EntityTable<Setting, 'key'>;
+  saleReturns!: EntityTable<SaleReturn, 'id'>;
 
   constructor() {
     super('manajemen-stok');
@@ -42,6 +47,20 @@ class StockDatabase extends Dexie {
       saleItems: 'id, saleId, productId',
       settings: 'key',
     });
+    this.version(4)
+      .stores({
+        sales: 'id, &number, createdAt, actor',
+        saleReturns: 'id, &number, saleId, createdAt',
+      })
+      .upgrade(async (transaction) => {
+        await transaction
+          .table<LegacySale, string>('sales')
+          .toCollection()
+          .modify((sale) => {
+            sale.status ??= 'selesai';
+            sale.refundedTotal ??= 0;
+          });
+      });
   }
 }
 
