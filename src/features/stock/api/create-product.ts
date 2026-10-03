@@ -3,6 +3,7 @@ import { STOCK_MOVEMENT_COUNTER } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
 import { buildProductRecords } from '../build-product-records';
 import { matchExistingSpelling } from '../match-existing-spelling';
+import { resolveCategory } from '../resolve-category';
 import { newProductSchema } from '../schema';
 import type { NewProductInput, Product } from '../schema';
 
@@ -21,24 +22,25 @@ export async function createProduct(input: NewProductInput): Promise<Product> {
   const fields = newProductSchema.parse(input);
 
   try {
-    return await db.transaction('rw', db.products, db.stockMovements, db.counters, async () => {
+    return await db.transaction('rw', db.products, db.stockMovements, db.counters, db.categories, async () => {
       const owner = await db.products.where('sku').equals(fields.sku).first();
       if (owner) throw new CreateProductError(fields.sku, owner.name);
 
       const existing = await db.products.toArray();
+      const now = new Date().toISOString();
       const movementSeq = await nextSequences(STOCK_MOVEMENT_COUNTER, 1);
       const { product, movement } = buildProductRecords(
         {
           sku: fields.sku,
           name: fields.name,
-          category: matchExistingSpelling(existing.map((item) => item.category), fields.category),
+          category: await resolveCategory(fields.category, now),
           unit: matchExistingSpelling(existing.map((item) => item.unit), fields.unit),
           stockQuantity: fields.initialStock,
           minStock: fields.minStock,
           purchasePrice: fields.purchasePrice,
           sellingPrice: fields.sellingPrice,
         },
-        new Date().toISOString(),
+        now,
         movementSeq,
       );
 

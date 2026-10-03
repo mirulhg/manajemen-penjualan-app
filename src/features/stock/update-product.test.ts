@@ -4,7 +4,6 @@ import { db } from '../../lib/db/database';
 import { findProductBySku, resetDatabaseWithSeed } from '../../test/reset-database';
 import { getPriceChanges, PRICE_CHANGES_PAGE_SIZE } from './api/get-price-changes';
 import { updateProduct } from './api/update-product';
-import { getCategories } from './filter-products';
 import type { ProductFieldsInput } from './schema';
 
 const BERAS_UNCHANGED: ProductFieldsInput = {
@@ -84,7 +83,7 @@ describe('updateProduct', () => {
     const updated = await updateProduct(before.id, edit({ category: 'sembako', unit: 'SAK', name: 'Beras Baru' }));
 
     expect(updated).toMatchObject({ category: 'Sembako', unit: 'sak' });
-    expect(getCategories(await db.products.toArray())).toHaveLength(6);
+    expect(await db.categories.count()).toBe(6);
   });
 
   it('mengubah selain harga tidak menambah riwayat harga', async () => {

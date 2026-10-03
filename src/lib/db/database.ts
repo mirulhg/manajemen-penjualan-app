@@ -1,8 +1,9 @@
 import Dexie from 'dexie';
 import type { EntityTable } from 'dexie';
 
-import { STOCK_MOVEMENT_COUNTER } from './records';
+import { STOCK_MOVEMENT_COUNTER, toCategoryKey } from './records';
 import type {
+  Category,
   Counter,
   PriceChange,
   Product,
@@ -31,6 +32,7 @@ class StockDatabase extends Dexie {
   saleReturns!: EntityTable<SaleReturn, 'id'>;
   priceChanges!: EntityTable<PriceChange, 'id'>;
   productPhotos!: EntityTable<ProductPhoto, 'productId'>;
+  categories!: EntityTable<Category, 'id'>;
 
   constructor() {
     super('manajemen-stok');
@@ -85,6 +87,34 @@ class StockDatabase extends Dexie {
           .toCollection()
           .modify((product) => {
             product.archivedAt ??= null;
+          });
+      });
+    this.version(6)
+      .stores({ categories: 'id, &nameKey' })
+      .upgrade(async (transaction) => {
+        const products = await transaction.table<Product, string>('products').toArray();
+        const now = new Date().toISOString();
+        const byKey = new Map<string, Category>();
+        // Urutan nama produk menentukan ejaan yang dipakai bila ada kategori yang hanya beda huruf.
+        for (const product of products.sort((a, b) => a.name.localeCompare(b.name, 'id'))) {
+          const nameKey = toCategoryKey(product.category);
+          if (byKey.has(nameKey)) continue;
+          byKey.set(nameKey, {
+            id: crypto.randomUUID(),
+            name: product.category,
+            nameKey,
+            createdAt: now,
+            updatedAt: now,
+          });
+        }
+        await transaction.table<Category, string>('categories').bulkAdd([...byKey.values()]);
+        // Produk memakai ejaan kategori yang sama dengan tabel, supaya pencocokan nama tetap tepat.
+        await transaction
+          .table<Product, string>('products')
+          .toCollection()
+          .modify((product) => {
+            const category = byKey.get(toCategoryKey(product.category));
+            if (category) product.category = category.name;
           });
       });
   }

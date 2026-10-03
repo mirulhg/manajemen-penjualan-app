@@ -8,7 +8,7 @@ export {
   stockMovementSchema,
   stockMovementTypeSchema,
 } from '../../lib/db/records';
-export type { Product, StockMovement } from '../../lib/db/records';
+export type { Category, Product, StockMovement } from '../../lib/db/records';
 
 export const MAX_ADJUSTMENT_QUANTITY = 100_000;
 
@@ -69,6 +69,14 @@ const optionalMinStockSchema = z.string().transform((value, ctx) => {
   return z.NEVER;
 });
 
+// Dipakai form barang dan form kategori; spasi ganda dirapikan supaya nama dan nameKey konsisten.
+export const categoryNameSchema = z
+  .string()
+  .trim()
+  .min(2, 'Isi nama kategori minimal 2 karakter.')
+  .max(50, 'Nama kategori maksimal 50 karakter.')
+  .transform((value) => value.replace(/\s+/g, ' '));
+
 export const newProductSchema = z.object({
   name: z
     .string()
@@ -80,7 +88,7 @@ export const newProductSchema = z.object({
     .trim()
     .toUpperCase()
     .regex(/^[A-Z0-9-]{2,32}$/, 'SKU hanya boleh huruf, angka, dan tanda hubung (2–32 karakter).'),
-  category: z.string().trim().min(2, 'Isi kategori barang.').max(50, 'Kategori maksimal 50 karakter.'),
+  category: categoryNameSchema,
   unit: z
     .string()
     .trim()
@@ -95,6 +103,7 @@ export const newProductSchema = z.object({
 // Form ubah memakai aturan field yang sama persis dengan tambah barang; stok tidak bisa diubah dari sini.
 export const editProductSchema = newProductSchema.omit({ initialStock: true });
 
+export type CategoryNameInput = z.input<typeof categoryNameSchema>;
 export type NewProductInput = z.input<typeof newProductSchema>;
 // Field yang dipakai bersama form tambah dan form ubah barang (tanpa stok awal).
 export type ProductFieldsInput = Omit<NewProductInput, 'initialStock'>;

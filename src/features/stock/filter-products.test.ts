@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { filterProducts, getCategories, normalizeFilters } from './filter-products';
+import { filterProducts, normalizeFilters } from './filter-products';
 import type { StockFilters } from './parse-filter-params';
 import { SEED_AS_PRODUCTS as products } from '../../test/seed-products';
 
@@ -50,21 +50,8 @@ describe('filterProducts', () => {
   });
 });
 
-describe('getCategories', () => {
-  it('mengembalikan kategori unik terurut A–Z', () => {
-    expect(getCategories(products)).toEqual([
-      'Bumbu Dapur',
-      'Kebutuhan Rumah',
-      'Makanan Ringan',
-      'Minuman',
-      'Perlengkapan Mandi',
-      'Sembako',
-    ]);
-  });
-});
-
 describe('normalizeFilters', () => {
-  const categories = getCategories(products);
+  const categories = ['Bumbu Dapur', 'Kebutuhan Rumah', 'Makanan Ringan', 'Minuman', 'Perlengkapan Mandi', 'Sembako'];
 
   it('mengubah kategori yang tidak dikenal menjadi null', () => {
     const result = normalizeFilters({ ...NO_FILTER, category: 'ngawur' }, categories);

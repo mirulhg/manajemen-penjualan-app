@@ -147,3 +147,19 @@ export const PRICE_CHANGE_COUNTER = 'priceChange';
 
 export type PriceChange = z.infer<typeof priceChangeSchema>;
 export type ProductPhoto = z.infer<typeof productPhotoSchema>;
+
+// nameKey = bentuk pembanding nama kategori; "sembako" dan "Sembako" harus menghasilkan kunci yang sama.
+export const categorySchema = z.object({
+  id: z.uuid(),
+  name: z.string().min(1),
+  nameKey: z.string().min(1),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+});
+
+export type Category = z.infer<typeof categorySchema>;
+
+// Satu-satunya cara membuat nameKey.
+export function toCategoryKey(name: string): string {
+  return name.trim().replace(/\s+/g, ' ').toLocaleLowerCase('id');
+}

@@ -1,6 +1,7 @@
 import { formatNumber } from '../../../utils/format-number';
+import { useCategoryNames } from '../api/use-categories';
 import { useProducts } from '../api/use-products';
-import { filterProducts, getCategories, normalizeFilters } from '../filter-products';
+import { filterProducts, normalizeFilters } from '../filter-products';
 import { useStockFilters } from '../hooks/use-stock-filters';
 import { sortProducts } from '../sort-products';
 import { AddProductLink } from './AddProductLink';
@@ -13,18 +14,22 @@ import { StockNoResults } from './StockNoResults';
 import { StockSummary } from './StockSummary';
 
 export function StockListContent() {
-  const { data: products, isPending, error, refetch } = useProducts();
+  const productsQuery = useProducts();
+  const categoriesQuery = useCategoryNames();
+  const { data: products } = productsQuery;
+  const { data: categories } = categoriesQuery;
+  const error = productsQuery.error ?? categoriesQuery.error;
   const { filters: urlFilters, setFilters, clearFilters } = useStockFilters();
 
   function handleRetry() {
-    void refetch();
+    void productsQuery.refetch();
+    void categoriesQuery.refetch();
   }
 
-  if (isPending) return <StockListSkeleton />;
   if (error) return <StockListError error={error} onRetry={handleRetry} />;
+  if (!products || !categories) return <StockListSkeleton />;
   if (products.length === 0) return <StockEmptyState />;
 
-  const categories = getCategories(products);
   const filters = normalizeFilters(urlFilters, categories);
   const hasActiveFilters =
     filters.query !== null || filters.category !== null || filters.status !== null || filters.archived;

@@ -3,8 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../../lib/db/database';
 import { DEFAULT_ACTOR } from './actor';
 import { createProduct, CreateProductError } from './api/create-product';
-import { getProducts } from './api/get-products';
-import { getCategories } from './filter-products';
+import { getCategoriesWithCounts } from './api/get-categories';
 import { seedSampleProducts } from './seed';
 import { getStockStatus } from './stock-status';
 import type { NewProductInput } from './schema';
@@ -78,7 +77,7 @@ describe('createProduct', () => {
   it('kategori baru disimpan apa adanya dan muncul di daftar kategori', async () => {
     await createProduct(input({ category: ' Alat Tulis ' }));
 
-    const categories = getCategories(await getProducts());
+    const categories = (await getCategoriesWithCounts()).map((category) => category.name);
     expect(categories).toContain('Alat Tulis');
     expect(categories).toHaveLength(7);
   });

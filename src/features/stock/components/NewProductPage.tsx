@@ -1,7 +1,8 @@
 import { useLocation } from 'react-router';
 
+import { useCategoryNames } from '../api/use-categories';
 import { useProducts } from '../api/use-products';
-import { getCategories, getUnits } from '../filter-products';
+import { getUnits } from '../filter-products';
 import { getListPath } from '../list-return-state';
 import { NewProductForm } from './NewProductForm';
 import { NewProductSkeleton } from './NewProductSkeleton';
@@ -10,15 +11,17 @@ import { SubpageLayout } from '../../../components/layout/SubpageLayout';
 
 export function NewProductPage() {
   const location = useLocation();
-  // Daftar produk dibutuhkan hanya untuk saran kategori dan satuan.
-  const { data: products, isPending, error, refetch } = useProducts();
+  // Produk dibutuhkan untuk saran satuan; kategori dari tabel kategori agar yang masih kosong ikut muncul.
+  const products = useProducts();
+  const categories = useCategoryNames();
   const backTo = getListPath(location.state);
 
   function handleRetry() {
-    void refetch();
+    void products.refetch();
+    void categories.refetch();
   }
 
-  if (isPending) {
+  if (products.isPending || categories.isPending) {
     return (
       <SubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
         <NewProductSkeleton />
@@ -26,17 +29,18 @@ export function NewProductPage() {
     );
   }
 
-  if (error) {
+  if (products.isError || categories.isError) {
+    const error = products.error ?? categories.error;
     return (
       <SubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
-        <StockListError error={error} onRetry={handleRetry} />
+        {error && <StockListError error={error} onRetry={handleRetry} />}
       </SubpageLayout>
     );
   }
 
   return (
     <SubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
-      <NewProductForm categories={getCategories(products)} units={getUnits(products)} />
+      <NewProductForm categories={categories.data} units={getUnits(products.data)} />
     </SubpageLayout>
   );
 }

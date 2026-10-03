@@ -3,11 +3,12 @@ import { STOCK_MOVEMENT_COUNTER } from '../../lib/db/records';
 import { nextSequences } from '../../lib/db/sequence';
 import { buildProductRecords } from './build-product-records';
 import { generateExtraProducts } from './generate-extra-products';
+import { resolveCategory } from './resolve-category';
 import { SEED_PRODUCTS } from './seed-data';
 
 export async function seedSampleProducts(extraCount = 0): Promise<void> {
   // Cek tabel kosong di dalam transaksi yang sama dengan penulisan, supaya dua pemanggilan bersamaan tidak menggandakan data.
-  await db.transaction('rw', db.products, db.stockMovements, db.counters, async () => {
+  await db.transaction('rw', db.products, db.stockMovements, db.counters, db.categories, async () => {
     if ((await db.products.count()) > 0) return;
 
     const now = new Date().toISOString();
@@ -17,6 +18,9 @@ export async function seedSampleProducts(extraCount = 0): Promise<void> {
       buildProductRecords(fields, now, firstSeq + index),
     );
 
+    for (const name of new Set(allFields.map((fields) => fields.category))) {
+      await resolveCategory(name, now);
+    }
     await db.products.bulkAdd(records.map((record) => record.product));
     await db.stockMovements.bulkAdd(records.map((record) => record.movement));
   });

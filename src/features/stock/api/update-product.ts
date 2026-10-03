@@ -4,6 +4,7 @@ import type { PriceChange, Product } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
 import { DEFAULT_ACTOR } from '../actor';
 import { matchExistingSpelling } from '../match-existing-spelling';
+import { resolveCategory } from '../resolve-category';
 import { editProductSchema } from '../schema';
 import type { ProductFieldsInput } from '../schema';
 
@@ -34,7 +35,7 @@ export async function updateProduct(productId: string, input: ProductFieldsInput
   const fields = editProductSchema.parse(input);
 
   try {
-    return await db.transaction('rw', db.products, db.priceChanges, db.counters, async () => {
+    return await db.transaction('rw', db.products, db.priceChanges, db.counters, db.categories, async () => {
       const row = await db.products.get(productId);
       if (!row) throw new UpdateProductError('PRODUCT_NOT_FOUND');
       const product = productSchema.parse(row);
@@ -43,17 +44,17 @@ export async function updateProduct(productId: string, input: ProductFieldsInput
       if (owner && owner.id !== productId) throw new UpdateProductError('DUPLICATE_SKU', fields.sku, owner.name);
 
       const all = await db.products.toArray();
+      const now = new Date().toISOString();
       const next = {
         ...product,
         ...fields,
-        category: matchExistingSpelling(all.map((item) => item.category), fields.category),
+        category: await resolveCategory(fields.category, now),
         unit: matchExistingSpelling(all.map((item) => item.unit), fields.unit),
       };
       if (EDITABLE_FIELDS.every((field) => next[field] === product[field])) {
         throw new UpdateProductError('NO_CHANGE');
       }
 
-      const now = new Date().toISOString();
       const changedPrices = PRICE_FIELDS.filter((field) => next[field] !== product[field]);
       const firstSeq =
         changedPrices.length > 0 ? await nextSequences(PRICE_CHANGE_COUNTER, changedPrices.length) : 0;

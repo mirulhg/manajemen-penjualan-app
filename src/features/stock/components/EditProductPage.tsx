@@ -2,8 +2,9 @@ import { useParams } from 'react-router';
 
 import { SubpageLayout } from '../../../components/layout/SubpageLayout';
 import { useProduct } from '../api/use-product';
+import { useCategoryNames } from '../api/use-categories';
 import { useProducts } from '../api/use-products';
-import { getCategories, getUnits } from '../filter-products';
+import { getUnits } from '../filter-products';
 import { EditProductForm } from './EditProductForm';
 import { NewProductSkeleton } from './NewProductSkeleton';
 import { ProductNotFound } from './ProductNotFound';
@@ -14,17 +15,19 @@ const HEADING = 'Ubah Barang';
 export function EditProductPage() {
   const { productId = '' } = useParams();
   const product = useProduct(productId);
-  // Daftar produk dibutuhkan untuk saran kategori dan satuan.
+  // Produk dibutuhkan untuk saran satuan; kategori dari tabel kategori.
   const products = useProducts();
+  const categories = useCategoryNames();
   const backTo = `/stok/${productId}`;
   const backLabel = 'Kembali ke detail barang';
 
   function handleRetry() {
     void product.refetch();
     void products.refetch();
+    void categories.refetch();
   }
 
-  if (product.isPending || products.isPending) {
+  if (product.isPending || products.isPending || categories.isPending) {
     return (
       <SubpageLayout title={HEADING} heading={HEADING} backTo={backTo} backLabel={backLabel}>
         <NewProductSkeleton />
@@ -32,8 +35,8 @@ export function EditProductPage() {
     );
   }
 
-  if (product.isError || products.isError) {
-    const error = product.error ?? products.error;
+  if (product.isError || products.isError || categories.isError) {
+    const error = product.error ?? products.error ?? categories.error;
     return (
       <SubpageLayout title={HEADING} heading={HEADING} backTo={backTo} backLabel={backLabel}>
         {error && <StockListError error={error} onRetry={handleRetry} />}
@@ -53,7 +56,7 @@ export function EditProductPage() {
     <SubpageLayout title={`Ubah ${product.data.name}`} heading={HEADING} backTo={backTo} backLabel={backLabel}>
       <EditProductForm
         product={product.data}
-        categories={getCategories(products.data)}
+        categories={categories.data}
         units={getUnits(products.data)}
       />
     </SubpageLayout>

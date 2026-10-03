@@ -22,10 +22,6 @@ export function filterProducts(products: Product[], filters: StockFilters): Prod
     });
 }
 
-export function getCategories(products: Product[]): string[] {
-  return [...new Set(products.map((product) => product.category))].sort(compareId);
-}
-
 export function getUnits(products: Product[]): string[] {
   return [...new Set(products.map((product) => product.unit))].sort(compareId);
 }
