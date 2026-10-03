@@ -85,4 +85,43 @@ describe('getCartView', () => {
     expect(input.amountPaid).toBe(100000);
     expect(JSON.stringify(input)).not.toContain('68000');
   });
+
+  it('harga produk berubah setelah dimasukkan: priceChangedFrom terisi dan total memakai harga baru', () => {
+    const cart = [add('SBK-001')].reduce(cartReducer, initialCartState);
+    const repriced = SEED_AS_PRODUCTS.map((product) =>
+      product.sku === 'SBK-001' ? { ...product, sellingPrice: 75000 } : product,
+    );
+
+    const result = getCartView(cart, repriced, false);
+
+    expect(result.lines[0]?.priceChangedFrom).toBe(74000);
+    expect(result.totals.total).toBe(75000);
+  });
+
+  it('mengubah jumlah menghapus pemberitahuan harga', () => {
+    const repriced = SEED_AS_PRODUCTS.map((product) =>
+      product.sku === 'SBK-001' ? { ...product, sellingPrice: 75000 } : product,
+    );
+    const cart = [add('SBK-001'), { type: 'increase', productId: idOf('SBK-001'), price: 75000 } as const].reduce(
+      cartReducer,
+      initialCartState,
+    );
+
+    expect(getCartView(cart, repriced, false).lines[0]?.priceChangedFrom).toBeNull();
+  });
+
+  it('barang yang diarsipkan setelah masuk keranjang memblokir simpan', () => {
+    const cart = [add('SBK-001'), { type: 'setPaymentMethod', method: 'transfer' } as const].reduce(
+      cartReducer,
+      initialCartState,
+    );
+    const archived = SEED_AS_PRODUCTS.map((product) =>
+      product.sku === 'SBK-001' ? { ...product, archivedAt: '2026-10-03T00:00:00.000Z' } : product,
+    );
+
+    const result = getCartView(cart, archived, false);
+
+    expect(result.lines[0]?.isArchived).toBe(true);
+    expect(result.blockReason).toBe('Ada barang yang sudah diarsipkan.');
+  });
 });

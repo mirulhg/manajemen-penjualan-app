@@ -80,4 +80,28 @@ describe('cartReducer', () => {
     cartReducer(before, { type: 'increase', productId: 'a', price: 1000 });
     expect(before).toEqual(snapshot);
   });
+
+  it('menyimpan harga saat barang dimasukkan', () => {
+    expect(run([{ type: 'add', productId: 'a', price: 74000 }]).lines[0]?.priceAtAdd).toBe(74000);
+  });
+
+  it('mengubah jumlah memperbarui priceAtAdd ke harga sekarang', () => {
+    const state = run([
+      { type: 'add', productId: 'a', price: 74000 },
+      { type: 'increase', productId: 'a', price: 75000 },
+    ]);
+    expect(state.lines[0]).toMatchObject({ quantity: 2, priceAtAdd: 75000 });
+    expect(
+      run([{ type: 'setQuantity', productId: 'a', quantity: 5, price: 76000 }], state).lines[0]?.priceAtAdd,
+    ).toBe(76000);
+    expect(run([{ type: 'decrease', productId: 'a', price: 77000 }], state).lines[0]?.priceAtAdd).toBe(77000);
+  });
+
+  it('mengubah diskon tidak menghapus pemberitahuan harga', () => {
+    const state = run([
+      { type: 'add', productId: 'a', price: 74000 },
+      { type: 'setLineDiscount', productId: 'a', text: '1.000' },
+    ]);
+    expect(state.lines[0]?.priceAtAdd).toBe(74000);
+  });
 });

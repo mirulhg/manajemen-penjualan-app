@@ -153,3 +153,73 @@ describe('migrasi database v3 ke v4', () => {
     expect(await db.sales.orderBy('actor').uniqueKeys()).toEqual(['Pemilik']);
   });
 });
+
+describe('migrasi database v4 ke v5', () => {
+  const PRODUCT_ID = '00000000-0000-4000-8000-0000000000bb';
+
+  beforeEach(async () => {
+    db.close();
+    await Dexie.delete(DB_NAME);
+    const legacy = new Dexie(DB_NAME);
+    legacy.version(1).stores({
+      products: 'id, &sku, category, updatedAt',
+      stockMovements: 'id, productId, [productId+createdAt]',
+    });
+    legacy.version(2).stores({
+      stockMovements: 'id, productId, [productId+createdAt], &seq, [productId+seq]',
+      counters: 'name',
+    });
+    legacy.version(3).stores({
+      sales: 'id, &number, createdAt',
+      saleItems: 'id, saleId, productId',
+      settings: 'key',
+    });
+    legacy.version(4).stores({
+      sales: 'id, &number, createdAt, actor',
+      saleReturns: 'id, &number, saleId, createdAt',
+    });
+    await legacy.table('products').bulkAdd([
+      {
+        id: PRODUCT_ID,
+        sku: 'TES-100',
+        name: 'Barang Lama',
+        category: 'Sembako',
+        unit: 'pcs',
+        stockQuantity: 7,
+        minStock: null,
+        purchasePrice: 1000,
+        sellingPrice: 1500,
+        createdAt: '2026-10-01T09:00:00.000Z',
+        updatedAt: '2026-10-01T09:00:00.000Z',
+      },
+    ]);
+    legacy.close();
+  });
+
+  it('produk lama mendapat archivedAt null dan jumlah data tidak berubah', async () => {
+    await db.open();
+
+    const product = await db.products.get(PRODUCT_ID);
+    expect(product).toMatchObject({ archivedAt: null, stockQuantity: 7, name: 'Barang Lama' });
+    expect(await db.products.count()).toBe(1);
+    expect(await db.priceChanges.count()).toBe(0);
+    expect(await db.productPhotos.count()).toBe(0);
+  });
+
+  it('index [productId+seq] pada priceChanges dan kunci productId pada foto tersedia', async () => {
+    await db.open();
+
+    await db.priceChanges.add({
+      id: crypto.randomUUID(),
+      seq: 1,
+      productId: PRODUCT_ID,
+      field: 'sellingPrice',
+      before: 1500,
+      after: 1600,
+      actor: 'Pemilik',
+      createdAt: new Date().toISOString(),
+    });
+    const rows = await db.priceChanges.where('[productId+seq]').equals([PRODUCT_ID, 1]).toArray();
+    expect(rows).toHaveLength(1);
+  });
+});

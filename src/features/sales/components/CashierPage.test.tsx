@@ -5,7 +5,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { db } from '../../../lib/db/database';
 import { renderWithProviders } from '../../../test/render';
-import { resetDatabaseWithSeed } from '../../../test/reset-database';
+import { findProductBySku, resetDatabaseWithSeed } from '../../../test/reset-database';
+import { archiveProduct } from '../../stock/api/archive-product';
 import { CashierPage } from './CashierPage';
 
 async function search(user: ReturnType<typeof userEvent.setup>, text: string) {
@@ -80,5 +81,45 @@ describe('CashierPage', () => {
 
     expect(screen.getAllByText(/Uang (diterima )?kurang Rp 24\.000/).length).toBeGreaterThan(0);
     expect(screen.getByRole('button', { name: 'Simpan transaksi' }).hasAttribute('disabled')).toBe(true);
+  });
+
+  it('harga berubah setelah barang masuk keranjang: pemberitahuan tampil, hilang saat jumlah diubah', async () => {
+    const user = userEvent.setup();
+    const { queryClient } = renderWithProviders(<CashierPage />);
+    await search(user, 'beras');
+    await user.click(await screen.findByRole('button', { name: /^Beras Premium 5 kg\s*SBK-001/ }));
+
+    const beras = await findProductBySku('SBK-001');
+    await db.products.update(beras.id, { sellingPrice: 76000 });
+    await queryClient.invalidateQueries({ queryKey: ['products'] });
+
+    expect(await screen.findByText('Harga berubah dari Rp 74.000 ke Rp 76.000')).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Tambah Beras Premium 5 kg' }));
+    expect(screen.queryByText(/Harga berubah dari/)).toBeNull();
+  });
+
+  it('barang diarsipkan saat sudah di keranjang: peringatan, simpan diblokir, keranjang tetap', async () => {
+    const user = userEvent.setup();
+    const { queryClient } = renderWithProviders(<CashierPage />);
+    await search(user, 'beras');
+    await user.click(await screen.findByRole('button', { name: /^Beras Premium 5 kg\s*SBK-001/ }));
+
+    await archiveProduct((await findProductBySku('SBK-001')).id);
+    await queryClient.invalidateQueries({ queryKey: ['products'] });
+
+    expect(await screen.findByText('Ada barang yang sudah diarsipkan.')).toBeTruthy();
+    expect(screen.getByText(/Barang ini sudah diarsipkan dan tidak bisa dijual/)).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Simpan transaksi' }).hasAttribute('disabled')).toBe(true);
+    expect(screen.getByRole('list', { name: 'Keranjang' })).toBeTruthy();
+  });
+
+  it('barang arsip tidak muncul di pencarian kasir', async () => {
+    const user = userEvent.setup();
+    await archiveProduct((await findProductBySku('MKR-005')).id);
+    renderWithProviders(<CashierPage />);
+
+    await search(user, 'roti');
+
+    expect(await screen.findByText('Tidak ada barang yang cocok.')).toBeTruthy();
   });
 });
