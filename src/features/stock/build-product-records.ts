@@ -1,5 +1,6 @@
+import { buildStockMovement } from '../../lib/db/build-stock-movement';
 import { DEFAULT_ACTOR } from './actor';
-import { productSchema, stockMovementSchema } from './schema';
+import { productSchema } from './schema';
 import type { Product, StockMovement } from './schema';
 
 export type NewProductFields = Pick<
@@ -19,8 +20,7 @@ export function buildProductRecords(
     createdAt: now,
     updatedAt: now,
   });
-  const movement = stockMovementSchema.parse({
-    id: crypto.randomUUID(),
+  const movement = buildStockMovement({
     seq: movementSeq,
     productId: product.id,
     type: 'awal',

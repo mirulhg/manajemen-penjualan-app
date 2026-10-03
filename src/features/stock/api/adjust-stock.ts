@@ -1,8 +1,9 @@
+import { buildStockMovement } from '../../../lib/db/build-stock-movement';
 import { db } from '../../../lib/db/database';
 import { STOCK_MOVEMENT_COUNTER } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
 import { DEFAULT_ACTOR } from '../actor';
-import { productSchema, stockAdjustmentSchema, stockMovementSchema } from '../schema';
+import { productSchema, stockAdjustmentSchema } from '../schema';
 import type { Product, StockAdjustmentInput } from '../schema';
 
 type StockAdjustmentErrorCode = 'PRODUCT_NOT_FOUND' | 'NO_CHANGE';
@@ -36,8 +37,7 @@ export async function adjustStock(productId: string, input: StockAdjustmentInput
     const movementSeq = await nextSequences(STOCK_MOVEMENT_COUNTER, 1);
     const now = new Date().toISOString();
     const updated = productSchema.parse({ ...product, stockQuantity: quantityAfter, updatedAt: now });
-    const movement = stockMovementSchema.parse({
-      id: crypto.randomUUID(),
+    const movement = buildStockMovement({
       seq: movementSeq,
       productId,
       type: adjustment.type,
