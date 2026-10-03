@@ -1,5 +1,5 @@
 import { StockListError, useProducts } from '../../stock';
-import { useAllowOversell } from '../api/use-allow-oversell';
+import { useAllowOversell } from '../../session';
 import { Cashier } from './Cashier';
 import { CashierEmptyState } from './CashierEmptyState';
 import { CashierSkeleton } from './CashierSkeleton';

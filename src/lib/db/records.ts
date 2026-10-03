@@ -110,9 +110,23 @@ export const saleItemSchema = z.object({
   discount: money,
 });
 
+export const hashedSecretSchema = z.object({
+  hash: z.string().min(1),
+  salt: z.string().min(1),
+  iterations: z.number().int().positive(),
+});
+
+export const pinAttemptsSchema = z.object({
+  failed: z.number().int().nonnegative(),
+  lockedUntil: z.iso.datetime().nullable(),
+});
+
 export const settingSchema = z.discriminatedUnion('key', [
   z.object({ key: z.literal('allowOversell'), value: z.boolean() }),
   z.object({ key: z.literal('cashierMode'), value: z.boolean() }),
+  z.object({ key: z.literal('ownerPin'), value: hashedSecretSchema }),
+  z.object({ key: z.literal('recoveryCode'), value: hashedSecretSchema }),
+  z.object({ key: z.literal('pinAttempts'), value: pinAttemptsSchema }),
 ]);
 
 export type Product = z.infer<typeof productSchema>;
@@ -122,6 +136,7 @@ export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
 export type Sale = z.infer<typeof saleSchema>;
 export type SaleItem = z.infer<typeof saleItemSchema>;
 export type Setting = z.infer<typeof settingSchema>;
+export type HashedSecret = z.infer<typeof hashedSecretSchema>;
 export type SaleReturn = z.infer<typeof saleReturnSchema>;
 
 export const priceChangeSchema = z.object({
