@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { SEED_AS_PRODUCTS } from '../../test/seed-products';
-import { db } from '../../lib/db';
+import { db } from '../../lib/db/database';
 import { adjustStock } from './api/adjust-stock';
 import { getProducts } from './api/get-products';
 import { seedSampleProducts } from './seed';

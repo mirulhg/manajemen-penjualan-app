@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { db } from '../../lib/db';
+import { db } from '../../lib/db/database';
 import { adjustStock } from './api/adjust-stock';
 import { getStockMovements } from './api/get-stock-movements';
 import { seedSampleProducts } from './seed';

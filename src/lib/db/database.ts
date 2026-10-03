@@ -1,7 +1,7 @@
 import Dexie from 'dexie';
 import type { EntityTable } from 'dexie';
 
-import type { Product, StockMovement } from '../features/stock/schema';
+import type { Product, StockMovement } from './records';
 
 class StockDatabase extends Dexie {
   products!: EntityTable<Product, 'id'>;

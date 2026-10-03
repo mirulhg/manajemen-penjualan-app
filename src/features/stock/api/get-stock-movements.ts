@@ -1,7 +1,7 @@
 import Dexie from 'dexie';
 import { z } from 'zod';
 
-import { db } from '../../../lib/db';
+import { db } from '../../../lib/db/database';
 import { clampPage, MOVEMENTS_PAGE_SIZE } from '../movement-page';
 import { stockMovementSchema } from '../schema';
 import type { StockMovement } from '../schema';

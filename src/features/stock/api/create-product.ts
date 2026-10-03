@@ -1,4 +1,4 @@
-import { db } from '../../../lib/db';
+import { db } from '../../../lib/db/database';
 import { buildProductRecords } from '../build-product-records';
 import { newProductSchema } from '../schema';
 import type { NewProductInput, Product } from '../schema';

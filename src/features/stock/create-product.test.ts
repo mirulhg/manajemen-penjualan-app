@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { db } from '../../lib/db';
+import { db } from '../../lib/db/database';
 import { DEFAULT_ACTOR } from './actor';
 import { createProduct, CreateProductError } from './api/create-product';
 import { getProducts } from './api/get-products';

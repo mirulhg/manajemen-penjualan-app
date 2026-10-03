@@ -1,4 +1,4 @@
-import { db } from '../../../lib/db';
+import { db } from '../../../lib/db/database';
 import { DEFAULT_ACTOR } from '../actor';
 import { productSchema, stockAdjustmentSchema, stockMovementSchema } from '../schema';
 import type { Product, StockAdjustmentInput } from '../schema';

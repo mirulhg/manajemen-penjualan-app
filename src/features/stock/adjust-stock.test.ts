@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { db } from '../../lib/db';
+import { db } from '../../lib/db/database';
 import { adjustStock, StockAdjustmentError } from './api/adjust-stock';
 import { getProduct } from './api/get-product';
 import { seedSampleProducts } from './seed';

@@ -1,4 +1,4 @@
-import { db } from '../../lib/db';
+import { db } from '../../lib/db/database';
 import { buildProductRecords } from './build-product-records';
 import { generateExtraProducts } from './generate-extra-products';
 import { SEED_PRODUCTS } from './seed-data';

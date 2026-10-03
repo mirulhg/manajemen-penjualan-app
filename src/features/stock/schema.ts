@@ -2,39 +2,13 @@ import { z } from 'zod';
 
 import { parseRupiah } from '../../utils/parse-rupiah';
 
-export const productSchema = z.object({
-  id: z.uuid(),
-  sku: z
-    .string()
-    .min(1)
-    .refine((sku) => sku === sku.toUpperCase(), 'SKU harus huruf besar'),
-  name: z.string().min(1),
-  category: z.string().min(1),
-  unit: z.string().min(1),
-  stockQuantity: z.number().int().nonnegative(),
-  minStock: z.number().int().nonnegative().nullable(),
-  purchasePrice: z.number().int().nonnegative(),
-  sellingPrice: z.number().int().nonnegative(),
-  createdAt: z.iso.datetime(),
-  updatedAt: z.iso.datetime(),
-});
-
-export const stockMovementTypeSchema = z.enum(['awal', 'masuk', 'koreksi']);
-
-// Selisih tidak disimpan; dihitung dari quantityAfter - quantityBefore.
-export const stockMovementSchema = z.object({
-  id: z.uuid(),
-  productId: z.uuid(),
-  type: stockMovementTypeSchema,
-  quantityBefore: z.number().int().nonnegative(),
-  quantityAfter: z.number().int().nonnegative(),
-  reason: z.string().min(3),
-  actor: z.string().min(1),
-  createdAt: z.iso.datetime(),
-});
-
-export type Product = z.infer<typeof productSchema>;
-export type StockMovement = z.infer<typeof stockMovementSchema>;
+// Bentuk data yang disimpan hidup di lib/db/records; skema input form tetap di sini.
+export {
+  productSchema,
+  stockMovementSchema,
+  stockMovementTypeSchema,
+} from '../../lib/db/records';
+export type { Product, StockMovement } from '../../lib/db/records';
 
 export const MAX_ADJUSTMENT_QUANTITY = 100_000;
 

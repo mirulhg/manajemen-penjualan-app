@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { db } from '../../../lib/db';
+import { db } from '../../../lib/db/database';
 import { productSchema } from '../schema';
 import type { Product } from '../schema';
 
