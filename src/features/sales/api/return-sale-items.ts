@@ -2,7 +2,7 @@ import { db } from '../../../lib/db/database';
 import { saleReturnSchema, saleSchema } from '../../../lib/db/records';
 import type { SaleReturn } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
-import { DEFAULT_ACTOR } from '../../stock';
+import { getCurrentActor } from '../../../lib/db/settings';
 import { calculateReturn } from '../sale-returns';
 import { formatReturnNumber, getReturnCounterName } from '../sale-number';
 import { returnSaleItemsInputSchema } from '../schema';
@@ -18,9 +18,10 @@ export async function returnSaleItems(saleId: string, input: ReturnSaleItemsInpu
 
   return db.transaction(
     'rw',
-    [db.sales, db.saleItems, db.saleReturns, db.products, db.stockMovements, db.counters],
+    [db.sales, db.saleItems, db.saleReturns, db.products, db.stockMovements, db.counters, db.settings],
     async () => {
       const { sale, progress } = await loadActiveSale(saleId);
+      const actor = await getCurrentActor();
 
       for (const line of request.items) {
         const entry = progress.find((candidate) => candidate.item.id === line.saleItemId);
@@ -39,7 +40,7 @@ export async function returnSaleItems(saleId: string, input: ReturnSaleItemsInpu
         items: lines,
         refundTotal,
         reason: request.reason,
-        actor: DEFAULT_ACTOR,
+        actor,
         createdAt: nowIso,
       });
 
@@ -48,6 +49,7 @@ export async function returnSaleItems(saleId: string, input: ReturnSaleItemsInpu
         type: 'retur',
         reason: `Retur ${number} (${sale.number}): ${request.reason}`,
         saleId,
+        actor,
         now: nowIso,
       });
       await db.saleReturns.add(saleReturn);

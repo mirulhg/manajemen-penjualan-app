@@ -2,7 +2,7 @@ import { db } from '../../../lib/db/database';
 import { PRICE_CHANGE_COUNTER, priceChangeSchema, productSchema } from '../../../lib/db/records';
 import type { PriceChange, Product } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
-import { DEFAULT_ACTOR } from '../actor';
+import { getCurrentActor } from '../../../lib/db/settings';
 import { matchExistingSpelling } from '../match-existing-spelling';
 import { resolveCategory } from '../resolve-category';
 import { editProductSchema } from '../schema';
@@ -35,7 +35,7 @@ export async function updateProduct(productId: string, input: ProductFieldsInput
   const fields = editProductSchema.parse(input);
 
   try {
-    return await db.transaction('rw', db.products, db.priceChanges, db.counters, db.categories, async () => {
+    return await db.transaction('rw', db.products, db.priceChanges, db.counters, db.categories, db.settings, async () => {
       const row = await db.products.get(productId);
       if (!row) throw new UpdateProductError('PRODUCT_NOT_FOUND');
       const product = productSchema.parse(row);
@@ -55,6 +55,7 @@ export async function updateProduct(productId: string, input: ProductFieldsInput
         throw new UpdateProductError('NO_CHANGE');
       }
 
+      const actor = await getCurrentActor();
       const changedPrices = PRICE_FIELDS.filter((field) => next[field] !== product[field]);
       const firstSeq =
         changedPrices.length > 0 ? await nextSequences(PRICE_CHANGE_COUNTER, changedPrices.length) : 0;
@@ -66,7 +67,7 @@ export async function updateProduct(productId: string, input: ProductFieldsInput
           field,
           before: product[field],
           after: next[field],
-          actor: DEFAULT_ACTOR,
+          actor,
           createdAt: now,
         }),
       );

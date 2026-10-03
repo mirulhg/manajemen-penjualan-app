@@ -1,5 +1,4 @@
 import { buildStockMovement } from '../../lib/db/build-stock-movement';
-import { DEFAULT_ACTOR } from './actor';
 import { productSchema } from './schema';
 import type { Product, StockMovement } from './schema';
 
@@ -13,6 +12,7 @@ export function buildProductRecords(
   fields: NewProductFields,
   now: string,
   movementSeq: number,
+  actor: string,
 ): { product: Product; movement: StockMovement } {
   const product = productSchema.parse({
     ...fields,
@@ -28,7 +28,7 @@ export function buildProductRecords(
     quantityBefore: 0,
     quantityAfter: product.stockQuantity,
     reason: 'Stok awal',
-    actor: DEFAULT_ACTOR,
+    actor,
     createdAt: now,
   });
   return { product, movement };

@@ -1,7 +1,7 @@
 import { db } from '../../../lib/db/database';
 import { saleSchema } from '../../../lib/db/records';
 import type { Sale } from '../../../lib/db/records';
-import { DEFAULT_ACTOR } from '../../stock';
+import { getCurrentActor } from '../../../lib/db/settings';
 import { cancelSaleInputSchema } from '../schema';
 import { loadActiveSale } from './load-active-sale';
 import { restoreStock } from './restore-stock';
@@ -12,9 +12,10 @@ export async function cancelSale(saleId: string, reason: string): Promise<Sale> 
 
   return db.transaction(
     'rw',
-    [db.sales, db.saleItems, db.saleReturns, db.products, db.stockMovements, db.counters],
+    [db.sales, db.saleItems, db.saleReturns, db.products, db.stockMovements, db.counters, db.settings],
     async () => {
       const { sale, progress } = await loadActiveSale(saleId);
+      const actor = await getCurrentActor();
 
       // Hanya sisa yang belum diretur yang dikembalikan; yang sudah diretur stoknya sudah kembali lewat retur.
       await restoreStock({
@@ -24,6 +25,7 @@ export async function cancelSale(saleId: string, reason: string): Promise<Sale> 
         type: 'batal',
         reason: `Batal ${sale.number}: ${request.reason}`,
         saleId,
+        actor,
         now: nowIso,
       });
       const cancelled = saleSchema.parse({
@@ -31,7 +33,7 @@ export async function cancelSale(saleId: string, reason: string): Promise<Sale> 
         status: 'dibatalkan',
         cancelledAt: nowIso,
         cancelReason: request.reason,
-        cancelledBy: DEFAULT_ACTOR,
+        cancelledBy: actor,
       });
       await db.sales.put(cancelled);
       return cancelled;

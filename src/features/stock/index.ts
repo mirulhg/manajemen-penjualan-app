@@ -1,6 +1,5 @@
 export { invalidateStockQueries } from './api/invalidate-stock-queries';
 export { useProducts } from './api/use-products';
-export { DEFAULT_ACTOR } from './actor';
 export { filterProducts } from './filter-products';
 export { seedSampleProducts } from './seed';
 export { sortProducts } from './sort-products';

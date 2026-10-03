@@ -1,6 +1,7 @@
 import { db } from '../../../lib/db/database';
 import { STOCK_MOVEMENT_COUNTER } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
+import { getCurrentActor } from '../../../lib/db/settings';
 import { buildProductRecords } from '../build-product-records';
 import { matchExistingSpelling } from '../match-existing-spelling';
 import { resolveCategory } from '../resolve-category';
@@ -22,7 +23,7 @@ export async function createProduct(input: NewProductInput): Promise<Product> {
   const fields = newProductSchema.parse(input);
 
   try {
-    return await db.transaction('rw', db.products, db.stockMovements, db.counters, db.categories, async () => {
+    return await db.transaction('rw', db.products, db.stockMovements, db.counters, db.categories, db.settings, async () => {
       const owner = await db.products.where('sku').equals(fields.sku).first();
       if (owner) throw new CreateProductError(fields.sku, owner.name);
 
@@ -42,6 +43,7 @@ export async function createProduct(input: NewProductInput): Promise<Product> {
         },
         now,
         movementSeq,
+        await getCurrentActor(),
       );
 
       await db.products.add(product);

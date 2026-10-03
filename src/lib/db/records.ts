@@ -112,6 +112,7 @@ export const saleItemSchema = z.object({
 
 export const settingSchema = z.discriminatedUnion('key', [
   z.object({ key: z.literal('allowOversell'), value: z.boolean() }),
+  z.object({ key: z.literal('cashierMode'), value: z.boolean() }),
 ]);
 
 export type Product = z.infer<typeof productSchema>;

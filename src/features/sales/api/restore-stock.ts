@@ -3,7 +3,6 @@ import { db } from '../../../lib/db/database';
 import { productSchema, STOCK_MOVEMENT_COUNTER } from '../../../lib/db/records';
 import type { Product } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
-import { DEFAULT_ACTOR } from '../../stock';
 import { SaleActionError } from './sale-action-error';
 
 type RestoreStockParams = {
@@ -11,11 +10,12 @@ type RestoreStockParams = {
   type: 'retur' | 'batal';
   reason: string;
   saleId: string;
+  actor: string;
   now: string;
 };
 
 // Mengembalikan stok dan mencatat pergerakannya; harus dipanggil di dalam transaksi pemanggil (butuh db.counters).
-export async function restoreStock({ lines, type, reason, saleId, now }: RestoreStockParams) {
+export async function restoreStock({ lines, type, reason, saleId, actor, now }: RestoreStockParams) {
   if (lines.length === 0) return;
 
   const products: Product[] = [];
@@ -36,7 +36,7 @@ export async function restoreStock({ lines, type, reason, saleId, now }: Restore
       quantityBefore: product.stockQuantity,
       quantityAfter: product.stockQuantity + line.quantity,
       reason,
-      actor: DEFAULT_ACTOR,
+      actor,
       createdAt: now,
       saleId,
     });

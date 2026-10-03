@@ -1,6 +1,7 @@
 import { db } from '../../lib/db/database';
 import { STOCK_MOVEMENT_COUNTER } from '../../lib/db/records';
 import { nextSequences } from '../../lib/db/sequence';
+import { OWNER_ACTOR } from '../../lib/db/settings';
 import { buildProductRecords } from './build-product-records';
 import { generateExtraProducts } from './generate-extra-products';
 import { resolveCategory } from './resolve-category';
@@ -15,7 +16,7 @@ export async function seedSampleProducts(extraCount = 0): Promise<void> {
     const allFields = [...SEED_PRODUCTS, ...generateExtraProducts(extraCount)];
     const firstSeq = await nextSequences(STOCK_MOVEMENT_COUNTER, allFields.length);
     const records = allFields.map((fields, index) =>
-      buildProductRecords(fields, now, firstSeq + index),
+      buildProductRecords(fields, now, firstSeq + index, OWNER_ACTOR),
     );
 
     for (const name of new Set(allFields.map((fields) => fields.category))) {

@@ -8,8 +8,7 @@ import {
 } from '../../../lib/db/records';
 import type { Product, Sale } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
-import { getAllowOversell } from '../../../lib/db/settings';
-import { DEFAULT_ACTOR } from '../../stock';
+import { getAllowOversell, getCurrentActor } from '../../../lib/db/settings';
 import { calculateSaleTotals, hasDiscountProblems } from '../calculate-sale-totals';
 import { formatSaleNumber, getSaleCounterName } from '../sale-number';
 import { createSaleInputSchema } from '../schema';
@@ -102,6 +101,7 @@ export async function createSale(input: CreateSaleInput): Promise<Sale> {
       if (amountPaid < totals.total) throw new CreateSaleError('INSUFFICIENT_PAYMENT');
 
       const saleSequence = await nextSequences(getSaleCounterName(now), 1);
+      const actor = await getCurrentActor();
       const firstMovementSeq = await nextSequences(STOCK_MOVEMENT_COUNTER, lines.length);
       const sale = saleSchema.parse({
         id: crypto.randomUUID(),
@@ -114,7 +114,7 @@ export async function createSale(input: CreateSaleInput): Promise<Sale> {
         amountPaid,
         change: amountPaid - totals.total,
         itemCount: totals.itemCount,
-        actor: DEFAULT_ACTOR,
+        actor,
         createdAt: nowIso,
         status: 'selesai',
         refundedTotal: 0,
@@ -142,7 +142,7 @@ export async function createSale(input: CreateSaleInput): Promise<Sale> {
           quantityBefore: line.product.stockQuantity,
           quantityAfter: line.product.stockQuantity - line.quantity,
           reason: `Penjualan ${sale.number}`,
-          actor: DEFAULT_ACTOR,
+          actor,
           createdAt: nowIso,
           saleId: sale.id,
         }),

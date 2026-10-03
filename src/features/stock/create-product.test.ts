@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { db } from '../../lib/db/database';
-import { DEFAULT_ACTOR } from './actor';
+import { OWNER_ACTOR } from '../../lib/db/settings';
 import { createProduct, CreateProductError } from './api/create-product';
 import { getCategoriesWithCounts } from './api/get-categories';
 import { seedSampleProducts } from './seed';
@@ -46,7 +46,7 @@ describe('createProduct', () => {
       type: 'awal',
       quantityBefore: 0,
       quantityAfter: 12,
-      actor: DEFAULT_ACTOR,
+      actor: OWNER_ACTOR,
     });
     expect(created).toMatchObject({ purchasePrice: 9000, sellingPrice: 11500, minStock: null });
   });

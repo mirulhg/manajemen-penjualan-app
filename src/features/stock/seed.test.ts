@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { db } from '../../lib/db/database';
-import { DEFAULT_ACTOR } from './actor';
+import { OWNER_ACTOR } from '../../lib/db/settings';
 import { getProducts } from './api/get-products';
 import { seedSampleProducts } from './seed';
 import { getStockStatus } from './stock-status';
@@ -26,7 +26,7 @@ describe('seedSampleProducts', () => {
     await seedSampleProducts();
 
     const movements = await db.stockMovements.toArray();
-    expect(movements.every((movement) => movement.actor === DEFAULT_ACTOR)).toBe(true);
+    expect(movements.every((movement) => movement.actor === OWNER_ACTOR)).toBe(true);
   });
 
   it('tidak menggandakan data saat dipanggil dua kali', async () => {
