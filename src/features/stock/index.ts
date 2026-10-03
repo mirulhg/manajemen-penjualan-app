@@ -7,3 +7,4 @@ export { sortProducts } from './sort-products';
 export { DEFAULT_MIN_STOCK, getStockStatus } from './stock-status';
 export type { StockStatus } from './stock-status';
 export type { Product, StockMovement } from './schema';
+export { StockListError } from './components/StockListError';

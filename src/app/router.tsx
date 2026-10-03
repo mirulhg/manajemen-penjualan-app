@@ -1,11 +1,12 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router';
 
+import { MainNav } from '../components/layout/MainNav';
 import { PageShell } from '../components/layout/PageShell';
 
 export const router = createBrowserRouter([
   {
     element: (
-      <PageShell>
+      <PageShell nav={<MainNav />}>
         <Outlet />
       </PageShell>
     ),
@@ -17,6 +18,13 @@ export const router = createBrowserRouter([
           // Impor langsung (bukan lewat features/stock/index.ts): main.tsx sudah memuat barrel itu untuk seed, jadi lewat barrel tidak akan jadi chunk terpisah.
           const { StockListPage } = await import('../features/stock/components/StockListPage');
           return { Component: StockListPage };
+        },
+      },
+      {
+        path: 'kasir',
+        lazy: async () => {
+          const { CashierPage } = await import('../features/sales/components/CashierPage');
+          return { Component: CashierPage };
         },
       },
       {
