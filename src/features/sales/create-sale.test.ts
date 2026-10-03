@@ -165,7 +165,11 @@ describe('createSale', () => {
     const product = await findProductBySku('SBK-005');
     expect(product.stockQuantity).toBe(-1);
     expect(getStockStatus(product.stockQuantity, product.minStock)).toBe('habis');
-    const movement = await db.stockMovements.where('productId').equals(product.id).last();
+    const movement = await db.stockMovements
+      .where('productId')
+      .equals(product.id)
+      .filter((row) => row.type === 'jual')
+      .first();
     expect(movement).toMatchObject({ type: 'jual', quantityBefore: 0, quantityAfter: -1 });
   });
 
