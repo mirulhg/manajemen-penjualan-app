@@ -27,12 +27,15 @@ export function StockListContent() {
   const categories = getCategories(products);
   const filters = normalizeFilters(urlFilters, categories);
   const hasActiveFilters =
-    filters.query !== null || filters.category !== null || filters.status !== null;
+    filters.query !== null || filters.category !== null || filters.status !== null || filters.archived;
+  const activeProducts = products.filter((product) => product.archivedAt === null);
+  // Pembanding "dari Y barang": semua barang bila arsip ditampilkan, kalau tidak hanya yang aktif.
+  const scopeCount = filters.archived ? products.length : activeProducts.length;
   const visibleProducts = sortProducts(filterProducts(products, filters), filters.sort);
 
   return (
     <div className="space-y-4">
-      <StockSummary products={products} />
+      <StockSummary products={activeProducts} />
       <AddProductLink />
       <StockFilters
         filters={filters}
@@ -42,7 +45,7 @@ export function StockListContent() {
         onClear={clearFilters}
       />
       <p aria-live="polite" className="text-sm text-text-muted">
-        Menampilkan {formatNumber(visibleProducts.length)} dari {formatNumber(products.length)}{' '}
+        Menampilkan {formatNumber(visibleProducts.length)} dari {formatNumber(scopeCount)}{' '}
         barang
       </p>
       {visibleProducts.length === 0 ? (

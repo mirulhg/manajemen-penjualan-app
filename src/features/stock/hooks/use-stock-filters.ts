@@ -13,7 +13,7 @@ export function useStockFilters() {
 
   // Urutan bukan filter, jadi tetap dipertahankan saat filter dihapus.
   function clearFilters() {
-    const cleared = { query: null, category: null, status: null, sort: filters.sort };
+    const cleared = { query: null, category: null, status: null, sort: filters.sort, archived: false };
     setSearchParams(serializeFilterParams(cleared), { replace: true });
   }
 

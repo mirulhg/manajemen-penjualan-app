@@ -2,6 +2,8 @@ import { Link, useLocation, useParams } from 'react-router';
 
 import { useProduct } from '../api/use-product';
 import { getListPath } from '../list-return-state';
+import { PriceHistory } from './PriceHistory';
+import { ProductArchiveSection } from './ProductArchiveSection';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
 import { ProductInfo } from './ProductInfo';
 import { ProductNotFound } from './ProductNotFound';
@@ -55,6 +57,15 @@ export function ProductDetailPage() {
       >
         Sesuaikan stok
       </Link>
+      <Link
+        to={`/stok/${product.id}/ubah`}
+        state={locationState}
+        className="ml-2 mt-4 inline-flex min-h-11 items-center rounded-md border border-border bg-surface px-4 font-medium"
+      >
+        Ubah barang
+      </Link>
+      <ProductArchiveSection product={product} />
+      <PriceHistory productId={product.id} />
       <StockMovementHistory productId={product.id} unit={product.unit} />
     </SubpageLayout>
   );

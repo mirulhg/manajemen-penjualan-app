@@ -20,7 +20,14 @@ export function StockListItem({ product }: StockListItemProps) {
       className="flex min-h-11 items-center justify-between gap-4 px-4 py-3"
     >
       <div className="min-w-0">
-        <p className="font-medium">{product.name}</p>
+        <p className="font-medium">
+          {product.name}
+          {product.archivedAt !== null && (
+            <span className="ml-2 rounded-md border border-border px-2 py-1 text-sm font-normal text-text-muted">
+              Diarsipkan
+            </span>
+          )}
+        </p>
         <p className="text-sm text-text-muted">
           {product.sku} · {product.category}
         </p>

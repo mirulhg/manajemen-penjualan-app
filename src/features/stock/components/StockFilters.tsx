@@ -107,6 +107,16 @@ export function StockFilters({
           ))}
         </select>
       </div>
+      <div className="sm:col-span-3">
+        <label className="flex min-h-11 items-center gap-3">
+          <input
+            type="checkbox"
+            checked={filters.archived}
+            onChange={(event) => onChange({ archived: event.target.checked })}
+          />
+          Tampilkan barang diarsipkan
+        </label>
+      </div>
       {hasActiveFilters && (
         <div className="sm:col-span-3">
           <button

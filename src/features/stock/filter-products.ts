@@ -17,7 +17,8 @@ export function filterProducts(products: Product[], filters: StockFilters): Prod
       const matchesStatus =
         filters.status === null ||
         getStockStatus(product.stockQuantity, product.minStock) === filters.status;
-      return matchesQuery && matchesCategory && matchesStatus;
+      const matchesArchive = filters.archived || product.archivedAt === null;
+      return matchesQuery && matchesCategory && matchesStatus && matchesArchive;
     });
 }
 

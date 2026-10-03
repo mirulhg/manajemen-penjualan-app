@@ -37,7 +37,14 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
   return (
     <div className="rounded-md border border-border bg-surface p-4">
-      <h2 className="text-lg font-semibold">{product.name}</h2>
+      <h2 className="text-lg font-semibold">
+        {product.name}
+        {product.archivedAt !== null && (
+          <span className="ml-2 rounded-md border border-border px-2 py-1 text-sm font-normal text-text-muted">
+            Diarsipkan
+          </span>
+        )}
+      </h2>
       <dl className="mt-4 grid gap-3 sm:grid-cols-2">
         {rows.map((row) => (
           <div key={row.label}>

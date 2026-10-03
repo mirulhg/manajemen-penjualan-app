@@ -10,6 +10,7 @@ describe('parseFilterParams', () => {
       category: 'Sembako',
       status: 'menipis',
       sort: 'nama',
+      archived: false,
     });
   });
 
@@ -23,12 +24,14 @@ describe('parseFilterParams', () => {
       category: null,
       status: null,
       sort: 'nama',
+      archived: false,
     });
     expect(parseFilterParams(new URLSearchParams())).toEqual({
       query: null,
       category: null,
       status: null,
       sort: 'nama',
+      archived: false,
     });
   });
 
@@ -39,9 +42,9 @@ describe('parseFilterParams', () => {
 
 describe('serializeFilterParams', () => {
   it('membuang parameter kosong dari URL', () => {
-    const params = serializeFilterParams({ query: null, category: null, status: 'habis', sort: 'nama' });
+    const params = serializeFilterParams({ query: null, category: null, status: 'habis', sort: 'nama', archived: false });
     expect(params.toString()).toBe('status=habis');
-    expect(serializeFilterParams({ query: null, category: null, status: null, sort: 'nama' }).toString()).toBe('');
+    expect(serializeFilterParams({ query: null, category: null, status: null, sort: 'nama', archived: false }).toString()).toBe('');
   });
 });
 
@@ -57,7 +60,7 @@ describe('parameter urut', () => {
 
   it('nama tidak ditulis ke URL, urutan lain ditulis', () => {
     const base = { query: null, category: null, status: null } as const;
-    expect(serializeFilterParams({ ...base, sort: 'nama' }).has('urut')).toBe(false);
-    expect(serializeFilterParams({ ...base, sort: 'terbaru' }).toString()).toBe('urut=terbaru');
+    expect(serializeFilterParams({ ...base, sort: 'nama', archived: false }).has('urut')).toBe(false);
+    expect(serializeFilterParams({ ...base, sort: 'terbaru', archived: false }).toString()).toBe('urut=terbaru');
   });
 });

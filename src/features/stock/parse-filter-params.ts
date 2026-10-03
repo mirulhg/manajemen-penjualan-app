@@ -8,10 +8,13 @@ export type StockFilters = {
   category: string | null;
   status: StockStatus | null;
   sort: StockSort;
+  // Barang diarsipkan disembunyikan secara bawaan; ?arsip=1 memunculkannya.
+  archived: boolean;
 };
 
 const textParamSchema = z.string().min(1).nullable().catch(null);
 const sortParamSchema = z.enum(['nama', 'stok-sedikit', 'stok-banyak', 'terbaru']).catch('nama');
+const archivedParamSchema = z.literal('1').transform(() => true).catch(false);
 const statusParamSchema = z.enum(['aman', 'menipis', 'habis']).nullable().catch(null);
 
 // q tidak di-trim di sini: spasi di tengah kata kunci ("mi instan") harus bertahan selama mengetik.
@@ -21,6 +24,7 @@ export function parseFilterParams(params: URLSearchParams): StockFilters {
     category: textParamSchema.parse(params.get('kategori')),
     status: statusParamSchema.parse(params.get('status')),
     sort: sortParamSchema.parse(params.get('urut')),
+    archived: archivedParamSchema.parse(params.get('arsip')),
   };
 }
 
@@ -31,5 +35,6 @@ export function serializeFilterParams(filters: StockFilters): URLSearchParams {
   if (filters.status) params.set('status', filters.status);
   // Urutan bawaan (nama) tidak ditulis ke URL.
   if (filters.sort !== 'nama') params.set('urut', filters.sort);
+  if (filters.archived) params.set('arsip', '1');
   return params;
 }

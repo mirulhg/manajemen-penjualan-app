@@ -4,7 +4,7 @@ import { filterProducts, getCategories, normalizeFilters } from './filter-produc
 import type { StockFilters } from './parse-filter-params';
 import { SEED_AS_PRODUCTS as products } from '../../test/seed-products';
 
-const NO_FILTER: StockFilters = { query: null, category: null, status: null, sort: 'nama' };
+const NO_FILTER: StockFilters = { query: null, category: null, status: null, sort: 'nama', archived: false };
 
 function search(overrides: Partial<StockFilters>) {
   return filterProducts(products, { ...NO_FILTER, ...overrides });
@@ -72,7 +72,7 @@ describe('normalizeFilters', () => {
   });
 
   it('mempertahankan kategori valid dan filter lainnya', () => {
-    const filters: StockFilters = { query: 'mi', category: 'Sembako', status: 'habis', sort: 'nama' };
+    const filters: StockFilters = { query: 'mi', category: 'Sembako', status: 'habis', sort: 'nama', archived: false };
     expect(normalizeFilters(filters, categories)).toEqual(filters);
   });
 });

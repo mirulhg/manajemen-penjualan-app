@@ -21,7 +21,7 @@ export function ProductSearch({ products, inputRef, onPick }: ProductSearchProps
   const hasQuery = query.trim() !== '';
   const results = hasQuery
     ? sortProducts(
-        filterProducts(products, { query, category: null, status: null, sort: 'nama' }),
+        filterProducts(products, { query, category: null, status: null, sort: 'nama', archived: false }),
         'nama',
       ).slice(0, MAX_RESULTS)
     : [];

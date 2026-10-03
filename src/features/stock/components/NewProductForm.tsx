@@ -4,7 +4,6 @@ import { useForm, useWatch } from 'react-hook-form';
 import { Link } from 'react-router';
 
 import { formatNumber } from '../../../utils/format-number';
-import { parseRupiah } from '../../../utils/parse-rupiah';
 import { CreateProductError } from '../api/create-product';
 import { useCreateProduct } from '../api/use-create-product';
 import { newProductSchema } from '../schema';
@@ -12,6 +11,7 @@ import type { NewProduct, NewProductInput } from '../schema';
 import { IdentityFields } from './IdentityFields';
 import { InitialStockField } from './InitialStockField';
 import { PriceAndLimitFields } from './PriceAndLimitFields';
+import { SoldAtLossWarning } from './SoldAtLossWarning';
 
 type NewProductFormProps = {
   categories: string[];
@@ -37,10 +37,8 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
     });
   const mutation = useCreateProduct();
 
-  const purchasePrice = parseRupiah(useWatch({ control, name: 'purchasePrice' }));
-  const sellingPrice = parseRupiah(useWatch({ control, name: 'sellingPrice' }));
-  const isSoldAtLoss =
-    purchasePrice !== null && sellingPrice !== null && sellingPrice > 0 && sellingPrice < purchasePrice;
+  const purchasePriceText = useWatch({ control, name: 'purchasePrice' });
+  const sellingPriceText = useWatch({ control, name: 'sellingPrice' });
   const isSaving = formState.isSubmitting || mutation.isPending;
   const hasSaved = mutation.isSuccess && !formState.isDirty;
   const hasUnexpectedError = mutation.isError && !(mutation.error instanceof CreateProductError);
@@ -73,11 +71,7 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
       />
       <InitialStockField register={register} errors={formState.errors} />
       <PriceAndLimitFields register={register} errors={formState.errors} />
-      {isSoldAtLoss && (
-        <p className="rounded-md bg-status-menipis-bg p-3 text-status-menipis-text">
-          Harga jual lebih rendah dari harga beli. Barang ini akan dijual rugi.
-        </p>
-      )}
+      <SoldAtLossWarning purchasePriceText={purchasePriceText} sellingPriceText={sellingPriceText} />
       {hasSaved && (
         <div role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
           <p>
