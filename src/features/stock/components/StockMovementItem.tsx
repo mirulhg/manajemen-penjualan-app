@@ -7,7 +7,12 @@ type StockMovementItemProps = {
   unit: string;
 };
 
-const TYPE_LABELS = { awal: 'Stok awal', masuk: 'Stok masuk', koreksi: 'Koreksi' } as const;
+const TYPE_LABELS = {
+  awal: 'Stok awal',
+  masuk: 'Stok masuk',
+  koreksi: 'Koreksi',
+  jual: 'Penjualan',
+} as const;
 
 function formatDelta(delta: number): string {
   if (delta > 0) return `+${formatNumber(delta)}`;

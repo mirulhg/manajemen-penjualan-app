@@ -2,7 +2,7 @@ import Dexie from 'dexie';
 import type { EntityTable } from 'dexie';
 
 import { STOCK_MOVEMENT_COUNTER } from './records';
-import type { Counter, Product, StockMovement } from './records';
+import type { Counter, Product, Sale, SaleItem, Setting, StockMovement } from './records';
 
 type LegacyStockMovement = Omit<StockMovement, 'seq'>;
 
@@ -10,6 +10,9 @@ class StockDatabase extends Dexie {
   products!: EntityTable<Product, 'id'>;
   stockMovements!: EntityTable<StockMovement, 'id'>;
   counters!: EntityTable<Counter, 'name'>;
+  sales!: EntityTable<Sale, 'id'>;
+  saleItems!: EntityTable<SaleItem, 'id'>;
+  settings!: EntityTable<Setting, 'key'>;
 
   constructor() {
     super('manajemen-stok');
@@ -34,6 +37,11 @@ class StockDatabase extends Dexie {
             .put({ name: STOCK_MOVEMENT_COUNTER, value: ordered.length });
         }
       });
+    this.version(3).stores({
+      sales: 'id, &number, createdAt',
+      saleItems: 'id, saleId, productId',
+      settings: 'key',
+    });
   }
 }
 

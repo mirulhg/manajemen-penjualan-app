@@ -13,8 +13,10 @@ type StockMovementPage = {
   pageCount: number;
 };
 
+export const STOCK_MOVEMENTS_ROOT_KEY = ['stock-movements'] as const;
+
 export function stockMovementsKey(productId: string) {
-  return ['stock-movements', productId] as const;
+  return [...STOCK_MOVEMENTS_ROOT_KEY, productId] as const;
 }
 
 export function stockMovementsPageKey(productId: string, page: number) {

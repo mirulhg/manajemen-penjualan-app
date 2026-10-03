@@ -9,7 +9,8 @@ export const productSchema = z.object({
   name: z.string().min(1),
   category: z.string().min(1),
   unit: z.string().min(1),
-  stockQuantity: z.number().int().nonnegative(),
+  // Boleh negatif: terjadi bila pemilik mengizinkan jual melebihi stok. Aturan bisnisnya dijaga oleh penulis data.
+  stockQuantity: z.number().int(),
   minStock: z.number().int().nonnegative().nullable(),
   purchasePrice: z.number().int().nonnegative(),
   sellingPrice: z.number().int().nonnegative(),
@@ -17,7 +18,7 @@ export const productSchema = z.object({
   updatedAt: z.iso.datetime(),
 });
 
-export const stockMovementTypeSchema = z.enum(['awal', 'masuk', 'koreksi']);
+export const stockMovementTypeSchema = z.enum(['awal', 'masuk', 'koreksi', 'jual']);
 
 // Selisih tidak disimpan; dihitung dari quantityAfter - quantityBefore.
 // seq naik terus untuk seluruh pergerakan; memberi urutan pasti walau createdAt sama.
@@ -26,11 +27,13 @@ export const stockMovementSchema = z.object({
   seq: z.number().int().min(1),
   productId: z.uuid(),
   type: stockMovementTypeSchema,
-  quantityBefore: z.number().int().nonnegative(),
-  quantityAfter: z.number().int().nonnegative(),
+  quantityBefore: z.number().int(),
+  quantityAfter: z.number().int(),
   reason: z.string().min(3),
   actor: z.string().min(1),
   createdAt: z.iso.datetime(),
+  // Hanya ada pada pergerakan bertipe 'jual'; data lama tanpa field ini tetap valid.
+  saleId: z.uuid().optional(),
 });
 
 export const STOCK_MOVEMENT_COUNTER = 'stockMovement';
@@ -40,6 +43,47 @@ export const counterSchema = z.object({
   value: z.number().int().nonnegative(),
 });
 
+const money = z.number().int().nonnegative();
+
+export const paymentMethodSchema = z.enum(['tunai', 'transfer', 'qris']);
+
+export const saleSchema = z.object({
+  id: z.uuid(),
+  number: z.string().regex(/^TRX-\d{8}-\d{4,}$/),
+  paymentMethod: paymentMethodSchema,
+  subtotal: money,
+  itemDiscountTotal: money,
+  transactionDiscount: money,
+  total: money,
+  amountPaid: money,
+  change: money,
+  itemCount: z.number().int().min(1),
+  actor: z.string().min(1),
+  createdAt: z.iso.datetime(),
+});
+
+// Salinan nama, SKU, satuan, dan harga saat transaksi: transaksi lama tidak berubah walau produk diubah.
+export const saleItemSchema = z.object({
+  id: z.uuid(),
+  saleId: z.uuid(),
+  productId: z.uuid(),
+  productName: z.string().min(1),
+  sku: z.string().min(1),
+  unit: z.string().min(1),
+  quantity: z.number().int().min(1),
+  unitPrice: money,
+  unitCost: money,
+  discount: money,
+});
+
+export const settingSchema = z.discriminatedUnion('key', [
+  z.object({ key: z.literal('allowOversell'), value: z.boolean() }),
+]);
+
 export type Product = z.infer<typeof productSchema>;
 export type StockMovement = z.infer<typeof stockMovementSchema>;
 export type Counter = z.infer<typeof counterSchema>;
+export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
+export type Sale = z.infer<typeof saleSchema>;
+export type SaleItem = z.infer<typeof saleItemSchema>;
+export type Setting = z.infer<typeof settingSchema>;
