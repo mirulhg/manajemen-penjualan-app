@@ -15,6 +15,9 @@ export type CartViewLine = {
   lineTotal: number;
   exceedsStock: boolean;
   available: number;
+  isArchived: boolean;
+  // Harga saat barang dimasukkan/terakhir dilihat bila sekarang berbeda; null bila tidak berubah.
+  priceChangedFrom: number | null;
 };
 
 export type CartView = {
@@ -32,6 +35,7 @@ function parseMoneyText(text: string): number | null {
 
 function getBlockReason(view: Omit<CartView, 'blockReason'>, cart: CartState, allowOversell: boolean) {
   if (view.lines.length === 0) return 'Keranjang masih kosong.';
+  if (view.lines.some((line) => line.isArchived)) return 'Ada barang yang sudah diarsipkan.';
   if (view.transactionDiscountInvalid || view.lines.some((line) => line.discountInvalid)) {
     return 'Isi diskon dengan angka, misalnya 4.000.';
   }
@@ -65,6 +69,8 @@ export function getCartView(cart: CartState, products: Product[], allowOversell:
         lineTotal: Math.max(0, lineSubtotal - discount),
         exceedsStock: line.quantity > product.stockQuantity,
         available: Math.max(0, product.stockQuantity),
+        isArchived: product.archivedAt !== null,
+        priceChangedFrom: line.priceAtAdd === product.sellingPrice ? null : line.priceAtAdd,
       },
     ];
   });

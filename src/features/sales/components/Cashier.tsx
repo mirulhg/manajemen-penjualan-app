@@ -30,8 +30,8 @@ export function Cashier({ products, allowOversell }: CashierProps) {
     dispatch(action);
   }
 
-  function handlePick(productId: string) {
-    handleCartAction({ type: 'add', productId });
+  function handlePick(product: Product) {
+    handleCartAction({ type: 'add', productId: product.id, price: product.sellingPrice });
   }
 
   function handleNewSale() {

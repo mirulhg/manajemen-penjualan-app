@@ -18,7 +18,8 @@ export function CashierContent() {
   if (allowOversell.isError) {
     return <StockListError error={allowOversell.error} onRetry={handleRetry} />;
   }
-  if (products.data.length === 0) return <CashierEmptyState />;
+  // Barang arsip tidak bisa dijual, jadi kasir kosong bila semua barang diarsipkan.
+  if (products.data.every((product) => product.archivedAt !== null)) return <CashierEmptyState />;
 
   return <Cashier products={products.data} allowOversell={allowOversell.data} />;
 }

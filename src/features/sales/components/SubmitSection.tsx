@@ -28,6 +28,13 @@ function SaleErrorMessage({ error }: { error: Error }) {
       </p>
     );
   }
+  if (error instanceof CreateSaleError && error.code === 'PRODUCT_ARCHIVED') {
+    return (
+      <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        {error.message}
+      </p>
+    );
+  }
   return (
     <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
       Transaksi tidak tersimpan. Isian dan keranjang Anda masih ada; periksa lalu coba simpan lagi.

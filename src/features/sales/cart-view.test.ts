@@ -11,6 +11,12 @@ function idOf(sku: string): string {
   return product.id;
 }
 
+function add(sku: string): CartAction {
+  const product = SEED_AS_PRODUCTS.find((item) => item.sku === sku);
+  if (!product) throw new Error(`${sku} tidak ada di seed`);
+  return { type: 'add', productId: product.id, price: product.sellingPrice };
+}
+
 function view(actions: CartAction[], allowOversell = false) {
   const cart = actions.reduce(cartReducer, initialCartState);
   return { cart, view: getCartView(cart, SEED_AS_PRODUCTS, allowOversell) };
@@ -23,7 +29,7 @@ describe('getCartView', () => {
 
   it('tunai dengan uang kurang menyebut kekurangannya', () => {
     const { view: result } = view([
-      { type: 'add', productId: idOf('SBK-001') },
+      add('SBK-001'),
       { type: 'setCash', text: '50.000' },
     ]);
     expect(result.cash.shortfall).toBe(24000);
@@ -32,7 +38,7 @@ describe('getCartView', () => {
 
   it('uang pas membuka blokir dan kembalian dihitung dari uang diterima', () => {
     const { view: result } = view([
-      { type: 'add', productId: idOf('SBK-001') },
+      add('SBK-001'),
       { type: 'setCash', text: '100.000' },
     ]);
     expect(result.blockReason).toBeNull();
@@ -41,7 +47,7 @@ describe('getCartView', () => {
 
   it('transfer tidak butuh uang diterima', () => {
     const { view: result } = view([
-      { type: 'add', productId: idOf('SBK-001') },
+      add('SBK-001'),
       { type: 'setPaymentMethod', method: 'transfer' },
     ]);
     expect(result.blockReason).toBeNull();
@@ -49,7 +55,7 @@ describe('getCartView', () => {
 
   it('barang melebihi stok memblokir kecuali pemilik mengizinkan', () => {
     const actions: CartAction[] = [
-      { type: 'add', productId: idOf('SBK-005') },
+      add('SBK-005'),
       { type: 'setPaymentMethod', method: 'transfer' },
     ];
     expect(view(actions).view.blockReason).toBe('Ada barang yang melebihi stok.');
@@ -60,7 +66,7 @@ describe('getCartView', () => {
 
   it('diskon bukan angka atau melebihi nilai barang diblokir', () => {
     const base: CartAction[] = [
-      { type: 'add', productId: idOf('MNM-001') },
+      add('MNM-001'),
       { type: 'setPaymentMethod', method: 'transfer' },
     ];
     const notNumber = view([...base, { type: 'setLineDiscount', productId: idOf('MNM-001'), text: 'abc' }]);
@@ -71,7 +77,7 @@ describe('getCartView', () => {
 
   it('input createSale memakai total di layar sebagai expectedTotal dan tidak membawa harga beli', () => {
     const { cart, view: result } = view([
-      { type: 'add', productId: idOf('SBK-001') },
+      add('SBK-001'),
       { type: 'setCash', text: '100000' },
     ]);
     const input = toCreateSaleInput(cart, result);

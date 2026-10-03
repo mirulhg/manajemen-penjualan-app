@@ -10,7 +10,7 @@ import type { Product } from '../../stock';
 type ProductSearchProps = {
   products: Product[];
   inputRef: RefObject<HTMLInputElement | null>;
-  onPick: (productId: string) => void;
+  onPick: (product: Product) => void;
 };
 
 const MAX_RESULTS = 20;
@@ -26,8 +26,8 @@ export function ProductSearch({ products, inputRef, onPick }: ProductSearchProps
       ).slice(0, MAX_RESULTS)
     : [];
 
-  function handlePick(productId: string) {
-    onPick(productId);
+  function handlePick(product: Product) {
+    onPick(product);
     // Fokus kembali ke pencarian dan teks diblok, supaya mengetik berikutnya langsung mengganti kata kunci.
     inputRef.current?.focus();
     inputRef.current?.select();
@@ -56,7 +56,7 @@ export function ProductSearch({ products, inputRef, onPick }: ProductSearchProps
           <li key={product.id}>
             <button
               type="button"
-              onClick={() => handlePick(product.id)}
+              onClick={() => handlePick(product)}
               className="min-h-11 w-full rounded-md border border-border bg-surface px-3 py-2 text-left"
             >
               <span className="block font-medium">{product.name}</span>

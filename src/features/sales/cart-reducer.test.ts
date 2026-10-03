@@ -9,15 +9,15 @@ function run(actions: CartAction[], start: CartState = initialCartState): CartSt
 
 describe('cartReducer', () => {
   it('add menambah baris baru dengan jumlah 1', () => {
-    expect(run([{ type: 'add', productId: 'a' }]).lines).toEqual([
-      { productId: 'a', quantity: 1, discountText: '' },
+    expect(run([{ type: 'add', productId: 'a', price: 1000 }]).lines).toEqual([
+      { productId: 'a', quantity: 1, discountText: '', priceAtAdd: 1000 },
     ]);
   });
 
   it('add pada barang yang sudah ada menambah jumlahnya', () => {
     const state = run([
-      { type: 'add', productId: 'a' },
-      { type: 'add', productId: 'a' },
+      { type: 'add', productId: 'a', price: 1000 },
+      { type: 'add', productId: 'a', price: 1000 },
     ]);
     expect(state.lines).toHaveLength(1);
     expect(state.lines[0]?.quantity).toBe(2);
@@ -25,15 +25,15 @@ describe('cartReducer', () => {
 
   it('decrease tidak turun di bawah 1', () => {
     const state = run([
-      { type: 'add', productId: 'a' },
-      { type: 'decrease', productId: 'a' },
+      { type: 'add', productId: 'a', price: 1000 },
+      { type: 'decrease', productId: 'a', price: 1000 },
     ]);
     expect(state.lines[0]?.quantity).toBe(1);
   });
 
   it('setQuantity dibatasi 1 sampai batas atas dan dibulatkan', () => {
     const setTo = (quantity: number) =>
-      run([{ type: 'add', productId: 'a' }, { type: 'setQuantity', productId: 'a', quantity }]).lines[0]
+      run([{ type: 'add', productId: 'a', price: 1000 }, { type: 'setQuantity', productId: 'a', quantity, price: 1000 }]).lines[0]
         ?.quantity;
     expect(setTo(0)).toBe(1);
     expect(setTo(7.9)).toBe(7);
@@ -42,8 +42,8 @@ describe('cartReducer', () => {
 
   it('remove menghapus hanya baris itu', () => {
     const state = run([
-      { type: 'add', productId: 'a' },
-      { type: 'add', productId: 'b' },
+      { type: 'add', productId: 'a', price: 1000 },
+      { type: 'add', productId: 'b', price: 1000 },
       { type: 'remove', productId: 'a' },
     ]);
     expect(state.lines.map((line) => line.productId)).toEqual(['b']);
@@ -51,7 +51,7 @@ describe('cartReducer', () => {
 
   it('menyimpan diskon baris, diskon transaksi, metode bayar, dan uang diterima', () => {
     const state = run([
-      { type: 'add', productId: 'a' },
+      { type: 'add', productId: 'a', price: 1000 },
       { type: 'setLineDiscount', productId: 'a', text: '4.000' },
       { type: 'setTransactionDiscount', text: '2.000' },
       { type: 'setPaymentMethod', method: 'qris' },
@@ -67,7 +67,7 @@ describe('cartReducer', () => {
 
   it('clear mengembalikan keadaan awal', () => {
     const state = run([
-      { type: 'add', productId: 'a' },
+      { type: 'add', productId: 'a', price: 1000 },
       { type: 'setPaymentMethod', method: 'transfer' },
       { type: 'clear' },
     ]);
@@ -75,9 +75,9 @@ describe('cartReducer', () => {
   });
 
   it('tidak mengubah state sebelumnya', () => {
-    const before = run([{ type: 'add', productId: 'a' }]);
+    const before = run([{ type: 'add', productId: 'a', price: 1000 }]);
     const snapshot = structuredClone(before);
-    cartReducer(before, { type: 'increase', productId: 'a' });
+    cartReducer(before, { type: 'increase', productId: 'a', price: 1000 });
     expect(before).toEqual(snapshot);
   });
 });

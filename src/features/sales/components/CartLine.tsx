@@ -23,7 +23,7 @@ export function CartLine({ line, dispatch }: CartLineProps) {
 
   function handleQuantityChange(text: string) {
     if (/^\d+$/.test(text)) {
-      dispatch({ type: 'setQuantity', productId: product.id, quantity: Number(text) });
+      dispatch({ type: 'setQuantity', productId: product.id, quantity: Number(text), price: product.sellingPrice });
     }
   }
 
@@ -40,7 +40,7 @@ export function CartLine({ line, dispatch }: CartLineProps) {
         <button
           type="button"
           aria-label={`Kurangi ${product.name}`}
-          onClick={() => dispatch({ type: 'decrease', productId: product.id })}
+          onClick={() => dispatch({ type: 'decrease', productId: product.id, price: product.sellingPrice })}
           className={STEP_BUTTON_CLASS}
         >
           −
@@ -56,7 +56,7 @@ export function CartLine({ line, dispatch }: CartLineProps) {
         <button
           type="button"
           aria-label={`Tambah ${product.name}`}
-          onClick={() => dispatch({ type: 'increase', productId: product.id })}
+          onClick={() => dispatch({ type: 'increase', productId: product.id, price: product.sellingPrice })}
           className={STEP_BUTTON_CLASS}
         >
           +
@@ -69,6 +69,16 @@ export function CartLine({ line, dispatch }: CartLineProps) {
           Hapus
         </button>
       </div>
+      {line.priceChangedFrom !== null && (
+        <p aria-live="polite" className="rounded-md bg-status-menipis-bg p-2 text-sm text-status-menipis-text">
+          Harga berubah dari {formatRupiah(line.priceChangedFrom)} ke {formatRupiah(product.sellingPrice)}
+        </p>
+      )}
+      {line.isArchived && (
+        <p className="rounded-md bg-status-habis-bg p-2 text-sm text-status-habis-text">
+          Barang ini sudah diarsipkan dan tidak bisa dijual. Hapus dari keranjang untuk melanjutkan.
+        </p>
+      )}
       {line.exceedsStock && (
         <p className="text-sm text-status-habis-text">
           Stok tidak cukup (tersedia {formatNumber(line.available)})

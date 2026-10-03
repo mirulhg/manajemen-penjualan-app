@@ -4,6 +4,8 @@ export type CartLine = {
   productId: string;
   quantity: number;
   discountText: string;
+  // Harga jual saat kasir terakhir "melihat" baris ini; bila harga produk berubah sesudahnya, kasir diberi tahu.
+  priceAtAdd: number;
 };
 
 // Diskon dan uang diterima disimpan sebagai teks mentah; diubah ke angka saat render (parseRupiah).
@@ -15,10 +17,10 @@ export type CartState = {
 };
 
 export type CartAction =
-  | { type: 'add'; productId: string }
-  | { type: 'increase'; productId: string }
-  | { type: 'decrease'; productId: string }
-  | { type: 'setQuantity'; productId: string; quantity: number }
+  | { type: 'add'; productId: string; price: number }
+  | { type: 'increase'; productId: string; price: number }
+  | { type: 'decrease'; productId: string; price: number }
+  | { type: 'setQuantity'; productId: string; quantity: number; price: number }
   | { type: 'remove'; productId: string }
   | { type: 'setLineDiscount'; productId: string; text: string }
   | { type: 'setTransactionDiscount'; text: string }
@@ -55,27 +57,35 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
         return updateLine(state, action.productId, (line) => ({
           ...line,
           quantity: clampQuantity(line.quantity + 1),
+          priceAtAdd: action.price,
         }));
       }
       return {
         ...state,
-        lines: [...state.lines, { productId: action.productId, quantity: 1, discountText: '' }],
+        lines: [
+          ...state.lines,
+          { productId: action.productId, quantity: 1, discountText: '', priceAtAdd: action.price },
+        ],
       };
     }
+    // Mengubah jumlah dianggap kasir sudah melihat harga sekarang, jadi priceAtAdd disamakan dengan harga itu.
     case 'increase':
       return updateLine(state, action.productId, (line) => ({
         ...line,
         quantity: clampQuantity(line.quantity + 1),
+        priceAtAdd: action.price,
       }));
     case 'decrease':
       return updateLine(state, action.productId, (line) => ({
         ...line,
         quantity: clampQuantity(line.quantity - 1),
+        priceAtAdd: action.price,
       }));
     case 'setQuantity':
       return updateLine(state, action.productId, (line) => ({
         ...line,
         quantity: clampQuantity(action.quantity),
+        priceAtAdd: action.price,
       }));
     case 'remove':
       return { ...state, lines: state.lines.filter((line) => line.productId !== action.productId) };
