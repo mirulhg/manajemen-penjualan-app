@@ -2,21 +2,23 @@ import { NavLink } from 'react-router';
 
 import type { NavItem } from './nav-items';
 
-type MainNavProps = {
+type TabBarProps = {
   items: NavItem[];
 };
 
-// Navigasi header untuk layar lebar; di layar kecil diganti TabBar. NavLink memasang aria-current="page" pada link aktif.
-export function MainNav({ items }: MainNavProps) {
+export function TabBar({ items }: TabBarProps) {
   return (
-    <nav aria-label="Menu utama" className="hidden md:block">
-      <ul className="flex gap-2">
+    <nav
+      aria-label="Menu bawah"
+      className="fixed inset-x-0 bottom-0 z-sticky border-t border-border bg-surface pb-safe md:hidden"
+    >
+      <ul className="flex">
         {items.map((item) => (
-          <li key={item.to}>
+          <li key={item.to} className="flex-1">
             <NavLink
               to={item.to}
               className={({ isActive }) =>
-                `inline-flex min-h-11 items-center rounded-md px-3 ${
+                `flex min-h-12 items-center justify-center px-2 ${
                   isActive ? 'font-semibold text-primary underline' : 'text-text'
                 }`
               }

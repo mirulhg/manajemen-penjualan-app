@@ -1,16 +1,11 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router';
 
-import { MainNav } from '../components/layout/MainNav';
-import { PageShell } from '../components/layout/PageShell';
 import { OwnerOnly } from '../features/session';
+import { AppLayout } from './AppLayout';
 
 export const router = createBrowserRouter([
   {
-    element: (
-      <PageShell nav={<MainNav />}>
-        <Outlet />
-      </PageShell>
-    ),
+    element: <AppLayout />,
     children: [
       { index: true, element: <Navigate to="/stok" replace /> },
       {

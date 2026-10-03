@@ -45,6 +45,11 @@
   z-index: var(--z-toast);
 }
 
+/* Ruang aman layar HP (poni/bilah gesture) agar TabBar tidak tertutup bilah sistem. */
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 @layer base {
   body {
     @apply bg-background text-text;
