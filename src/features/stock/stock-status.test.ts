@@ -3,6 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { getStockStatus } from './stock-status';
 
 describe('getStockStatus', () => {
+  it('stok minus dianggap habis', () => {
+    expect(getStockStatus(-1, null)).toBe('habis');
+    expect(getStockStatus(-3, 6)).toBe('habis');
+  });
+
   it('stok 0 selalu habis', () => {
     expect(getStockStatus(0, 6)).toBe('habis');
     expect(getStockStatus(0, null)).toBe('habis');

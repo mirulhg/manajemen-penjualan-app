@@ -77,6 +77,16 @@ describe('migrasi database v1 ke v2', () => {
     expect(first).toMatchObject({ quantityBefore: 0, quantityAfter: 18, reason: 'Data lama' });
   });
 
+  it('migrasi ke v3 menambah tabel penjualan kosong tanpa mengubah data lama', async () => {
+    await db.open();
+
+    expect(await db.sales.count()).toBe(0);
+    expect(await db.saleItems.count()).toBe(0);
+    expect(await db.settings.count()).toBe(0);
+    expect(await db.products.count()).toBe(2);
+    expect(await db.stockMovements.count()).toBe(4);
+  });
+
   it('index [productId+seq] bisa dipakai setelah migrasi', async () => {
     await db.open();
 
