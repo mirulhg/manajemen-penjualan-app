@@ -223,3 +223,68 @@ describe('migrasi database v4 ke v5', () => {
     expect(rows).toHaveLength(1);
   });
 });
+
+describe('migrasi database v5 ke v6', () => {
+  function legacyProduct(id: string, sku: string, name: string, category: string) {
+    return {
+      id,
+      sku,
+      name,
+      category,
+      unit: 'pcs',
+      stockQuantity: 5,
+      minStock: null,
+      purchasePrice: 1000,
+      sellingPrice: 1500,
+      createdAt: '2026-10-01T09:00:00.000Z',
+      updatedAt: '2026-10-01T09:00:00.000Z',
+      archivedAt: null,
+    };
+  }
+
+  beforeEach(async () => {
+    db.close();
+    await Dexie.delete(DB_NAME);
+    const legacy = new Dexie(DB_NAME);
+    legacy.version(1).stores({
+      products: 'id, &sku, category, updatedAt',
+      stockMovements: 'id, productId, [productId+createdAt]',
+    });
+    legacy.version(2).stores({
+      stockMovements: 'id, productId, [productId+createdAt], &seq, [productId+seq]',
+      counters: 'name',
+    });
+    legacy.version(3).stores({
+      sales: 'id, &number, createdAt',
+      saleItems: 'id, saleId, productId',
+      settings: 'key',
+    });
+    legacy.version(4).stores({
+      sales: 'id, &number, createdAt, actor',
+      saleReturns: 'id, &number, saleId, createdAt',
+    });
+    legacy.version(5).stores({
+      priceChanges: 'id, productId, [productId+seq]',
+      productPhotos: 'productId',
+    });
+    await legacy.table('products').bulkAdd([
+      legacyProduct('00000000-0000-4000-8000-000000000001', 'TES-001', 'Beras', 'Sembako'),
+      legacyProduct('00000000-0000-4000-8000-000000000002', 'TES-002', 'Gula', 'sembako'),
+      legacyProduct('00000000-0000-4000-8000-000000000003', 'TES-003', 'Teh', 'Minuman'),
+    ]);
+    legacy.close();
+  });
+
+  it('membuat satu kategori per nameKey dan menyeragamkan ejaan produk tanpa mengubah updatedAt', async () => {
+    await db.open();
+
+    const categories = await db.categories.toArray();
+    expect(categories.map((category) => category.name).sort()).toEqual(['Minuman', 'Sembako']);
+    expect(new Set(categories.map((category) => category.nameKey)).size).toBe(2);
+
+    const products = await db.products.orderBy('sku').toArray();
+    expect(products.map((product) => product.category)).toEqual(['Sembako', 'Sembako', 'Minuman']);
+    expect(products.every((product) => product.updatedAt === '2026-10-01T09:00:00.000Z')).toBe(true);
+    expect(await db.products.count()).toBe(3);
+  });
+});

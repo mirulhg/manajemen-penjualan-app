@@ -10,6 +10,7 @@ describe('seedSampleProducts', () => {
   beforeEach(async () => {
     await db.products.clear();
     await db.stockMovements.clear();
+    await db.categories.clear();
   });
 
   it('mengisi database kosong dengan 30 produk dan 30 pergerakan awal', async () => {
@@ -34,6 +35,22 @@ describe('seedSampleProducts', () => {
 
     expect(await db.products.count()).toBe(30);
     expect(await db.stockMovements.count()).toBe(30);
+  });
+
+  it('membuat 6 kategori dan tetap 6 setelah dua kali seed', async () => {
+    await seedSampleProducts();
+    await seedSampleProducts();
+
+    const categories = await db.categories.toArray();
+    expect(categories.map((category) => category.name).sort()).toEqual([
+      'Bumbu Dapur',
+      'Kebutuhan Rumah',
+      'Makanan Ringan',
+      'Minuman',
+      'Perlengkapan Mandi',
+      'Sembako',
+    ]);
+    expect(new Set(categories.map((category) => category.nameKey)).size).toBe(6);
   });
 
   it('tidak menggandakan data saat dipanggil bersamaan', async () => {
