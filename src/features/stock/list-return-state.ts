@@ -1,9 +1,5 @@
-import { z } from 'zod';
+import { getReturnPath } from '../../utils/return-path';
 
-const listReturnStateSchema = z.object({ search: z.string().regex(/^(\?.*)?$/) });
-
-// Daftar stok menitipkan query string-nya lewat location.state agar filter pulih saat kembali.
 export function getListPath(locationState: unknown): string {
-  const result = listReturnStateSchema.safeParse(locationState);
-  return result.success ? `/stok${result.data.search}` : '/stok';
+  return getReturnPath(locationState, '/stok');
 }

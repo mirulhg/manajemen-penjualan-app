@@ -3,7 +3,7 @@ import { useStockMovements } from '../api/use-stock-movements';
 import { useMovementPage } from '../hooks/use-movement-page';
 import { StockListError } from './StockListError';
 import { StockMovementItem } from './StockMovementItem';
-import { StockMovementPagination } from './StockMovementPagination';
+import { Pagination } from '../../../components/ui/Pagination';
 
 type StockMovementHistoryProps = {
   productId: string;
@@ -49,7 +49,7 @@ export function StockMovementHistory({ productId, unit }: StockMovementHistoryPr
             <StockMovementItem key={movement.id} movement={movement} unit={unit} />
           ))}
         </ol>
-        <StockMovementPagination page={data.page} pageCount={data.pageCount} onPageChange={setPage} />
+        <Pagination page={data.page} pageCount={data.pageCount} onPageChange={setPage} />
       </div>
     );
   }

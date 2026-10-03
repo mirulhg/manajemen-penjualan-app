@@ -1,4 +1,4 @@
-type StockMovementPaginationProps = {
+type PaginationProps = {
   page: number;
   pageCount: number;
   onPageChange: (page: number) => void;
@@ -6,11 +6,11 @@ type StockMovementPaginationProps = {
 
 const BUTTON_CLASS = 'min-h-11 rounded-md border border-border bg-surface px-4 font-medium';
 
-export function StockMovementPagination({
+export function Pagination({
   page,
   pageCount,
   onPageChange,
-}: StockMovementPaginationProps) {
+}: PaginationProps) {
   return (
     <nav aria-label="Halaman riwayat" className="flex items-center justify-between gap-4">
       <button

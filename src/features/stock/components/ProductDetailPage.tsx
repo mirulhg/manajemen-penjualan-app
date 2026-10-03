@@ -7,7 +7,7 @@ import { ProductInfo } from './ProductInfo';
 import { ProductNotFound } from './ProductNotFound';
 import { StockListError } from './StockListError';
 import { StockMovementHistory } from './StockMovementHistory';
-import { StockSubpageLayout } from './StockSubpageLayout';
+import { SubpageLayout } from '../../../components/layout/SubpageLayout';
 
 export function ProductDetailPage() {
   const { productId = '' } = useParams();
@@ -23,30 +23,30 @@ export function ProductDetailPage() {
 
   if (isPending) {
     return (
-      <StockSubpageLayout title="Detail barang" heading="Detail Barang" backTo={listPath} backLabel="Kembali ke daftar stok">
+      <SubpageLayout title="Detail barang" heading="Detail Barang" backTo={listPath} backLabel="Kembali ke daftar stok">
         <ProductDetailSkeleton />
-      </StockSubpageLayout>
+      </SubpageLayout>
     );
   }
 
   if (error) {
     return (
-      <StockSubpageLayout title="Detail barang" heading="Detail Barang" backTo={listPath} backLabel="Kembali ke daftar stok">
+      <SubpageLayout title="Detail barang" heading="Detail Barang" backTo={listPath} backLabel="Kembali ke daftar stok">
         <StockListError error={error} onRetry={handleRetry} />
-      </StockSubpageLayout>
+      </SubpageLayout>
     );
   }
 
   if (!product) {
     return (
-      <StockSubpageLayout title="Barang tidak ditemukan" heading="Detail Barang" backTo={listPath} backLabel="Kembali ke daftar stok">
+      <SubpageLayout title="Barang tidak ditemukan" heading="Detail Barang" backTo={listPath} backLabel="Kembali ke daftar stok">
         <ProductNotFound />
-      </StockSubpageLayout>
+      </SubpageLayout>
     );
   }
 
   return (
-    <StockSubpageLayout title={product.name} heading="Detail Barang" backTo={listPath} backLabel="Kembali ke daftar stok">
+    <SubpageLayout title={product.name} heading="Detail Barang" backTo={listPath} backLabel="Kembali ke daftar stok">
       <ProductInfo product={product} />
       <Link
         to={`/stok/${product.id}/sesuaikan`}
@@ -56,6 +56,6 @@ export function ProductDetailPage() {
         Sesuaikan stok
       </Link>
       <StockMovementHistory productId={product.id} unit={product.unit} />
-    </StockSubpageLayout>
+    </SubpageLayout>
   );
 }

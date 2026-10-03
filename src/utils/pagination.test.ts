@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { clampPage, parsePageParam } from './movement-page';
+import { clampPage, parsePageParam } from './pagination';
 
 describe('parsePageParam', () => {
   it.each([null, '', '0', '-1', 'abc', '1.5', '02x'])('"%s" menjadi halaman 1', (raw) => {

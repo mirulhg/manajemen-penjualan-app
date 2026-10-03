@@ -7,7 +7,7 @@ import { AdjustStockSkeleton } from './AdjustStockSkeleton';
 import { AdjustStockSummary } from './AdjustStockSummary';
 import { ProductNotFound } from './ProductNotFound';
 import { StockListError } from './StockListError';
-import { StockSubpageLayout } from './StockSubpageLayout';
+import { SubpageLayout } from '../../../components/layout/SubpageLayout';
 
 export function AdjustStockPage() {
   const { productId = '' } = useParams();
@@ -21,32 +21,32 @@ export function AdjustStockPage() {
 
   if (isPending) {
     return (
-      <StockSubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" backTo={detailPath} backLabel="Kembali ke detail barang">
+      <SubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" backTo={detailPath} backLabel="Kembali ke detail barang">
         <AdjustStockSkeleton />
-      </StockSubpageLayout>
+      </SubpageLayout>
     );
   }
 
   if (error) {
     return (
-      <StockSubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" backTo={detailPath} backLabel="Kembali ke detail barang">
+      <SubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" backTo={detailPath} backLabel="Kembali ke detail barang">
         <StockListError error={error} onRetry={handleRetry} />
-      </StockSubpageLayout>
+      </SubpageLayout>
     );
   }
 
   if (!product) {
     return (
-      <StockSubpageLayout heading="Penyesuaian Stok" title="Barang tidak ditemukan" backTo={getListPath(location.state)} backLabel="Kembali ke daftar stok">
+      <SubpageLayout heading="Penyesuaian Stok" title="Barang tidak ditemukan" backTo={getListPath(location.state)} backLabel="Kembali ke daftar stok">
         <ProductNotFound />
-      </StockSubpageLayout>
+      </SubpageLayout>
     );
   }
 
   return (
-    <StockSubpageLayout heading="Penyesuaian Stok" title={`Sesuaikan ${product.name}`} backTo={detailPath} backLabel="Kembali ke detail barang">
+    <SubpageLayout heading="Penyesuaian Stok" title={`Sesuaikan ${product.name}`} backTo={detailPath} backLabel="Kembali ke detail barang">
       <AdjustStockSummary product={product} />
       <AdjustStockForm product={product} />
-    </StockSubpageLayout>
+    </SubpageLayout>
   );
 }

@@ -1,4 +1,4 @@
-export const MOVEMENTS_PAGE_SIZE = 50;
+export const DEFAULT_PAGE_SIZE = 50;
 
 // Parameter ?halaman= yang bukan bilangan bulat positif dianggap halaman 1.
 export function parsePageParam(raw: string | null): number {

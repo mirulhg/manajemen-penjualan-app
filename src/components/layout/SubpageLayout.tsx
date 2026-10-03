@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router';
 
-type StockSubpageLayoutProps = {
+type SubpageLayoutProps = {
   title: string;
   heading: string;
   backTo: string;
@@ -9,7 +9,7 @@ type StockSubpageLayoutProps = {
   children: ReactNode;
 };
 
-export function StockSubpageLayout({ title, heading, backTo, backLabel, children }: StockSubpageLayoutProps) {
+export function SubpageLayout({ title, heading, backTo, backLabel, children }: SubpageLayoutProps) {
   const locationState: unknown = useLocation().state;
 
   return (

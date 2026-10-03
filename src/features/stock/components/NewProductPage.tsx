@@ -6,7 +6,7 @@ import { getListPath } from '../list-return-state';
 import { NewProductForm } from './NewProductForm';
 import { NewProductSkeleton } from './NewProductSkeleton';
 import { StockListError } from './StockListError';
-import { StockSubpageLayout } from './StockSubpageLayout';
+import { SubpageLayout } from '../../../components/layout/SubpageLayout';
 
 export function NewProductPage() {
   const location = useLocation();
@@ -20,23 +20,23 @@ export function NewProductPage() {
 
   if (isPending) {
     return (
-      <StockSubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
+      <SubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
         <NewProductSkeleton />
-      </StockSubpageLayout>
+      </SubpageLayout>
     );
   }
 
   if (error) {
     return (
-      <StockSubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
+      <SubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
         <StockListError error={error} onRetry={handleRetry} />
-      </StockSubpageLayout>
+      </SubpageLayout>
     );
   }
 
   return (
-    <StockSubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
+    <SubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
       <NewProductForm categories={getCategories(products)} units={getUnits(products)} />
-    </StockSubpageLayout>
+    </SubpageLayout>
   );
 }

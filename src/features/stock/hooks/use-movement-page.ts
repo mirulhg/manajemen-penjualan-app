@@ -1,6 +1,6 @@
 import { useLocation, useSearchParams } from 'react-router';
 
-import { parsePageParam } from '../movement-page';
+import { parsePageParam } from '../../../utils/pagination';
 
 export function useMovementPage() {
   const [searchParams, setSearchParams] = useSearchParams();
