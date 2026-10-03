@@ -10,7 +10,8 @@ import { useCreateProduct } from '../api/use-create-product';
 import { newProductSchema } from '../schema';
 import type { NewProduct, NewProductInput } from '../schema';
 import { IdentityFields } from './IdentityFields';
-import { StockPriceFields } from './StockPriceFields';
+import { InitialStockField } from './InitialStockField';
+import { PriceAndLimitFields } from './PriceAndLimitFields';
 
 type NewProductFormProps = {
   categories: string[];
@@ -70,7 +71,8 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
         categories={categories}
         units={units}
       />
-      <StockPriceFields register={register} errors={formState.errors} />
+      <InitialStockField register={register} errors={formState.errors} />
+      <PriceAndLimitFields register={register} errors={formState.errors} />
       {isSoldAtLoss && (
         <p className="rounded-md bg-status-menipis-bg p-3 text-status-menipis-text">
           Harga jual lebih rendah dari harga beli. Barang ini akan dijual rugi.

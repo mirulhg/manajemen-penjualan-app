@@ -93,4 +93,6 @@ export const newProductSchema = z.object({
 });
 
 export type NewProductInput = z.input<typeof newProductSchema>;
+// Field yang dipakai bersama form tambah dan form ubah barang (tanpa stok awal).
+export type ProductFieldsInput = Omit<NewProductInput, 'initialStock'>;
 export type NewProduct = z.output<typeof newProductSchema>;

@@ -2,6 +2,7 @@ import { db } from '../../../lib/db/database';
 import { STOCK_MOVEMENT_COUNTER } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
 import { buildProductRecords } from '../build-product-records';
+import { matchExistingSpelling } from '../match-existing-spelling';
 import { newProductSchema } from '../schema';
 import type { NewProductInput, Product } from '../schema';
 
@@ -14,12 +15,6 @@ export class CreateProductError extends Error {
     this.name = 'CreateProductError';
     this.ownerName = ownerName;
   }
-}
-
-// Mencegah "Sembako" dan "sembako" menjadi dua kategori: pakai ejaan yang sudah ada bila hanya beda huruf besar/kecil.
-function matchExistingSpelling(existingValues: string[], value: string): string {
-  const lowered = value.toLocaleLowerCase('id');
-  return existingValues.find((existing) => existing.toLocaleLowerCase('id') === lowered) ?? value;
 }
 
 export async function createProduct(input: NewProductInput): Promise<Product> {

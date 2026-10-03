@@ -1,6 +1,6 @@
 import { formatNumber } from '../../../utils/format-number';
 import { useStockMovements } from '../api/use-stock-movements';
-import { useMovementPage } from '../hooks/use-movement-page';
+import { usePageParam } from '../hooks/use-page-param';
 import { StockListError } from './StockListError';
 import { StockMovementItem } from './StockMovementItem';
 import { Pagination } from '../../../components/ui/Pagination';
@@ -13,7 +13,7 @@ type StockMovementHistoryProps = {
 const SKELETON_ROW_COUNT = 3;
 
 export function StockMovementHistory({ productId, unit }: StockMovementHistoryProps) {
-  const { page: requestedPage, setPage } = useMovementPage();
+  const { page: requestedPage, setPage } = usePageParam('halaman');
   const { data, isPending, error, refetch } = useStockMovements(productId, requestedPage);
 
   function handleRetry() {

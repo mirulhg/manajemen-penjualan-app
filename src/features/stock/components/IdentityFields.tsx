@@ -2,11 +2,11 @@ import type { FieldErrors, UseFormRegister } from 'react-hook-form';
 
 import { FormField } from '../../../components/ui/FormField';
 import { FIELD_CLASS } from '../../../components/ui/field-styles';
-import type { NewProductInput } from '../schema';
+import type { ProductFieldsInput } from '../schema';
 
 type IdentityFieldsProps = {
-  register: UseFormRegister<NewProductInput>;
-  errors: FieldErrors<NewProductInput>;
+  register: UseFormRegister<ProductFieldsInput>;
+  errors: FieldErrors<ProductFieldsInput>;
   categories: string[];
   units: string[];
 };
