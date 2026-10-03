@@ -9,4 +9,5 @@ export const SEED_AS_PRODUCTS: Product[] = SEED_PRODUCTS.map((seed, index) => ({
   id: `00000000-0000-4000-8000-${String(index).padStart(12, '0')}`,
   createdAt: FIXTURE_TIMESTAMP,
   updatedAt: FIXTURE_TIMESTAMP,
+  archivedAt: null,
 }));

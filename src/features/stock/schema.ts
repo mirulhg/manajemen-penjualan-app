@@ -92,7 +92,11 @@ export const newProductSchema = z.object({
   sellingPrice: priceSchema,
 });
 
+// Form ubah memakai aturan field yang sama persis dengan tambah barang; stok tidak bisa diubah dari sini.
+export const editProductSchema = newProductSchema.omit({ initialStock: true });
+
 export type NewProductInput = z.input<typeof newProductSchema>;
 // Field yang dipakai bersama form tambah dan form ubah barang (tanpa stok awal).
 export type ProductFieldsInput = Omit<NewProductInput, 'initialStock'>;
 export type NewProduct = z.output<typeof newProductSchema>;
+export type EditProduct = z.output<typeof editProductSchema>;

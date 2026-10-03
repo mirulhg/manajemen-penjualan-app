@@ -19,6 +19,7 @@ export function buildProductRecords(
     id: crypto.randomUUID(),
     createdAt: now,
     updatedAt: now,
+    archivedAt: null,
   });
   const movement = buildStockMovement({
     seq: movementSeq,

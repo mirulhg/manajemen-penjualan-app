@@ -16,6 +16,8 @@ export const productSchema = z.object({
   sellingPrice: z.number().int().nonnegative(),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
+  // null = produk aktif; terisi = diarsipkan (disembunyikan dari katalog tanpa menghapus riwayatnya).
+  archivedAt: z.iso.datetime().nullable(),
 });
 
 export const stockMovementTypeSchema = z.enum(['awal', 'masuk', 'koreksi', 'jual', 'retur', 'batal']);
@@ -120,3 +122,28 @@ export type Sale = z.infer<typeof saleSchema>;
 export type SaleItem = z.infer<typeof saleItemSchema>;
 export type Setting = z.infer<typeof settingSchema>;
 export type SaleReturn = z.infer<typeof saleReturnSchema>;
+
+export const priceChangeSchema = z.object({
+  id: z.uuid(),
+  seq: z.number().int().min(1),
+  productId: z.uuid(),
+  field: z.enum(['purchasePrice', 'sellingPrice']),
+  before: z.number().int().nonnegative(),
+  after: z.number().int().nonnegative(),
+  actor: z.string().min(1),
+  createdAt: z.iso.datetime(),
+});
+
+// Foto disimpan di tabel terpisah dari produk supaya daftar ribuan barang tetap ringan.
+export const productPhotoSchema = z.object({
+  productId: z.uuid(),
+  blob: z.instanceof(Blob),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+  updatedAt: z.iso.datetime(),
+});
+
+export const PRICE_CHANGE_COUNTER = 'priceChange';
+
+export type PriceChange = z.infer<typeof priceChangeSchema>;
+export type ProductPhoto = z.infer<typeof productPhotoSchema>;

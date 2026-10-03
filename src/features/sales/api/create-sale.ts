@@ -17,6 +17,7 @@ import type { CreateSaleInput } from '../schema';
 
 type CreateSaleErrorCode =
   | 'PRODUCT_NOT_FOUND'
+  | 'PRODUCT_ARCHIVED'
   | 'INVALID_DISCOUNT'
   | 'TOTAL_CHANGED'
   | 'INSUFFICIENT_STOCK'
@@ -30,6 +31,7 @@ export type StockShortage = {
 
 const ERROR_MESSAGES: Record<CreateSaleErrorCode, string> = {
   PRODUCT_NOT_FOUND: 'Ada barang di keranjang yang sudah tidak ada.',
+  PRODUCT_ARCHIVED: 'Ada barang di keranjang yang sudah diarsipkan.',
   INVALID_DISCOUNT: 'Diskon melebihi nilai yang didiskon.',
   TOTAL_CHANGED: 'Harga barang berubah. Periksa total lalu simpan lagi.',
   INSUFFICIENT_STOCK: 'Stok beberapa barang tidak cukup.',
@@ -40,8 +42,12 @@ export class CreateSaleError extends Error {
   readonly code: CreateSaleErrorCode;
   readonly shortages: StockShortage[];
 
-  constructor(code: CreateSaleErrorCode, shortages: StockShortage[] = []) {
-    super(ERROR_MESSAGES[code]);
+  constructor(code: CreateSaleErrorCode, shortages: StockShortage[] = [], productName: string | null = null) {
+    super(
+      code === 'PRODUCT_ARCHIVED' && productName
+        ? `${productName} sudah diarsipkan dan tidak bisa dijual. Hapus dari keranjang lalu simpan lagi.`
+        : ERROR_MESSAGES[code],
+    );
     this.name = 'CreateSaleError';
     this.code = code;
     this.shortages = shortages;
@@ -64,7 +70,9 @@ export async function createSale(input: CreateSaleInput): Promise<Sale> {
       for (const item of parsed.items) {
         const row = await db.products.get(item.productId);
         if (!row) throw new CreateSaleError('PRODUCT_NOT_FOUND');
-        lines.push({ ...item, product: productSchema.parse(row) });
+        const product = productSchema.parse(row);
+        if (product.archivedAt !== null) throw new CreateSaleError('PRODUCT_ARCHIVED', [], product.name);
+        lines.push({ ...item, product });
       }
 
       const totals = calculateSaleTotals(
