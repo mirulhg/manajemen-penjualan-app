@@ -12,23 +12,27 @@ export function createTestQueryClient() {
   return new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
 }
 
-function createWrapper(queryClient: QueryClient) {
+function createWrapper(queryClient: QueryClient, route: string) {
   return function Wrapper({ children }: { children: ReactNode }) {
     return (
       <QueryClientProvider client={queryClient}>
-        <MemoryRouter>{children}</MemoryRouter>
+        <MemoryRouter initialEntries={[route]}>{children}</MemoryRouter>
       </QueryClientProvider>
     );
   };
 }
 
-export function renderWithProviders(ui: ReactElement, queryClient = createTestQueryClient()) {
-  return { queryClient, ...render(ui, { wrapper: createWrapper(queryClient) }) };
+export function renderWithProviders(
+  ui: ReactElement,
+  queryClient = createTestQueryClient(),
+  route = '/',
+) {
+  return { queryClient, ...render(ui, { wrapper: createWrapper(queryClient, route) }) };
 }
 
 export function renderHookWithProviders<Result>(
   callback: () => Result,
   queryClient = createTestQueryClient(),
 ) {
-  return { queryClient, ...renderHook(callback, { wrapper: createWrapper(queryClient) }) };
+  return { queryClient, ...renderHook(callback, { wrapper: createWrapper(queryClient, '/') }) };
 }

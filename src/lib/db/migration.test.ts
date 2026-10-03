@@ -98,3 +98,58 @@ describe('migrasi database v1 ke v2', () => {
     expect(ofProduct.map((movement) => movement.seq)).toEqual([4, 3, 1]);
   });
 });
+
+describe('migrasi database v3 ke v4', () => {
+  const SALE_ID = '00000000-0000-4000-8000-0000000000aa';
+
+  beforeEach(async () => {
+    db.close();
+    await Dexie.delete(DB_NAME);
+    const legacy = new Dexie(DB_NAME);
+    legacy.version(1).stores({
+      products: 'id, &sku, category, updatedAt',
+      stockMovements: 'id, productId, [productId+createdAt]',
+    });
+    legacy.version(2).stores({
+      stockMovements: 'id, productId, [productId+createdAt], &seq, [productId+seq]',
+      counters: 'name',
+    });
+    legacy.version(3).stores({
+      sales: 'id, &number, createdAt',
+      saleItems: 'id, saleId, productId',
+      settings: 'key',
+    });
+    await legacy.table('sales').bulkAdd([
+      {
+        id: SALE_ID,
+        number: 'TRX-20261001-0001',
+        paymentMethod: 'tunai',
+        subtotal: 10000,
+        itemDiscountTotal: 0,
+        transactionDiscount: 0,
+        total: 10000,
+        amountPaid: 10000,
+        change: 0,
+        itemCount: 1,
+        actor: 'Pemilik',
+        createdAt: '2026-10-01T09:00:00.000Z',
+      },
+    ]);
+    legacy.close();
+  });
+
+  it('transaksi lama mendapat status selesai dan refundedTotal 0, jumlah data tetap', async () => {
+    await db.open();
+
+    const sale = await db.sales.get(SALE_ID);
+    expect(sale).toMatchObject({ status: 'selesai', refundedTotal: 0, total: 10000 });
+    expect(await db.sales.count()).toBe(1);
+    expect(await db.saleReturns.count()).toBe(0);
+  });
+
+  it('index actor tersedia untuk daftar kasir', async () => {
+    await db.open();
+
+    expect(await db.sales.orderBy('actor').uniqueKeys()).toEqual(['Pemilik']);
+  });
+});

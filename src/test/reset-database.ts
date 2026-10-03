@@ -8,6 +8,7 @@ export async function resetDatabaseWithSeed() {
   await db.counters.clear();
   await db.sales.clear();
   await db.saleItems.clear();
+  await db.saleReturns.clear();
   await db.settings.clear();
   await seedSampleProducts();
 }
