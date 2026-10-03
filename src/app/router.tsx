@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate, Outlet } from 'react-router';
 
 import { MainNav } from '../components/layout/MainNav';
 import { PageShell } from '../components/layout/PageShell';
+import { OwnerOnly } from '../features/session';
 
 export const router = createBrowserRouter([
   {
@@ -21,17 +22,10 @@ export const router = createBrowserRouter([
         },
       },
       {
-        path: 'penjualan',
+        path: 'stok/:productId',
         lazy: async () => {
-          const { SaleHistoryPage } = await import('../features/sales/components/SaleHistoryPage');
-          return { Component: SaleHistoryPage };
-        },
-      },
-      {
-        path: 'penjualan/:saleId',
-        lazy: async () => {
-          const { SaleDetailPage } = await import('../features/sales/components/SaleDetailPage');
-          return { Component: SaleDetailPage };
+          const { ProductDetailPage } = await import('../features/stock/components/ProductDetailPage');
+          return { Component: ProductDetailPage };
         },
       },
       {
@@ -42,39 +36,70 @@ export const router = createBrowserRouter([
         },
       },
       {
-        path: 'stok/baru',
+        path: 'keluar-mode-kasir',
         lazy: async () => {
-          const { NewProductPage } = await import('../features/stock/components/NewProductPage');
-          return { Component: NewProductPage };
+          const { ExitCashierModePage } = await import('../features/session/components/ExitCashierModePage');
+          return { Component: ExitCashierModePage };
         },
       },
       {
-        path: 'kategori',
-        lazy: async () => {
-          const { CategoriesPage } = await import('../features/stock/components/CategoriesPage');
-          return { Component: CategoriesPage };
-        },
-      },
-      {
-        path: 'stok/:productId',
-        lazy: async () => {
-          const { ProductDetailPage } = await import('../features/stock/components/ProductDetailPage');
-          return { Component: ProductDetailPage };
-        },
-      },
-      {
-        path: 'stok/:productId/ubah',
-        lazy: async () => {
-          const { EditProductPage } = await import('../features/stock/components/EditProductPage');
-          return { Component: EditProductPage };
-        },
-      },
-      {
-        path: 'stok/:productId/sesuaikan',
-        lazy: async () => {
-          const { AdjustStockPage } = await import('../features/stock/components/AdjustStockPage');
-          return { Component: AdjustStockPage };
-        },
+        // Halaman khusus pemilik: di Mode Kasir, OwnerOnly menggantikan isinya, termasuk saat URL dibuka langsung.
+        element: (
+          <OwnerOnly>
+            <Outlet />
+          </OwnerOnly>
+        ),
+        children: [
+          {
+            path: 'penjualan',
+            lazy: async () => {
+              const { SaleHistoryPage } = await import('../features/sales/components/SaleHistoryPage');
+              return { Component: SaleHistoryPage };
+            },
+          },
+          {
+            path: 'penjualan/:saleId',
+            lazy: async () => {
+              const { SaleDetailPage } = await import('../features/sales/components/SaleDetailPage');
+              return { Component: SaleDetailPage };
+            },
+          },
+          {
+            path: 'stok/baru',
+            lazy: async () => {
+              const { NewProductPage } = await import('../features/stock/components/NewProductPage');
+              return { Component: NewProductPage };
+            },
+          },
+          {
+            path: 'stok/:productId/ubah',
+            lazy: async () => {
+              const { EditProductPage } = await import('../features/stock/components/EditProductPage');
+              return { Component: EditProductPage };
+            },
+          },
+          {
+            path: 'stok/:productId/sesuaikan',
+            lazy: async () => {
+              const { AdjustStockPage } = await import('../features/stock/components/AdjustStockPage');
+              return { Component: AdjustStockPage };
+            },
+          },
+          {
+            path: 'kategori',
+            lazy: async () => {
+              const { CategoriesPage } = await import('../features/stock/components/CategoriesPage');
+              return { Component: CategoriesPage };
+            },
+          },
+          {
+            path: 'pengaturan',
+            lazy: async () => {
+              const { SettingsPage } = await import('../features/session/components/SettingsPage');
+              return { Component: SettingsPage };
+            },
+          },
+        ],
       },
       {
         path: '*',

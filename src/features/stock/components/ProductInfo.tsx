@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { formatDateTime } from '../../../utils/format-date-time';
 import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
+import { useSession } from '../../session';
 import type { Product } from '../schema';
 import { DEFAULT_MIN_STOCK, getStockStatus } from '../stock-status';
 import { StockStatusBadge } from './StockStatusBadge';
@@ -12,6 +13,7 @@ type ProductInfoProps = {
 };
 
 export function ProductInfo({ product }: ProductInfoProps) {
+  const { isCashierMode } = useSession();
   const minStockText =
     product.minStock === null ? `${DEFAULT_MIN_STOCK} (default)` : formatNumber(product.minStock);
   const rows: { label: string; value: ReactNode }[] = [
@@ -28,9 +30,12 @@ export function ProductInfo({ product }: ProductInfoProps) {
       ),
     },
     { label: 'Batas stok menipis', value: minStockText },
-    { label: 'Harga beli', value: formatRupiah(product.purchasePrice) },
+    // Kasir tidak boleh melihat harga beli maupun nilai stok; barisnya tidak dibuat sama sekali.
+    ...(isCashierMode ? [] : [{ label: 'Harga beli', value: formatRupiah(product.purchasePrice) }]),
     { label: 'Harga jual', value: formatRupiah(product.sellingPrice) },
-    { label: 'Nilai stok', value: formatRupiah(product.stockQuantity * product.purchasePrice) },
+    ...(isCashierMode
+      ? []
+      : [{ label: 'Nilai stok', value: formatRupiah(product.stockQuantity * product.purchasePrice) }]),
     { label: 'Dibuat', value: formatDateTime(product.createdAt) },
     { label: 'Terakhir diperbarui', value: formatDateTime(product.updatedAt) },
   ];

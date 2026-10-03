@@ -1,0 +1,44 @@
+import { useState } from 'react';
+import { Link, Navigate } from 'react-router';
+
+import { useSession } from '../session-context';
+import { ExitWithPinForm } from './ExitWithPinForm';
+import { ExitWithRecoveryForm } from './ExitWithRecoveryForm';
+import { RecoveryCodeNotice } from './RecoveryCodeNotice';
+
+export function ExitCashierModePage() {
+  const { isCashierMode } = useSession();
+  const [isUsingRecovery, setIsUsingRecovery] = useState(false);
+  // Kode baru harus tetap tampil walau mode sudah berubah; hanya ada di sini sampai dicatat.
+  const [newRecoveryCode, setNewRecoveryCode] = useState<string | null>(null);
+
+  function handleToggleRecovery() {
+    setIsUsingRecovery((current) => !current);
+  }
+
+  if (newRecoveryCode) {
+    return (
+      <section className="space-y-4">
+        <title>PIN baru · Manajemen Stok</title>
+        <h1 className="text-xl font-semibold">PIN diganti</h1>
+        <RecoveryCodeNotice code={newRecoveryCode}>
+          <Link to="/stok" className="inline-flex min-h-11 items-center font-medium underline">
+            Sudah saya catat, lanjut ke daftar stok
+          </Link>
+        </RecoveryCodeNotice>
+      </section>
+    );
+  }
+  if (!isCashierMode) return <Navigate to="/stok" replace />;
+
+  return (
+    <section className="space-y-4">
+      <title>Keluar Mode Kasir · Manajemen Stok</title>
+      <h1 className="text-xl font-semibold">Keluar Mode Kasir</h1>
+      {isUsingRecovery ? <ExitWithRecoveryForm onRecovered={setNewRecoveryCode} /> : <ExitWithPinForm />}
+      <button type="button" onClick={handleToggleRecovery} className="min-h-11 font-medium text-primary underline">
+        {isUsingRecovery ? 'Pakai PIN' : 'Pakai kode pemulihan'}
+      </button>
+    </section>
+  );
+}

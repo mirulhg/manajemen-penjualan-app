@@ -1,4 +1,5 @@
 import { formatNumber } from '../../../utils/format-number';
+import { useSession } from '../../session';
 import { useCategoryNames } from '../api/use-categories';
 import { useProducts } from '../api/use-products';
 import { filterProducts, normalizeFilters } from '../filter-products';
@@ -19,6 +20,7 @@ export function StockListContent() {
   const { data: products } = productsQuery;
   const { data: categories } = categoriesQuery;
   const error = productsQuery.error ?? categoriesQuery.error;
+  const { isCashierMode } = useSession();
   const { filters: urlFilters, setFilters, clearFilters } = useStockFilters();
 
   function handleRetry() {
@@ -40,8 +42,8 @@ export function StockListContent() {
 
   return (
     <div className="space-y-4">
-      <StockSummary products={activeProducts} />
-      <AddProductLink />
+      {!isCashierMode && <StockSummary products={activeProducts} />}
+      {!isCashierMode && <AddProductLink />}
       <StockFilters
         filters={filters}
         categories={categories}
