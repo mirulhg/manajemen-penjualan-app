@@ -21,6 +21,20 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: 'penjualan',
+        lazy: async () => {
+          const { SaleHistoryPage } = await import('../features/sales/components/SaleHistoryPage');
+          return { Component: SaleHistoryPage };
+        },
+      },
+      {
+        path: 'penjualan/:saleId',
+        lazy: async () => {
+          const { SaleDetailPage } = await import('../features/sales/components/SaleDetailPage');
+          return { Component: SaleDetailPage };
+        },
+      },
+      {
         path: 'kasir',
         lazy: async () => {
           const { CashierPage } = await import('../features/sales/components/CashierPage');

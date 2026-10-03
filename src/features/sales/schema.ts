@@ -57,3 +57,45 @@ export const returnSaleItemsInputSchema = z
 export const cancelSaleInputSchema = z.object({ reason: reasonSchema });
 
 export type ReturnSaleItemsInput = z.input<typeof returnSaleItemsInputSchema>;
+
+// Jumlah retur di form berupa teks; kosong berarti 0 (barang itu tidak diretur).
+const returnQuantityTextSchema = z.string().transform((text, ctx) => {
+  const value = text.trim();
+  if (value === '') return 0;
+  if (!/^\d+$/.test(value)) {
+    ctx.addIssue({ code: 'custom', message: 'Jumlah harus bilangan bulat tanpa koma.' });
+    return z.NEVER;
+  }
+  return Number(value);
+});
+
+// remaining sejajar dengan baris form: sisa jumlah yang masih bisa diretur per baris.
+export function buildReturnFormSchema(remaining: number[]) {
+  return z
+    .object({
+      items: z.array(z.object({ saleItemId: z.string(), quantity: returnQuantityTextSchema })),
+      reason: reasonSchema,
+    })
+    .superRefine((value, ctx) => {
+      value.items.forEach((item, index) => {
+        const limit = remaining[index] ?? 0;
+        if (item.quantity > limit) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['items', index, 'quantity'],
+            message: `Jumlah retur melebihi sisa (${limit}).`,
+          });
+        }
+      });
+      if (!value.items.some((item) => item.quantity > 0)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['items'],
+          message: 'Isi jumlah retur untuk minimal satu barang.',
+        });
+      }
+    });
+}
+
+export type ReturnFormInput = { items: { saleItemId: string; quantity: string }[]; reason: string };
+export type ReturnFormValues = z.output<ReturnType<typeof buildReturnFormSchema>>;

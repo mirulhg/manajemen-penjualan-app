@@ -3,6 +3,7 @@ import { NavLink } from 'react-router';
 const LINKS = [
   { to: '/stok', label: 'Stok' },
   { to: '/kasir', label: 'Kasir' },
+  { to: '/penjualan', label: 'Riwayat' },
 ];
 
 // Sementara, sampai tab bar bawah dibuat bersama Mode Kasir. NavLink memasang aria-current="page" pada link aktif.

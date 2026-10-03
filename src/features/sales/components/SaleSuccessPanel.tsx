@@ -1,3 +1,5 @@
+import { Link } from 'react-router';
+
 import { formatRupiah } from '../../../utils/format-rupiah';
 import type { Sale } from '../../../lib/db/records';
 
@@ -17,6 +19,9 @@ export function SaleSuccessPanel({ sale, onNewSale }: SaleSuccessPanelProps) {
       <p className="font-medium">Transaksi {sale.number} tersimpan</p>
       <p>Total {formatRupiah(sale.total)}</p>
       <p className="text-2xl font-semibold">Kembalian {formatRupiah(sale.change)}</p>
+      <Link to={`/penjualan/${sale.id}`} className="inline-flex min-h-11 items-center font-medium underline">
+        Lihat transaksi
+      </Link>
       <button
         type="button"
         ref={focusOnMount}
