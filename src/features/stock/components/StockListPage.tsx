@@ -12,9 +12,14 @@ export function StockListPage() {
       <div className="mb-4 flex flex-wrap items-center justify-between gap-x-4">
         <h1 className="text-xl font-semibold">Stok Barang</h1>
         {!isCashierMode && (
-          <Link to="/kategori" className="inline-flex min-h-11 items-center font-medium text-primary">
-            Kelola kategori
-          </Link>
+          <div className="flex gap-4">
+            <Link to="/stok/impor" className="inline-flex min-h-11 items-center font-medium text-primary">
+              Impor dari file
+            </Link>
+            <Link to="/kategori" className="inline-flex min-h-11 items-center font-medium text-primary">
+              Kelola kategori
+            </Link>
+          </div>
         )}
       </div>
       <StockListContent />
