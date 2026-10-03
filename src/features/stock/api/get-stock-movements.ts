@@ -26,7 +26,7 @@ export async function getStockMovements(
   requestedPage: number,
 ): Promise<StockMovementPage> {
   const movementsOfProduct = db.stockMovements
-    .where('[productId+createdAt]')
+    .where('[productId+seq]')
     .between([productId, Dexie.minKey], [productId, Dexie.maxKey]);
 
   const total = await movementsOfProduct.count();

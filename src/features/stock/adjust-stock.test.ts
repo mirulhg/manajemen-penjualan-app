@@ -157,12 +157,11 @@ describe('adjustStock: konsistensi data', () => {
     ]);
 
     expect((await findBySku('SBK-001')).stockQuantity).toBe(26);
-    // Diurutkan menurut quantityBefore, bukan createdAt: dua transaksi beruntun bisa berbagi milidetik yang sama.
     const added = await db.stockMovements
       .where('productId')
       .equals(product.id)
       .filter((movement) => movement.type === 'masuk')
-      .sortBy('quantityBefore');
+      .sortBy('seq');
     expect(added).toHaveLength(2);
     const [first, second] = added;
     expect(first?.quantityBefore).toBe(18);

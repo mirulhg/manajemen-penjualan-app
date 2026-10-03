@@ -20,8 +20,10 @@ export const productSchema = z.object({
 export const stockMovementTypeSchema = z.enum(['awal', 'masuk', 'koreksi']);
 
 // Selisih tidak disimpan; dihitung dari quantityAfter - quantityBefore.
+// seq naik terus untuk seluruh pergerakan; memberi urutan pasti walau createdAt sama.
 export const stockMovementSchema = z.object({
   id: z.uuid(),
+  seq: z.number().int().min(1),
   productId: z.uuid(),
   type: stockMovementTypeSchema,
   quantityBefore: z.number().int().nonnegative(),
@@ -31,5 +33,13 @@ export const stockMovementSchema = z.object({
   createdAt: z.iso.datetime(),
 });
 
+export const STOCK_MOVEMENT_COUNTER = 'stockMovement';
+
+export const counterSchema = z.object({
+  name: z.string().min(1),
+  value: z.number().int().nonnegative(),
+});
+
 export type Product = z.infer<typeof productSchema>;
 export type StockMovement = z.infer<typeof stockMovementSchema>;
+export type Counter = z.infer<typeof counterSchema>;

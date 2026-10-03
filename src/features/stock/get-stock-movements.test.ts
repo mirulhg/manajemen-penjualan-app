@@ -50,6 +50,7 @@ describe('getStockMovements', () => {
     const productId = await idOf('SBK-001');
     const extra: StockMovement[] = Array.from({ length: 119 }, (_, index) => ({
       id: crypto.randomUUID(),
+      seq: 1000 + index + 1,
       productId,
       type: 'masuk',
       quantityBefore: index,

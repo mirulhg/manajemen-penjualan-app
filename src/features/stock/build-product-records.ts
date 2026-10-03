@@ -11,6 +11,7 @@ export type NewProductFields = Pick<
 export function buildProductRecords(
   fields: NewProductFields,
   now: string,
+  movementSeq: number,
 ): { product: Product; movement: StockMovement } {
   const product = productSchema.parse({
     ...fields,
@@ -20,6 +21,7 @@ export function buildProductRecords(
   });
   const movement = stockMovementSchema.parse({
     id: crypto.randomUUID(),
+    seq: movementSeq,
     productId: product.id,
     type: 'awal',
     quantityBefore: 0,

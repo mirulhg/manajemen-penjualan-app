@@ -1,4 +1,6 @@
 import { db } from '../../../lib/db/database';
+import { STOCK_MOVEMENT_COUNTER } from '../../../lib/db/records';
+import { nextSequences } from '../../../lib/db/sequence';
 import { DEFAULT_ACTOR } from '../actor';
 import { productSchema, stockAdjustmentSchema, stockMovementSchema } from '../schema';
 import type { Product, StockAdjustmentInput } from '../schema';
@@ -21,7 +23,7 @@ export async function adjustStock(productId: string, input: StockAdjustmentInput
   const adjustment = stockAdjustmentSchema.parse(input);
 
   // Stok dibaca ulang di dalam transaksi, bukan dari data di layar, yang bisa sudah basi.
-  return db.transaction('rw', db.products, db.stockMovements, async () => {
+  return db.transaction('rw', db.products, db.stockMovements, db.counters, async () => {
     const row = await db.products.get(productId);
     if (!row) throw new StockAdjustmentError('PRODUCT_NOT_FOUND');
 
@@ -31,10 +33,12 @@ export async function adjustStock(productId: string, input: StockAdjustmentInput
       adjustment.type === 'masuk' ? quantityBefore + adjustment.quantity : adjustment.quantity;
     if (quantityAfter === quantityBefore) throw new StockAdjustmentError('NO_CHANGE', quantityBefore);
 
+    const movementSeq = await nextSequences(STOCK_MOVEMENT_COUNTER, 1);
     const now = new Date().toISOString();
     const updated = productSchema.parse({ ...product, stockQuantity: quantityAfter, updatedAt: now });
     const movement = stockMovementSchema.parse({
       id: crypto.randomUUID(),
+      seq: movementSeq,
       productId,
       type: adjustment.type,
       quantityBefore,
