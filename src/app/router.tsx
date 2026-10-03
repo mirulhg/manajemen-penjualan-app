@@ -49,6 +49,13 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: 'kategori',
+        lazy: async () => {
+          const { CategoriesPage } = await import('../features/stock/components/CategoriesPage');
+          return { Component: CategoriesPage };
+        },
+      },
+      {
         path: 'stok/:productId',
         lazy: async () => {
           const { ProductDetailPage } = await import('../features/stock/components/ProductDetailPage');
