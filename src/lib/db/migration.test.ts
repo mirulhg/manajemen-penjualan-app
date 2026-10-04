@@ -496,3 +496,95 @@ describe('migrasi database v7 ke v8', () => {
     expect(last?.date).toBe('2026-10-02');
   });
 });
+
+describe('migrasi database v8 ke v9', () => {
+  function legacyProduct(id: string, sku: string, stockQuantity: number, minStock: number | null, archivedAt: string | null = null) {
+    return {
+      id,
+      sku,
+      name: `Barang ${sku}`,
+      category: 'Sembako',
+      unit: 'pcs',
+      stockQuantity,
+      minStock,
+      purchasePrice: 1000,
+      sellingPrice: 1500,
+      createdAt: '2026-10-01T09:00:00.000Z',
+      updatedAt: '2026-10-01T09:00:00.000Z',
+      archivedAt,
+    };
+  }
+
+  const AMAN = '00000000-0000-4000-8000-0000000000a1';
+  const MENIPIS = '00000000-0000-4000-8000-0000000000a2';
+  const HABIS = '00000000-0000-4000-8000-0000000000a3';
+  const MENIPIS_DEFAULT = '00000000-0000-4000-8000-0000000000a4';
+  const ARSIP = '00000000-0000-4000-8000-0000000000a5';
+
+  async function createV8Database(defaultMinStock?: number) {
+    db.close();
+    await Dexie.delete(DB_NAME);
+    const legacy = new Dexie(DB_NAME);
+    legacy.version(1).stores({
+      products: 'id, &sku, category, updatedAt',
+      stockMovements: 'id, productId, [productId+createdAt]',
+    });
+    legacy.version(2).stores({
+      stockMovements: 'id, productId, [productId+createdAt], &seq, [productId+seq]',
+      counters: 'name',
+    });
+    legacy.version(3).stores({ sales: 'id, &number, createdAt', saleItems: 'id, saleId, productId', settings: 'key' });
+    legacy.version(4).stores({
+      sales: 'id, &number, createdAt, actor',
+      saleReturns: 'id, &number, saleId, createdAt',
+    });
+    legacy.version(5).stores({ priceChanges: 'id, productId, [productId+seq]', productPhotos: 'productId' });
+    legacy.version(6).stores({ categories: 'id, &nameKey' });
+    legacy.version(7).stores({ dailySales: 'date' });
+    legacy.version(8).stores({ dailyProductSales: '[date+productId], [productId+date]' });
+    await legacy.table('products').bulkAdd([
+      legacyProduct(AMAN, 'AMN-1', 30, 5),
+      legacyProduct(MENIPIS, 'MNP-1', 4, 5),
+      legacyProduct(HABIS, 'HBS-1', 0, null),
+      legacyProduct(MENIPIS_DEFAULT, 'MND-1', 5, null),
+      // Diarsipkan: tidak mendapat peringatan walau stoknya habis.
+      legacyProduct(ARSIP, 'ARS-1', 0, 5, '2026-10-02T09:00:00.000Z'),
+    ]);
+    if (defaultMinStock !== undefined) {
+      await legacy.table('settings').put({ key: 'defaultMinStock', value: defaultMinStock });
+    }
+    legacy.close();
+  }
+
+  it('membuka peringatan belum dibaca untuk barang yang kini menipis atau habis; yang aman dan arsip tidak', async () => {
+    await createV8Database();
+    await db.open();
+
+    const alerts = await db.stockAlerts.toArray();
+    expect(alerts.map((alert) => [alert.productId, alert.level]).sort()).toEqual(
+      [
+        [MENIPIS, 'menipis'],
+        [HABIS, 'habis'],
+        [MENIPIS_DEFAULT, 'menipis'],
+      ].sort(),
+    );
+    expect(alerts.every((alert) => alert.readAt === null && alert.resolvedAt === null && alert.isOpen === 1)).toBe(true);
+  });
+
+  it('memakai batas default dari pengaturan yang sudah ada, dan tidak mengubah data lain', async () => {
+    await createV8Database(3);
+    await db.open();
+
+    // Dengan batas default 3: MND-1 (stok 5, tanpa batas sendiri) aman.
+    expect((await db.stockAlerts.toArray()).map((alert) => alert.productId).sort()).toEqual([MENIPIS, HABIS].sort());
+    expect(await db.products.count()).toBe(5);
+  });
+
+  it('index peringatan terbuka tersedia', async () => {
+    await createV8Database();
+    await db.open();
+
+    expect(await db.stockAlerts.where('isOpen').equals(1).count()).toBe(3);
+    expect(await db.stockAlerts.where('[productId+isOpen]').equals([HABIS, 1]).count()).toBe(1);
+  });
+});

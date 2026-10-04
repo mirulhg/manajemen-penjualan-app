@@ -69,6 +69,14 @@ describe('seedSampleSales', () => {
     expect(summary).toEqual({ count: metrics.transactionCount, netRevenue: metrics.revenue });
   });
 
+  it('peringatan stok = keadaan akhir saja: satu terbuka per barang menipis/habis, belum dibaca, tanpa riwayat episode', async () => {
+    const alerts = await db.stockAlerts.toArray();
+
+    expect(alerts).toHaveLength(12);
+    expect(alerts.every((alert) => alert.isOpen === 1 && alert.readAt === null)).toBe(true);
+    expect(new Set(alerts.map((alert) => alert.productId)).size).toBe(12);
+  });
+
   it('dipanggil dua kali tidak menggandakan data', async () => {
     await seedSampleSales(SAMPLE_PRODUCT_SKUS, TODAY);
     expect(await db.sales.count()).toBe(300);

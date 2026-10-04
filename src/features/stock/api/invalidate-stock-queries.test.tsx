@@ -10,6 +10,7 @@ function setup() {
     products: ['products'],
     analytics: ['product-analytics', 'forecast', '2026-10-03'],
     revenueByCategory: ['revenue-by-category', '2026-10-01', '2026-10-04'],
+    stockAlerts: ['stock-alerts', 'unread'],
     movements: ['stock-movements', 'x', 1],
     dailySales: ['daily-sales'],
   };
@@ -27,6 +28,7 @@ describe('invalidateProductData', () => {
     expect(isInvalidated(keys.products)).toBe(true);
     expect(isInvalidated(keys.analytics)).toBe(true);
     expect(isInvalidated(keys.revenueByCategory)).toBe(true);
+    expect(isInvalidated(keys.stockAlerts)).toBe(true);
     expect(isInvalidated(keys.movements)).toBe(false);
     expect(isInvalidated(keys.dailySales)).toBe(false);
   });
