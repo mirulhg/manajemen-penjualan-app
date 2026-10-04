@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { archiveProduct, unarchiveProduct } from './archive-product';
 import { CATEGORIES_QUERY_KEY } from './get-categories';
-import { PRODUCTS_QUERY_KEY } from './get-products';
+import { invalidateProductData } from './invalidate-stock-queries';
 
 function useArchiveMutation(productId: string, action: (productId: string) => Promise<unknown>) {
   const queryClient = useQueryClient();
@@ -12,7 +12,7 @@ function useArchiveMutation(productId: string, action: (productId: string) => Pr
     // Jumlah barang aktif dan arsip per kategori ikut berubah.
     onSettled: () =>
       Promise.all([
-        queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
+        invalidateProductData(queryClient),
         queryClient.invalidateQueries({ queryKey: CATEGORIES_QUERY_KEY }),
       ]),
   });

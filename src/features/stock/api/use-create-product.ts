@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { NewProductInput } from '../schema';
 import { CATEGORIES_QUERY_KEY } from './get-categories';
 import { createProduct } from './create-product';
-import { PRODUCTS_QUERY_KEY } from './get-products';
+import { invalidateProductData } from './invalidate-stock-queries';
 
 export function useCreateProduct() {
   const queryClient = useQueryClient();
@@ -13,7 +13,7 @@ export function useCreateProduct() {
     // Kategori yang diketik baru dibuat otomatis, jadi daftar kategori ikut basi.
     onSettled: () =>
       Promise.all([
-        queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
+        invalidateProductData(queryClient),
         queryClient.invalidateQueries({ queryKey: CATEGORIES_QUERY_KEY }),
       ]),
   });

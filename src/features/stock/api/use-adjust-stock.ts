@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { adjustStock } from './adjust-stock';
 import { stockMovementsKey } from './get-stock-movements';
-import { PRODUCTS_QUERY_KEY } from './get-products';
+import { invalidateProductData } from './invalidate-stock-queries';
 import type { StockAdjustmentInput } from '../schema';
 
 export function useAdjustStock(productId: string) {
@@ -14,7 +14,7 @@ export function useAdjustStock(productId: string) {
     // Dikembalikan agar mutasi baru dianggap selesai setelah data layar diperbarui.
     onSettled: () =>
       Promise.all([
-        queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
+        invalidateProductData(queryClient),
         queryClient.invalidateQueries({ queryKey: stockMovementsKey(productId) }),
       ]),
   });
