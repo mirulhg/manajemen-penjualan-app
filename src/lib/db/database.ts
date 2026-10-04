@@ -1,11 +1,12 @@
 import Dexie from 'dexie';
-import type { EntityTable } from 'dexie';
+import type { EntityTable, Table } from 'dexie';
 
-import { buildDailySalesRows } from './daily-sales-rows';
+import { buildDailyRecap } from './daily-sales-rows';
 import { STOCK_MOVEMENT_COUNTER, toCategoryKey } from './records';
 import type {
   Category,
   Counter,
+  DailyProductSales,
   DailySales,
   PriceChange,
   Product,
@@ -36,6 +37,7 @@ class StockDatabase extends Dexie {
   productPhotos!: EntityTable<ProductPhoto, 'productId'>;
   categories!: EntityTable<Category, 'id'>;
   dailySales!: EntityTable<DailySales, 'date'>;
+  dailyProductSales!: Table<DailyProductSales, [string, string]>;
 
   constructor() {
     super('manajemen-stok');
@@ -123,12 +125,24 @@ class StockDatabase extends Dexie {
     this.version(7)
       .stores({ dailySales: 'date' })
       .upgrade(async (transaction) => {
-        const rows = buildDailySalesRows(
+        const recap = buildDailyRecap(
           await transaction.table<Sale, string>('sales').toArray(),
           await transaction.table<SaleItem, string>('saleItems').toArray(),
           await transaction.table<SaleReturn, string>('saleReturns').toArray(),
         );
-        await transaction.table<DailySales, string>('dailySales').bulkAdd(rows);
+        await transaction.table<DailySales, string>('dailySales').bulkAdd(recap.days);
+      });
+    this.version(8)
+      .stores({ dailyProductSales: '[date+productId], [productId+date]' })
+      .upgrade(async (transaction) => {
+        const recap = buildDailyRecap(
+          await transaction.table<Sale, string>('sales').toArray(),
+          await transaction.table<SaleItem, string>('saleItems').toArray(),
+          await transaction.table<SaleReturn, string>('saleReturns').toArray(),
+        );
+        await transaction
+          .table<DailyProductSales, [string, string]>('dailyProductSales')
+          .bulkAdd(recap.products);
       });
   }
 }

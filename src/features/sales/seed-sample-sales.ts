@@ -10,7 +10,7 @@ import { getSampleSaleTime, planSampleSales, SAMPLE_SALES_DAYS } from './sample-
 export async function seedSampleSales(sampleSkus: readonly string[], today = new Date()): Promise<void> {
   await db.transaction(
     'rw',
-    [db.products, db.stockMovements, db.counters, db.sales, db.saleItems, db.settings, db.dailySales],
+    [db.products, db.stockMovements, db.counters, db.sales, db.saleItems, db.settings, db.dailySales, db.dailyProductSales],
     async () => {
       if ((await db.sales.count()) > 0) return;
 

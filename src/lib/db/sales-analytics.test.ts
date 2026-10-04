@@ -183,52 +183,31 @@ describe('omzet per kategori dengan diskon, retur, dan pembatalan', () => {
   });
 });
 
-describe('omzet per kategori pada banyak transaksi', () => {
+describe('omzet per kategori tidak membaca transaksi mentah', () => {
   beforeEach(async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(TODAY);
     await resetDatabaseWithSeed();
+    await seedSampleSales(SAMPLE_PRODUCT_SKUS, TODAY);
   });
 
-  it('3.000 transaksi dalam rentang selesai < 2 detik (anyOf per kunci butuh puluhan detik)', async () => {
-    const product = await findProductBySku('SBK-001');
-    const sales = [];
-    const items = [];
-    for (let index = 0; index < 3_000; index += 1) {
-      const id = crypto.randomUUID();
-      sales.push({
-        id,
-        number: `TRX-20260101-${String(index + 1).padStart(4, '0')}`,
-        paymentMethod: 'tunai' as const,
-        subtotal: 74_000,
-        itemDiscountTotal: 0,
-        transactionDiscount: 0,
-        total: 74_000,
-        amountPaid: 74_000,
-        change: 0,
-        itemCount: 1,
-        actor: 'Pemilik',
-        createdAt: new Date(2026, 5, 1 + (index % 60), 8 + (index % 12)).toISOString(),
-        status: 'selesai' as const,
-        refundedTotal: 0,
-      });
-      items.push({
-        id: crypto.randomUUID(),
-        saleId: id,
-        productId: product.id,
-        productName: product.name,
-        sku: product.sku,
-        unit: product.unit,
-        quantity: 1,
-        unitPrice: 74_000,
-        unitCost: 68_000,
-        discount: 0,
-      });
-    }
-    await db.sales.bulkAdd(sales);
-    await db.saleItems.bulkAdd(items);
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.useRealTimers();
+  });
 
-    const startedAt = performance.now();
-    const result = await getRevenueByCategory({ start: new Date(2026, 5, 1), end: new Date(2026, 8, 1) });
-    expect(performance.now() - startedAt).toBeLessThan(2_000);
-    expect(result).toEqual([{ category: 'Sembako', revenue: 3_000 * 74_000 }]);
-  }, 20_000);
+  it('hanya memakai rekap per produk: saleItems dan sales tidak dibaca sama sekali', async () => {
+    const itemsToArray = vi.spyOn(db.saleItems, 'toArray');
+    const itemsWhere = vi.spyOn(db.saleItems, 'where');
+    const salesToArray = vi.spyOn(db.sales, 'toArray');
+    const salesWhere = vi.spyOn(db.sales, 'where');
+
+    const result = await getRevenueByCategory(rangeOf('30-hari'));
+
+    expect(result.reduce((sum, entry) => sum + entry.revenue, 0)).toBe(5_524_500);
+    expect(itemsToArray).not.toHaveBeenCalled();
+    expect(itemsWhere).not.toHaveBeenCalled();
+    expect(salesToArray).not.toHaveBeenCalled();
+    expect(salesWhere).not.toHaveBeenCalled();
+  });
 });

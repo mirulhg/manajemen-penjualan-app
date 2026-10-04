@@ -139,6 +139,16 @@ export const dailySalesSchema = z.object({
   cogs: money,
 });
 
+// Satu baris per (tanggal lokal, produk), hanya yang punya penjualan bersih. quantity = terjual - retur;
+// revenue = nilai bersih baris (sudah termasuk bagian diskon transaksi) - uang retur baris; cogs = HPP bersih.
+export const dailyProductSalesSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  productId: z.uuid(),
+  quantity: z.number().int().nonnegative(),
+  revenue: money,
+  cogs: money,
+});
+
 export type Product = z.infer<typeof productSchema>;
 export type StockMovement = z.infer<typeof stockMovementSchema>;
 export type Counter = z.infer<typeof counterSchema>;
@@ -149,6 +159,7 @@ export type Setting = z.infer<typeof settingSchema>;
 export type HashedSecret = z.infer<typeof hashedSecretSchema>;
 export type SaleReturn = z.infer<typeof saleReturnSchema>;
 export type DailySales = z.infer<typeof dailySalesSchema>;
+export type DailyProductSales = z.infer<typeof dailyProductSalesSchema>;
 
 export const priceChangeSchema = z.object({
   id: z.uuid(),

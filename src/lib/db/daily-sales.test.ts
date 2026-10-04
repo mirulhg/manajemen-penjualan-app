@@ -77,11 +77,17 @@ describe('saleContribution', () => {
   it('transaksi biasa: 1 transaksi, total, tanpa retur, HPP penuh', async () => {
     const sale = await plainSale(DAY_1);
     const { items, returns } = await load(sale.id);
+    // Urutan produk mengikuti urutan baris transaksi (nama A-Z): Air Mineral, Beras, Mi Instan.
     expect(saleContribution(sale, items, returns)).toEqual({
       transactionCount: 1,
       grossTotal: 162_000,
       refundedTotal: 0,
       cogs: 146_900,
+      products: [
+        { productId: (await findProductBySku('MNM-001')).id, quantity: 1, revenue: 3_500, cogs: 2_500 },
+        { productId: (await findProductBySku('SBK-001')).id, quantity: 2, revenue: 148_000, cogs: 136_000 },
+        { productId: (await findProductBySku('MKR-001')).id, quantity: 3, revenue: 10_500, cogs: 8_400 },
+      ],
     });
   });
 
@@ -97,6 +103,11 @@ describe('saleContribution', () => {
       grossTotal: 162_000,
       refundedTotal: 74_000,
       cogs: 78_900,
+      products: [
+        { productId: (await findProductBySku('MNM-001')).id, quantity: 1, revenue: 3_500, cogs: 2_500 },
+        { productId: (await findProductBySku('SBK-001')).id, quantity: 1, revenue: 74_000, cogs: 68_000 },
+        { productId: (await findProductBySku('MKR-001')).id, quantity: 3, revenue: 10_500, cogs: 8_400 },
+      ],
     });
   });
 

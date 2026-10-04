@@ -69,7 +69,7 @@ export async function createSaleAt(input: CreateSaleInput, now: Date): Promise<S
   // Harga dan stok dibaca ulang di dalam transaksi; seluruh penulisan (termasuk penghitung nomor) satu kesatuan.
   return db.transaction(
     'rw',
-    [db.products, db.stockMovements, db.counters, db.sales, db.saleItems, db.settings, db.dailySales],
+    [db.products, db.stockMovements, db.counters, db.sales, db.saleItems, db.settings, db.dailySales, db.dailyProductSales],
     async () => {
       const lines: SaleLine[] = [];
       for (const item of parsed.items) {

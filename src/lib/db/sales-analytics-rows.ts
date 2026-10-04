@@ -1,44 +1,21 @@
-import { allocateLineNets, sortSaleItems } from './sale-line-nets';
-import type { Sale, SaleItem, SaleReturn } from './records';
+import type { Sale } from './records';
 
 export const NO_CATEGORY = 'Tanpa kategori';
 
 export type CategoryRevenue = { category: string; revenue: number };
 export type HourCount = { hour: number; count: number };
 
-// Nilai bersih baris (sudah termasuk bagian diskon transaksi) dikurangi uang retur baris itu, dijumlah per kategori.
-// Transaksi dibatalkan diabaikan. Jumlah semua kategori = omzet periode (total - refundedTotal).
-export function computeRevenueByCategory(
-  sales: Sale[],
-  items: SaleItem[],
-  returns: SaleReturn[],
+// Jumlah semua kategori = omzet periode, karena revenue per produk sudah bersih dari diskon transaksi dan retur.
+export function groupRevenueByCategory(
+  totals: { productId: string; revenue: number }[],
   categoryByProductId: Map<string, string>,
 ): CategoryRevenue[] {
-  const refundedByItem = new Map<string, number>();
-  for (const saleReturn of returns) {
-    for (const line of saleReturn.items) {
-      refundedByItem.set(line.saleItemId, (refundedByItem.get(line.saleItemId) ?? 0) + line.refundAmount);
-    }
+  const byCategory = new Map<string, number>();
+  for (const entry of totals) {
+    const category = categoryByProductId.get(entry.productId) ?? NO_CATEGORY;
+    byCategory.set(category, (byCategory.get(category) ?? 0) + entry.revenue);
   }
-  const itemsBySale = new Map<string, SaleItem[]>();
-  for (const item of items) {
-    itemsBySale.set(item.saleId, [...(itemsBySale.get(item.saleId) ?? []), item]);
-  }
-
-  const totals = new Map<string, number>();
-  for (const sale of sales) {
-    if (sale.status === 'dibatalkan') continue;
-    // Urutan baris harus sama dengan yang dipakai saat retur dihitung, supaya pembulatan alokasinya identik.
-    const saleItems = sortSaleItems(itemsBySale.get(sale.id) ?? []);
-    const nets = allocateLineNets(sale, saleItems);
-    saleItems.forEach((item, index) => {
-      const category = categoryByProductId.get(item.productId) ?? NO_CATEGORY;
-      const net = (nets[index] ?? 0) - (refundedByItem.get(item.id) ?? 0);
-      totals.set(category, (totals.get(category) ?? 0) + net);
-    });
-  }
-
-  return [...totals.entries()]
+  return [...byCategory.entries()]
     .map(([category, revenue]) => ({ category, revenue }))
     .filter((entry) => entry.revenue > 0)
     .sort((a, b) => b.revenue - a.revenue || a.category.localeCompare(b.category, 'id'));

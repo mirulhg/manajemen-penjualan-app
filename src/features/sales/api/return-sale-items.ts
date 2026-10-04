@@ -29,6 +29,7 @@ export async function returnSaleItems(saleId: string, input: ReturnSaleItemsInpu
       db.counters,
       db.settings,
       db.dailySales,
+      db.dailyProductSales,
     ],
     async () => {
       const { sale, items, returns, progress } = await loadActiveSale(saleId);
