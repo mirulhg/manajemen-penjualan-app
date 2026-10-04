@@ -114,14 +114,14 @@ describe('Bagikan daftar', () => {
   });
 
   it('memakai navigator.share bila ada, dengan teks tanpa harga beli', async () => {
-    const share = vi.fn().mockResolvedValue(undefined);
+    const share = vi.fn<(data: ShareData) => Promise<void>>().mockResolvedValue(undefined);
     Object.defineProperty(navigator, 'share', { value: share, configurable: true });
     renderApp('/peringatan');
 
     fireEvent.click(await screen.findByRole('button', { name: 'Bagikan daftar' }));
 
     await waitFor(() => expect(share).toHaveBeenCalledTimes(1));
-    const text: string = share.mock.calls[0]?.[0]?.text ?? '';
+    const text = share.mock.calls[0]?.[0].text ?? '';
     expect(text).toContain('- Minyak Goreng 2 L: 8 pouch');
     expect(text).toContain('- Telur Ayam 1 kg: 6 pack');
     expect(text.split('\n')).toHaveLength(13);
