@@ -288,3 +288,116 @@ describe('migrasi database v5 ke v6', () => {
     expect(await db.products.count()).toBe(3);
   });
 });
+
+describe('migrasi database v6 ke v7', () => {
+  const SALE_ID_ACTIVE = '10000000-0000-4000-8000-000000000001';
+  const SALE_ID_CANCELLED = '10000000-0000-4000-8000-000000000002';
+  const SALE_ID_NEXT_DAY = '10000000-0000-4000-8000-000000000003';
+  const ITEM_A = '20000000-0000-4000-8000-000000000001';
+  const ITEM_B = '20000000-0000-4000-8000-000000000002';
+  const ITEM_C = '20000000-0000-4000-8000-000000000003';
+  const ITEM_D = '20000000-0000-4000-8000-000000000004';
+  const PRODUCT = '00000000-0000-4000-8000-000000000001';
+  // Dibuat dari tanggal lokal supaya hasilnya tidak bergantung zona waktu mesin yang menjalankan test.
+  const DAY_1_NOON = new Date(2026, 9, 1, 12, 0).toISOString();
+  const DAY_2_NOON = new Date(2026, 9, 2, 12, 0).toISOString();
+
+  function legacySale(id: string, number: string, total: number, createdAt: string, extra: object = {}) {
+    return {
+      id,
+      number,
+      paymentMethod: 'tunai',
+      subtotal: total,
+      itemDiscountTotal: 0,
+      transactionDiscount: 0,
+      total,
+      amountPaid: total,
+      change: 0,
+      itemCount: 1,
+      actor: 'Pemilik',
+      createdAt,
+      status: 'selesai',
+      refundedTotal: 0,
+      ...extra,
+    };
+  }
+
+  function legacyItem(id: string, saleId: string, quantity: number, unitPrice: number, unitCost: number) {
+    return {
+      id,
+      saleId,
+      productId: PRODUCT,
+      productName: 'Barang Lama',
+      sku: 'TES-001',
+      unit: 'pcs',
+      quantity,
+      unitPrice,
+      unitCost,
+      discount: 0,
+    };
+  }
+
+  beforeEach(async () => {
+    db.close();
+    await Dexie.delete(DB_NAME);
+    const legacy = new Dexie(DB_NAME);
+    legacy.version(1).stores({
+      products: 'id, &sku, category, updatedAt',
+      stockMovements: 'id, productId, [productId+createdAt]',
+    });
+    legacy.version(2).stores({
+      stockMovements: 'id, productId, [productId+createdAt], &seq, [productId+seq]',
+      counters: 'name',
+    });
+    legacy.version(3).stores({
+      sales: 'id, &number, createdAt',
+      saleItems: 'id, saleId, productId',
+      settings: 'key',
+    });
+    legacy.version(4).stores({
+      sales: 'id, &number, createdAt, actor',
+      saleReturns: 'id, &number, saleId, createdAt',
+    });
+    legacy.version(5).stores({
+      priceChanges: 'id, productId, [productId+seq]',
+      productPhotos: 'productId',
+    });
+    legacy.version(6).stores({ categories: 'id, &nameKey' });
+
+    await legacy.table('sales').bulkAdd([
+      // 10000 dengan retur 1 dari 2 unit barang A (3000): HPP sisa = 2000 x 1 + 2500 x 1.
+      legacySale(SALE_ID_ACTIVE, 'TRX-20261001-0001', 10_000, DAY_1_NOON, { refundedTotal: 3_000 }),
+      legacySale(SALE_ID_CANCELLED, 'TRX-20261001-0002', 5_000, DAY_1_NOON, { status: 'dibatalkan' }),
+      legacySale(SALE_ID_NEXT_DAY, 'TRX-20261002-0001', 7_000, DAY_2_NOON),
+    ]);
+    await legacy.table('saleItems').bulkAdd([
+      legacyItem(ITEM_A, SALE_ID_ACTIVE, 2, 3_000, 2_000),
+      legacyItem(ITEM_B, SALE_ID_ACTIVE, 1, 4_000, 2_500),
+      legacyItem(ITEM_C, SALE_ID_CANCELLED, 1, 5_000, 3_000),
+      legacyItem(ITEM_D, SALE_ID_NEXT_DAY, 1, 7_000, 5_000),
+    ]);
+    await legacy.table('saleReturns').add({
+      id: '30000000-0000-4000-8000-000000000001',
+      number: 'RTR-20261001-0001',
+      saleId: SALE_ID_ACTIVE,
+      items: [{ saleItemId: ITEM_A, quantity: 1, refundAmount: 3_000 }],
+      refundTotal: 3_000,
+      reason: 'Kemasan sobek',
+      actor: 'Pemilik',
+      createdAt: DAY_2_NOON,
+    });
+    legacy.close();
+  });
+
+  it('membangun dailySales dari penjualan, retur, dan pembatalan lama tanpa mengubah data lain', async () => {
+    await db.open();
+
+    expect(await db.dailySales.orderBy('date').toArray()).toEqual([
+      { date: '2026-10-01', transactionCount: 1, grossTotal: 10_000, refundedTotal: 3_000, cogs: 4_500 },
+      { date: '2026-10-02', transactionCount: 1, grossTotal: 7_000, refundedTotal: 0, cogs: 5_000 },
+    ]);
+    expect(await db.sales.count()).toBe(3);
+    expect(await db.saleItems.count()).toBe(4);
+    expect(await db.saleReturns.count()).toBe(1);
+  });
+});
