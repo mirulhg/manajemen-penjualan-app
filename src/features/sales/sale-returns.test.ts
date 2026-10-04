@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { allocateLineNets } from './allocate-line-nets';
+import { allocateLineNets } from '../../lib/db/sale-line-nets';
 import { refundAmountFor } from './sale-returns';
 import { netRevenue, saleDisplayStatus } from './sale-status';
 

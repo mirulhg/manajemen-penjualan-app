@@ -1,4 +1,4 @@
-import type { Sale, SaleItem } from '../../lib/db/records';
+import type { Sale, SaleItem } from './records';
 
 type LineForAllocation = Pick<SaleItem, 'quantity' | 'unitPrice' | 'discount'>;
 
@@ -26,4 +26,11 @@ export function allocateLineNets(sale: Pick<Sale, 'total'>, items: LineForAlloca
     nets[index] = (nets[index] ?? 0) + 1;
   }
   return nets;
+}
+
+// Urutan tetap (nama lalu id) supaya alokasi pembulatan dan tampilan selalu sama untuk transaksi yang sama.
+export function sortSaleItems(items: SaleItem[]): SaleItem[] {
+  return [...items].sort(
+    (a, b) => a.productName.localeCompare(b.productName, 'id') || a.id.localeCompare(b.id),
+  );
 }

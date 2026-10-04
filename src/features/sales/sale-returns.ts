@@ -1,5 +1,5 @@
 import type { Sale, SaleItem, SaleReturn } from '../../lib/db/records';
-import { allocateLineNets } from './allocate-line-nets';
+import { allocateLineNets, sortSaleItems } from '../../lib/db/sale-line-nets';
 
 export type ReturnRequestLine = {
   saleItemId: string;
@@ -27,13 +27,6 @@ export function refundAmountFor(
     return lineNet - alreadyRefundedAmount;
   }
   return Math.floor((lineNet * returnQuantity) / lineQuantity);
-}
-
-// Urutan tetap (nama lalu id) supaya alokasi pembulatan dan tampilan selalu sama untuk transaksi yang sama.
-export function sortSaleItems(items: SaleItem[]): SaleItem[] {
-  return [...items].sort(
-    (a, b) => a.productName.localeCompare(b.productName, 'id') || a.id.localeCompare(b.id),
-  );
 }
 
 export function getItemProgress(
