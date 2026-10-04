@@ -1,4 +1,4 @@
-export const PERIODS = ['hari-ini', 'kemarin', '7-hari', '30-hari', 'bulan-ini', 'rentang'] as const;
+export const PERIODS = ['hari-ini', 'kemarin', '7-hari', '30-hari', 'bulan-ini', '12-bulan', 'rentang'] as const;
 export type Period = (typeof PERIODS)[number];
 
 export const PERIOD_LABELS: Record<Period, string> = {
@@ -7,6 +7,7 @@ export const PERIOD_LABELS: Record<Period, string> = {
   '7-hari': '7 hari terakhir',
   '30-hari': '30 hari terakhir',
   'bulan-ini': 'Bulan ini',
+  '12-bulan': '12 bulan terakhir',
   rentang: 'Rentang tanggal',
 };
 
@@ -56,6 +57,9 @@ export function resolvePeriodRange(selection: PeriodSelection, now: Date): { sta
         start: new Date(now.getFullYear(), now.getMonth(), 1),
         end: new Date(now.getFullYear(), now.getMonth() + 1, 1),
       };
+    // Hari ini + 11 bulan kalender sebelumnya, mulai tanggal 1.
+    case '12-bulan':
+      return { start: new Date(now.getFullYear(), now.getMonth() - 11, 1), end: startOfDay(now, 1) };
     case 'rentang': {
       const from = parseLocalDate(selection.from) ?? startOfDay(now);
       const to = parseLocalDate(selection.to) ?? from;
@@ -87,4 +91,39 @@ export function serializePeriodParams(selection: PeriodSelection, params = new U
     if (selection.to) params.set('sampai', selection.to);
   }
   return params;
+}
+
+export type DateRange = { start: Date; end: Date };
+
+const MS_PER_DAY = 86_400_000;
+
+// Selisih hari kalender; dibulatkan karena hari perpindahan jam musim panas bisa 23 atau 25 jam.
+export function daysBetween(start: Date, end: Date): number {
+  return Math.round((end.getTime() - start.getTime()) / MS_PER_DAY);
+}
+
+// Data tidak ada setelah hari ini; tanpa pemotongan, "Bulan ini" akan menampilkan sisa bulan sebagai hari kosong.
+export function clipRangeToToday(range: DateRange, now: Date): DateRange {
+  const tomorrow = startOfDay(now, 1);
+  const end = range.end > tomorrow ? tomorrow : range.end;
+  return { start: range.start, end: end < range.start ? range.start : end };
+}
+
+// Pembanding: rentang sama panjang tepat sebelumnya. "Bulan ini" dibandingkan dengan tanggal yang sama bulan lalu
+// (dipotong bila bulan lalu lebih pendek); "12 bulan" dengan 12 bulan kalender sebelumnya.
+export function previousPeriod(period: Period, range: DateRange): DateRange {
+  const { start } = range;
+  if (period === 'bulan-ini') {
+    const previousStart = new Date(start.getFullYear(), start.getMonth() - 1, 1);
+    const sameLength = new Date(
+      previousStart.getFullYear(),
+      previousStart.getMonth(),
+      1 + daysBetween(start, range.end),
+    );
+    return { start: previousStart, end: sameLength > start ? start : sameLength };
+  }
+  if (period === '12-bulan') {
+    return { start: new Date(start.getFullYear(), start.getMonth() - 12, 1), end: start };
+  }
+  return { start: startOfDay(start, -daysBetween(start, range.end)), end: start };
 }

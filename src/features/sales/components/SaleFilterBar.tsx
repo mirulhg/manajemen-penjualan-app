@@ -1,8 +1,9 @@
 import { FormField } from '../../../components/ui/FormField';
 import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import type { PaymentMethod } from '../../../lib/db/records';
-import { PERIOD_LABELS, PERIODS, toLocalDateText } from '../../../utils/date-period';
+import { PERIOD_LABELS, toLocalDateText } from '../../../utils/date-period';
 import type { Period } from '../../../utils/date-period';
+import { SALE_PERIODS } from '../sale-filters';
 import type { SaleFilters } from '../sale-filters';
 
 type SaleFilterBarProps = {
@@ -18,7 +19,7 @@ const METHODS: { value: PaymentMethod; label: string }[] = [
 ];
 
 function findPeriod(value: string): Period {
-  return PERIODS.find((period) => period === value) ?? 'hari-ini';
+  return SALE_PERIODS.find((period) => period === value) ?? 'hari-ini';
 }
 
 function findMethod(value: string): PaymentMethod | null {
@@ -47,7 +48,7 @@ export function SaleFilterBar({ filters, actors, onChange }: SaleFilterBarProps)
             onChange={(event) => handlePeriodChange(event.target.value)}
             className={FIELD_CLASS}
           >
-            {PERIODS.map((period) => (
+            {SALE_PERIODS.map((period) => (
               <option key={period} value={period}>
                 {PERIOD_LABELS[period]}
               </option>

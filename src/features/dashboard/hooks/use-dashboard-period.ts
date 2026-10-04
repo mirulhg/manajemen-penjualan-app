@@ -4,7 +4,7 @@ import { parsePeriodParams, serializePeriodParams } from '../../../utils/date-pe
 import type { Period, PeriodSelection } from '../../../utils/date-period';
 
 // Kemarin tidak ada di dasbor karena sudah ditampilkan sebagai pembanding "hari ini vs kemarin".
-export const DASHBOARD_PERIODS: readonly Period[] = ['hari-ini', '7-hari', '30-hari', 'bulan-ini', 'rentang'];
+export const DASHBOARD_PERIODS: readonly Period[] = ['hari-ini', '7-hari', '30-hari', 'bulan-ini', '12-bulan', 'rentang'];
 
 export function useDashboardPeriod() {
   const [searchParams, setSearchParams] = useSearchParams();

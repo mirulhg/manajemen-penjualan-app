@@ -2,9 +2,12 @@ import { z } from 'zod';
 
 import { paymentMethodSchema } from '../../lib/db/records';
 import type { PaymentMethod } from '../../lib/db/records';
-import { parsePeriodParams, resolvePeriodRange, serializePeriodParams } from '../../utils/date-period';
+import { parsePeriodParams, PERIODS, resolvePeriodRange, serializePeriodParams } from '../../utils/date-period';
 import type { Period } from '../../utils/date-period';
 import { parsePageParam } from '../../utils/pagination';
+
+// 12 bulan hanya ada di dasbor; Riwayat bertahan di pilihan harian sampai bulanan.
+export const SALE_PERIODS = PERIODS.filter((period) => period !== '12-bulan');
 
 export type SaleFilters = {
   period: Period;
@@ -20,7 +23,7 @@ const textSchema = z.string().min(1).nullable().catch(null);
 
 export function parseSaleFilters(params: URLSearchParams): SaleFilters {
   return {
-    ...parsePeriodParams(params),
+    ...parsePeriodParams(params, SALE_PERIODS),
     method: methodSchema.parse(params.get('metode')),
     actor: textSchema.parse(params.get('kasir')),
     page: parsePageParam(params.get('halaman')),
