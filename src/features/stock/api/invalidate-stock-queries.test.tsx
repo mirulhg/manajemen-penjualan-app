@@ -9,6 +9,7 @@ function setup() {
   const keys = {
     products: ['products'],
     analytics: ['product-analytics', 'forecast', '2026-10-03'],
+    revenueByCategory: ['revenue-by-category', '2026-10-01', '2026-10-04'],
     movements: ['stock-movements', 'x', 1],
     dailySales: ['daily-sales'],
   };
@@ -18,13 +19,14 @@ function setup() {
 }
 
 describe('invalidateProductData', () => {
-  it('menandai daftar produk dan analisis produk basi, tanpa menyentuh yang lain', async () => {
+  it('menandai daftar produk, analisis produk, dan omzet per kategori basi, tanpa menyentuh yang lain', async () => {
     const { queryClient, keys, isInvalidated } = setup();
 
     await invalidateProductData(queryClient);
 
     expect(isInvalidated(keys.products)).toBe(true);
     expect(isInvalidated(keys.analytics)).toBe(true);
+    expect(isInvalidated(keys.revenueByCategory)).toBe(true);
     expect(isInvalidated(keys.movements)).toBe(false);
     expect(isInvalidated(keys.dailySales)).toBe(false);
   });

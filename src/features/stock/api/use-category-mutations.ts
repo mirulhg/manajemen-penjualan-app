@@ -4,7 +4,7 @@ import type { CategoryNameInput } from '../schema';
 import { createCategory } from './create-category';
 import { deleteCategory } from './delete-category';
 import { CATEGORIES_QUERY_KEY } from './get-categories';
-import { PRODUCTS_QUERY_KEY } from './get-products';
+import { invalidateProductData } from './invalidate-stock-queries';
 import { renameCategory } from './rename-category';
 
 function useCategoryMutation<Variables, Result>(action: (variables: Variables) => Promise<Result>) {
@@ -12,11 +12,11 @@ function useCategoryMutation<Variables, Result>(action: (variables: Variables) =
 
   return useMutation({
     mutationFn: action,
-    // Nama kategori tersimpan di setiap barang, jadi daftar barang ikut basi.
+    // Nama kategori tersimpan di setiap barang, jadi daftar barang, omzet per kategori, dan analisis produk ikut basi.
     onSettled: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: CATEGORIES_QUERY_KEY }),
-        queryClient.invalidateQueries({ queryKey: PRODUCTS_QUERY_KEY }),
+        invalidateProductData(queryClient),
       ]),
   });
 }
