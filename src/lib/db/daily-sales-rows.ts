@@ -49,6 +49,7 @@ export function buildDailySalesRows(
 ): DailySales[] {
   const itemsBySale = groupBySaleId(items);
   const returnsBySale = groupBySaleId(returns);
+  // Tanggal yang semua transaksinya dibatalkan tetap punya baris (bernilai nol), sama seperti pembaruan inkremental.
   const byDate = new Map<string, DailySales>();
 
   for (const sale of sales) {
@@ -57,7 +58,6 @@ export function buildDailySalesRows(
       itemsBySale.get(sale.id) ?? [],
       returnsBySale.get(sale.id) ?? [],
     );
-    if (contribution.transactionCount === 0) continue;
     const date = getSaleDateKey(sale.createdAt);
     const current = byDate.get(date) ?? { date, ...NO_CONTRIBUTION };
     byDate.set(date, {
