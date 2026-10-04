@@ -1,10 +1,12 @@
 // @vitest-environment jsdom
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Outlet, Route, Routes } from 'react-router';
 
 import { HomeRedirect } from '../../../app/HomeRedirect';
 import { createSaleAt } from '../../sales/api/create-sale';
+import { seedSampleSales } from '../../sales/seed-sample-sales';
+import { SAMPLE_PRODUCT_SKUS } from '../../stock';
 import { OwnerOnly } from '../../session';
 import { createTestQueryClient, renderWithProviders } from '../../../test/render';
 import { findProductBySku, resetDatabaseWithSeed } from '../../../test/reset-database';
@@ -111,5 +113,70 @@ describe('DashboardPage', () => {
 
     renderRoutes('/', true);
     expect(await screen.findByText('halaman kasir')).toBeTruthy();
+  });
+});
+
+describe('DashboardPage grafik', () => {
+  beforeEach(async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
+    await resetDatabaseWithSeed();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('30 hari: perbandingan, tren, kategori dengan total = omzet, dan jam sibuk', async () => {
+    await seedSampleSales(SAMPLE_PRODUCT_SKUS, NOW);
+    renderRoutes('/dasbor?periode=30-hari', false);
+
+    // Grafik dimuat lazy setelah kartu angka.
+    // Legenda teks (li); nama seri yang sama juga ada di judul kolom tabel yang tersembunyi.
+    const legend = await screen.findAllByText('Periode sebelumnya');
+    expect(legend.some((element) => element.tagName === 'LI')).toBe(true);
+    expect(screen.getByText('turun 2,9% dibanding periode sebelumnya')).toBeTruthy();
+    expect(await screen.findByText('Total Rp 5.524.500')).toBeTruthy();
+    expect(await screen.findByRole('group', { name: /Jumlah transaksi per jam/ })).toBeTruthy();
+    expect(screen.getByLabelText<HTMLSelectElement>('Skala waktu').value).toBe('harian');
+  });
+
+  it('12 bulan: skala otomatis bulanan dan tautan Riwayat memakai rentang tanggal yang sama', async () => {
+    await seedSampleSales(SAMPLE_PRODUCT_SKUS, NOW);
+    renderRoutes('/dasbor?periode=12-bulan', false);
+
+    expect((await screen.findByLabelText<HTMLSelectElement>('Skala waktu')).value).toBe('bulanan');
+    expect(screen.getByRole('link', { name: 'Lihat transaksi' }).getAttribute('href')).toBe(
+      '/penjualan?periode=rentang&dari=2025-11-01&sampai=2026-10-03',
+    );
+  });
+
+  it('?skala= di URL menimpa skala otomatis, nilai tidak valid diabaikan', async () => {
+    await seedSampleSales(SAMPLE_PRODUCT_SKUS, NOW);
+    const first = renderRoutes('/dasbor?periode=30-hari&skala=mingguan', false);
+    expect((await screen.findByLabelText<HTMLSelectElement>('Skala waktu')).value).toBe('mingguan');
+    first.unmount();
+
+    renderRoutes('/dasbor?periode=30-hari&skala=ngawur', false);
+    expect((await screen.findByLabelText<HTMLSelectElement>('Skala waktu')).value).toBe('harian');
+  });
+
+  it('periode tanpa penjualan: tiap grafik menampilkan keadaan kosong, bukan grafik datar', async () => {
+    // Penjualan ada, tetapi hanya kemarin; periode "Hari ini" kosong.
+    const beras = await findProductBySku('SBK-001');
+    await createSaleAt(
+      {
+        items: [{ productId: beras.id, quantity: 1, discount: 0 }],
+        paymentMethod: 'transfer',
+        transactionDiscount: 0,
+        expectedTotal: 74_000,
+      },
+      new Date(2026, 9, 2, 9, 0),
+    );
+    renderRoutes('/dasbor', false);
+
+    await waitFor(() => {
+      expect(screen.getAllByText('Belum ada penjualan di periode ini.')).toHaveLength(3);
+    });
   });
 });
