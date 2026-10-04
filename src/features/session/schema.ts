@@ -9,3 +9,14 @@ export const newPinSchema = z
     path: ['confirmPin'],
     message: 'Isi ulang PIN harus sama dengan PIN baru.',
   });
+
+// Batas menipis default: bilangan bulat 1-1000 (teks dari form).
+export const defaultMinStockSchema = z.object({
+  defaultMinStock: z
+    .string()
+    .trim()
+    .regex(/^\d+$/, 'Isi batas berupa bilangan bulat antara 1 dan 1.000.')
+    .transform(Number)
+    .pipe(z.number().min(1, 'Isi batas berupa bilangan bulat antara 1 dan 1.000.').max(1000, 'Isi batas berupa bilangan bulat antara 1 dan 1.000.')),
+});
+export type DefaultMinStockInput = z.input<typeof defaultMinStockSchema>;

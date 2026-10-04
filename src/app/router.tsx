@@ -32,6 +32,14 @@ export const router = createBrowserRouter([
         },
       },
       {
+        // Pemilik selalu; kasir hanya bila pengaturannya aktif (dijaga di dalam halamannya).
+        path: 'peringatan',
+        lazy: async () => {
+          const { AlertsPage } = await import('../features/alerts/components/AlertsPage');
+          return { Component: AlertsPage };
+        },
+      },
+      {
         path: 'keluar-mode-kasir',
         lazy: async () => {
           const { ExitCashierModePage } = await import('../features/session/components/ExitCashierModePage');

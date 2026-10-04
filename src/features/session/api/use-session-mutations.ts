@@ -4,6 +4,10 @@ import { changePin } from './change-pin';
 import { enterCashierMode, exitCashierMode } from './cashier-mode';
 import { SESSION_QUERY_KEY } from './get-session';
 import { resetPinWithRecoveryCode } from './reset-pin-with-recovery-code';
+import { PRODUCT_ANALYTICS_QUERY_KEY } from '../../../lib/db/product-analytics';
+import { setDefaultMinStock, STOCK_ALERTS_QUERY_KEY } from '../../../lib/db/stock-alerts';
+import { dismissDailySummary, setAlertFlag } from './set-alert-preference';
+import type { AlertFlagKey } from './set-alert-preference';
 import { setAllowOversell } from './set-allow-oversell';
 import { setupPin } from './setup-pin';
 
@@ -45,4 +49,27 @@ export function useExitCashierMode() {
 
 export function useSetAllowOversell() {
   return useSessionMutation((value: boolean) => setAllowOversell(value));
+}
+
+export function useSetAlertFlag() {
+  return useSessionMutation(({ key, value }: { key: AlertFlagKey; value: boolean }) => setAlertFlag(key, value));
+}
+
+export function useDismissDailySummary() {
+  return useSessionMutation((dateKey: string) => dismissDailySummary(dateKey));
+}
+
+// Batas default mengubah status stok semua barang tanpa batas sendiri, jadi peringatan dan analisis ikut basi.
+export function useSetDefaultMinStock() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (value: number) => setDefaultMinStock(value),
+    onSettled: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: SESSION_QUERY_KEY }),
+        queryClient.invalidateQueries({ queryKey: STOCK_ALERTS_QUERY_KEY }),
+        queryClient.invalidateQueries({ queryKey: PRODUCT_ANALYTICS_QUERY_KEY }),
+      ]),
+  });
 }

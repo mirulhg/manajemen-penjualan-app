@@ -9,3 +9,4 @@ export { getStockStatus } from './stock-status';
 export type { StockStatus } from './stock-status';
 export type { Product, StockMovement } from './schema';
 export { StockListError } from './components/StockListError';
+export { StockStatusBadge } from './components/StockStatusBadge';
