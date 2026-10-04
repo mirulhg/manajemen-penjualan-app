@@ -1,5 +1,6 @@
 import { buildStockMovement } from '../../../lib/db/build-stock-movement';
 import { db } from '../../../lib/db/database';
+import { syncStockAlerts } from '../../../lib/db/stock-alerts';
 import { STOCK_MOVEMENT_COUNTER } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
 import { getCurrentActor } from '../../../lib/db/settings';
@@ -24,7 +25,7 @@ export async function adjustStock(productId: string, input: StockAdjustmentInput
   const adjustment = stockAdjustmentSchema.parse(input);
 
   // Stok dibaca ulang di dalam transaksi, bukan dari data di layar, yang bisa sudah basi.
-  return db.transaction('rw', db.products, db.stockMovements, db.counters, db.settings, async () => {
+  return db.transaction('rw', db.products, db.stockMovements, db.counters, db.settings, db.stockAlerts, async () => {
     const row = await db.products.get(productId);
     if (!row) throw new StockAdjustmentError('PRODUCT_NOT_FOUND');
 
@@ -51,6 +52,7 @@ export async function adjustStock(productId: string, input: StockAdjustmentInput
 
     await db.products.put(updated);
     await db.stockMovements.add(movement);
+    await syncStockAlerts([productId], now);
     return updated;
   });
 }

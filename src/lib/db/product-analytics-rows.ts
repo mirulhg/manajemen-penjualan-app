@@ -1,6 +1,7 @@
 import { daysBetween, parseLocalDate, startOfDay } from '../../utils/date-period';
 import type { ProductTotals } from './daily-product-sales';
 import type { Product } from './records';
+import { suggestRestockQuantity } from './restock';
 
 export const MISSING_PRODUCT_NAME = 'Produk tidak ditemukan';
 
@@ -114,9 +115,13 @@ export type StockForecastRow = {
   restockSuggestion: number;
 };
 
-// Rata-rata = terjual FORECAST_DAYS hari terakhir / FORECAST_DAYS. Saran restock = kebutuhan FORECAST_DAYS hari ke depan
-// dikurangi stok; avg x 14 sama dengan jumlah terjual, jadi dipakai langsung agar tidak terkena galat pecahan.
-export function computeStockForecast(soldInWindow: ProductTotals[], activeProducts: Map<string, Product>): StockForecastRow[] {
+// Rata-rata = terjual FORECAST_DAYS hari terakhir / FORECAST_DAYS. Saran restock memakai rumus tunggal suggestRestockQuantity
+// (sama dengan Daftar perlu restock): cukup untuk 14 hari dan cukup mengangkat stok di atas batas menipis.
+export function computeStockForecast(
+  soldInWindow: ProductTotals[],
+  activeProducts: Map<string, Product>,
+  defaultMinStock: number,
+): StockForecastRow[] {
   const rows: StockForecastRow[] = [];
   for (const entry of soldInWindow) {
     const product = activeProducts.get(entry.productId);
@@ -129,7 +134,12 @@ export function computeStockForecast(soldInWindow: ProductTotals[], activeProduc
       stockQuantity: product.stockQuantity,
       averagePerDay,
       daysUntilOut: product.stockQuantity <= 0 ? 0 : product.stockQuantity / averagePerDay,
-      restockSuggestion: Math.max(0, entry.quantity - product.stockQuantity),
+      restockSuggestion: suggestRestockQuantity({
+        stock: product.stockQuantity,
+        minStock: product.minStock,
+        defaultMinStock,
+        soldLast14Days: entry.quantity,
+      }),
     });
   }
   return rows.sort((a, b) => a.daysUntilOut - b.daysUntilOut || compareNames(a, b));

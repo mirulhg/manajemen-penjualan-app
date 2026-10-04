@@ -16,7 +16,15 @@ export function createTestQueryClient() {
 }
 
 // Sesi bawaan = pemilik, dibagikan secara sinkron supaya tes komponen tidak menunggu pembacaan settings.
-const OWNER_SESSION: Session = { isCashierMode: false, hasPin: false, defaultMinStock: 5 };
+const OWNER_SESSION: Session = {
+  isCashierMode: false,
+  hasPin: false,
+  defaultMinStock: 5,
+  alertsBellEnabled: true,
+  dailySummaryEnabled: true,
+  alertsInCashierMode: false,
+  dailySummaryDismissedOn: null,
+};
 
 function createWrapper(queryClient: QueryClient, route: string, session: Session) {
   return function Wrapper({ children }: { children: ReactNode }) {

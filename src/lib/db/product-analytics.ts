@@ -4,6 +4,7 @@ import { startOfDay } from '../../utils/date-period';
 import type { DateRange } from '../../utils/date-period';
 import { getProductSalesInRange, getProductSalesRows, sumByProduct } from './daily-product-sales';
 import { db } from './database';
+import { getDefaultMinStock } from './settings';
 import { productSchema } from './records';
 import type { Product } from './records';
 import {
@@ -54,7 +55,7 @@ export async function getStockForecast(now: Date): Promise<StockForecastRow[]> {
   const window = { start: startOfDay(now, -(FORECAST_DAYS - 1)), end: startOfDay(now, 1) };
   const sold = sumByProduct(await getProductSalesRows(window));
   const active = new Map((await getActiveProducts()).map((product) => [product.id, product]));
-  return computeStockForecast(sold, active);
+  return computeStockForecast(sold, active, await getDefaultMinStock());
 }
 
 export async function getAnalysisReadiness(now: Date): Promise<{ ready: boolean; daysOfData: number }> {

@@ -1,4 +1,5 @@
 import { db } from '../../../lib/db/database';
+import { syncStockAlerts } from '../../../lib/db/stock-alerts';
 import { STOCK_MOVEMENT_COUNTER } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
 import { getCurrentActor } from '../../../lib/db/settings';
@@ -23,7 +24,10 @@ export async function createProduct(input: NewProductInput): Promise<Product> {
   const fields = newProductSchema.parse(input);
 
   try {
-    return await db.transaction('rw', db.products, db.stockMovements, db.counters, db.categories, db.settings, async () => {
+    return await db.transaction(
+      'rw',
+      [db.products, db.stockMovements, db.counters, db.categories, db.settings, db.stockAlerts],
+      async () => {
       const owner = await db.products.where('sku').equals(fields.sku).first();
       if (owner) throw new CreateProductError(fields.sku, owner.name);
 
@@ -48,8 +52,10 @@ export async function createProduct(input: NewProductInput): Promise<Product> {
 
       await db.products.add(product);
       await db.stockMovements.add(movement);
+      await syncStockAlerts([product.id], now);
       return product;
-    });
+    },
+    );
   } catch (error) {
     // Balapan antar tab: indeks unik &sku bisa menolak setelah pengecekan di atas lolos.
     if (error instanceof Error && error.name === 'ConstraintError') {

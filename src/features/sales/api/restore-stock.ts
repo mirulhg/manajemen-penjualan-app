@@ -1,5 +1,6 @@
 import { buildStockMovement } from '../../../lib/db/build-stock-movement';
 import { db } from '../../../lib/db/database';
+import { syncStockAlerts } from '../../../lib/db/stock-alerts';
 import { productSchema, STOCK_MOVEMENT_COUNTER } from '../../../lib/db/records';
 import type { Product } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
@@ -14,7 +15,8 @@ type RestoreStockParams = {
   now: string;
 };
 
-// Mengembalikan stok dan mencatat pergerakannya; harus dipanggil di dalam transaksi pemanggil (butuh db.counters).
+// Mengembalikan stok dan mencatat pergerakannya; harus dipanggil di dalam transaksi pemanggil (butuh db.counters,
+// db.settings, dan db.stockAlerts). Peringatan stok ikut dievaluasi karena stok naik bisa menutupnya.
 export async function restoreStock({ lines, type, reason, saleId, actor, now }: RestoreStockParams) {
   if (lines.length === 0) return;
 
@@ -51,4 +53,5 @@ export async function restoreStock({ lines, type, reason, saleId, actor, now }: 
 
   await db.products.bulkPut(updated);
   await db.stockMovements.bulkAdd(movements);
+  await syncStockAlerts(lines.map((line) => line.productId), now);
 }

@@ -1,4 +1,5 @@
 import { db } from '../../../lib/db/database';
+import { syncStockAlerts } from '../../../lib/db/stock-alerts';
 import { STOCK_MOVEMENT_COUNTER } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
 import { getCurrentActor } from '../../../lib/db/settings';
@@ -16,7 +17,7 @@ export type ImportProductsResult = {
 export async function importProducts(rows: ReadyImportRow[]): Promise<ImportProductsResult> {
   return db.transaction(
     'rw',
-    [db.products, db.stockMovements, db.counters, db.categories, db.settings],
+    [db.products, db.stockMovements, db.counters, db.categories, db.settings, db.stockAlerts],
     async () => {
       // SKU diperiksa ulang di sini: toko bisa berubah sejak pratinjau (mis. barang ditambah di tab lain).
       const existing = await db.products.toArray();
@@ -59,6 +60,7 @@ export async function importProducts(rows: ReadyImportRow[]): Promise<ImportProd
 
       await db.products.bulkAdd(records.map((record) => record.product));
       await db.stockMovements.bulkAdd(records.map((record) => record.movement));
+      await syncStockAlerts(records.map((record) => record.product.id), now);
       return { imported: toAdd.length, skipped };
     },
   );

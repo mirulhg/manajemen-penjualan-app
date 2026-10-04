@@ -130,7 +130,7 @@ describe('ProductAnalysisPage', () => {
       expect(forecast).toHaveLength(27);
       expect(forecast[0]?.textContent).toContain('Telur Ayam 1 kg');
       expect(forecast[0]?.textContent).toContain('Sudah habis');
-      expect(forecast[0]?.textContent).toContain('4 pack');
+      expect(forecast[0]?.textContent).toContain('6 pack');
       expect(forecast[1]?.textContent).toContain('sekitar 3 hari');
       expect(screen.getByText(/Saran restock cukup untuk 14 hari ke depan/)).toBeTruthy();
     });

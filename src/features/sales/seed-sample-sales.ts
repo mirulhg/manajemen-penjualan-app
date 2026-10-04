@@ -2,6 +2,7 @@ import { db } from '../../lib/db/database';
 import { productSchema, stockMovementSchema } from '../../lib/db/records';
 import type { Product } from '../../lib/db/records';
 import { startOfDay } from '../../utils/date-period';
+import { syncStockAlerts } from '../../lib/db/stock-alerts';
 import { createSaleAt } from './api/create-sale';
 import { getSampleSaleTime, planSampleSales, SAMPLE_SALES_DAYS } from './sample-sales-plan';
 
@@ -10,7 +11,7 @@ import { getSampleSaleTime, planSampleSales, SAMPLE_SALES_DAYS } from './sample-
 export async function seedSampleSales(sampleSkus: readonly string[], today = new Date()): Promise<void> {
   await db.transaction(
     'rw',
-    [db.products, db.stockMovements, db.counters, db.sales, db.saleItems, db.settings, db.dailySales, db.dailyProductSales],
+    [db.products, db.stockMovements, db.counters, db.sales, db.saleItems, db.settings, db.dailySales, db.dailyProductSales, db.stockAlerts],
     async () => {
       if ((await db.sales.count()) > 0) return;
 
@@ -67,6 +68,11 @@ export async function seedSampleSales(sampleSkus: readonly string[], today = new
           getSampleSaleTime(planned, today),
         );
       }
+
+      // Tiap penjualan di atas menyinkronkan peringatan dengan stok pada masanya (naik-turun selama simulasi). Yang berlaku
+      // hanya keadaan akhir, jadi riwayat episode itu dibuang dan peringatan dibangun sekali dari stok akhir.
+      await db.stockAlerts.clear();
+      await syncStockAlerts('all');
     },
   );
 }

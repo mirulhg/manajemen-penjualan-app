@@ -1,4 +1,5 @@
 import { db } from '../../lib/db/database';
+import { syncStockAlerts } from '../../lib/db/stock-alerts';
 import { STOCK_MOVEMENT_COUNTER } from '../../lib/db/records';
 import { nextSequences } from '../../lib/db/sequence';
 import { OWNER_ACTOR } from '../../lib/db/settings';
@@ -10,7 +11,10 @@ import { SEED_PRODUCTS } from './seed-data';
 // Mengembalikan true hanya bila seed benar-benar menulis data (tabel produk tadinya kosong).
 export async function seedSampleProducts(extraCount = 0): Promise<boolean> {
   // Cek tabel kosong di dalam transaksi yang sama dengan penulisan, supaya dua pemanggilan bersamaan tidak menggandakan data.
-  return db.transaction('rw', db.products, db.stockMovements, db.counters, db.categories, async () => {
+  return db.transaction(
+    'rw',
+    [db.products, db.stockMovements, db.counters, db.categories, db.settings, db.stockAlerts],
+    async () => {
     if ((await db.products.count()) > 0) return false;
 
     const now = new Date().toISOString();
@@ -25,6 +29,9 @@ export async function seedSampleProducts(extraCount = 0): Promise<boolean> {
     }
     await db.products.bulkAdd(records.map((record) => record.product));
     await db.stockMovements.bulkAdd(records.map((record) => record.movement));
+    // Pemilik langsung melihat barang yang sudah menipis/habis sejak pertama membuka aplikasi.
+    await syncStockAlerts('all', now);
     return true;
-  });
+  },
+  );
 }

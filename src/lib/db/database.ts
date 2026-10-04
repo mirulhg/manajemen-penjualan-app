@@ -2,6 +2,8 @@ import Dexie from 'dexie';
 import type { EntityTable, Table } from 'dexie';
 
 import { buildDailyRecap } from './daily-sales-rows';
+import { planAlertChanges } from './stock-alerts-rows';
+import { FALLBACK_DEFAULT_MIN_STOCK } from './stock-status';
 import { STOCK_MOVEMENT_COUNTER, toCategoryKey } from './records';
 import type {
   Category,
@@ -15,6 +17,7 @@ import type {
   SaleItem,
   SaleReturn,
   Setting,
+  StockAlert,
   StockMovement,
 } from './records';
 
@@ -38,6 +41,7 @@ class StockDatabase extends Dexie {
   categories!: EntityTable<Category, 'id'>;
   dailySales!: EntityTable<DailySales, 'date'>;
   dailyProductSales!: Table<DailyProductSales, [string, string]>;
+  stockAlerts!: EntityTable<StockAlert, 'id'>;
 
   constructor() {
     super('manajemen-stok');
@@ -143,6 +147,16 @@ class StockDatabase extends Dexie {
         await transaction
           .table<DailyProductSales, [string, string]>('dailyProductSales')
           .bulkAdd(recap.products);
+      });
+    // Index [productId+isOpen] untuk peringatan terbuka per produk; isOpen untuk semua yang terbuka (null tidak bisa diindeks).
+    this.version(9)
+      .stores({ stockAlerts: 'id, productId, [productId+isOpen], isOpen' })
+      .upgrade(async (transaction) => {
+        const defaultRow = await transaction.table<{ key: string; value: number }, string>('settings').get('defaultMinStock');
+        const products = await transaction.table<Product, string>('products').toArray();
+        // Pemilik langsung melihat kondisi toko: semua barang yang kini menipis/habis mendapat peringatan belum dibaca.
+        const alerts = planAlertChanges(products, [], defaultRow?.value ?? FALLBACK_DEFAULT_MIN_STOCK, new Date().toISOString());
+        await transaction.table<StockAlert, string>('stockAlerts').bulkAdd(alerts);
       });
   }
 }

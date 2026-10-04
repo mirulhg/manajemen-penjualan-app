@@ -125,6 +125,10 @@ export const settingSchema = z.discriminatedUnion('key', [
   z.object({ key: z.literal('allowOversell'), value: z.boolean() }),
   z.object({ key: z.literal('cashierMode'), value: z.boolean() }),
   z.object({ key: z.literal('defaultMinStock'), value: z.number().int().min(1).max(1000) }),
+  z.object({ key: z.literal('alertsBellEnabled'), value: z.boolean() }),
+  z.object({ key: z.literal('dailySummaryEnabled'), value: z.boolean() }),
+  z.object({ key: z.literal('alertsInCashierMode'), value: z.boolean() }),
+  z.object({ key: z.literal('dailySummaryDismissedOn'), value: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable() }),
   z.object({ key: z.literal('ownerPin'), value: hashedSecretSchema }),
   z.object({ key: z.literal('recoveryCode'), value: hashedSecretSchema }),
   z.object({ key: z.literal('pinAttempts'), value: pinAttemptsSchema }),
@@ -150,6 +154,25 @@ export const dailyProductSalesSchema = z.object({
   cogs: money,
 });
 
+export const stockAlertLevelSchema = z.enum(['menipis', 'habis']);
+
+// Satu "episode" peringatan per produk: dibuka saat stok turun ke menipis/habis, ditutup saat kembali aman atau diarsipkan.
+// isOpen (1/0) ada karena IndexedDB tidak bisa mengindeks null atau boolean; selalu sama dengan resolvedAt === null.
+export const stockAlertSchema = z
+  .object({
+    id: z.uuid(),
+    productId: z.uuid(),
+    level: stockAlertLevelSchema,
+    openedAt: z.iso.datetime(),
+    resolvedAt: z.iso.datetime().nullable(),
+    readAt: z.iso.datetime().nullable(),
+    isOpen: z.union([z.literal(0), z.literal(1)]),
+  })
+  .refine((alert) => (alert.isOpen === 1) === (alert.resolvedAt === null), {
+    path: ['isOpen'],
+    message: 'isOpen harus 1 tepat ketika resolvedAt kosong.',
+  });
+
 export type Product = z.infer<typeof productSchema>;
 export type StockMovement = z.infer<typeof stockMovementSchema>;
 export type Counter = z.infer<typeof counterSchema>;
@@ -161,6 +184,8 @@ export type HashedSecret = z.infer<typeof hashedSecretSchema>;
 export type SaleReturn = z.infer<typeof saleReturnSchema>;
 export type DailySales = z.infer<typeof dailySalesSchema>;
 export type DailyProductSales = z.infer<typeof dailyProductSalesSchema>;
+export type StockAlert = z.infer<typeof stockAlertSchema>;
+export type StockAlertLevel = z.infer<typeof stockAlertLevelSchema>;
 
 export const priceChangeSchema = z.object({
   id: z.uuid(),

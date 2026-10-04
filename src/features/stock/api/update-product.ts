@@ -1,4 +1,5 @@
 import { db } from '../../../lib/db/database';
+import { syncStockAlerts } from '../../../lib/db/stock-alerts';
 import { PRICE_CHANGE_COUNTER, priceChangeSchema, productSchema } from '../../../lib/db/records';
 import type { PriceChange, Product } from '../../../lib/db/records';
 import { nextSequences } from '../../../lib/db/sequence';
@@ -35,7 +36,10 @@ export async function updateProduct(productId: string, input: ProductFieldsInput
   const fields = editProductSchema.parse(input);
 
   try {
-    return await db.transaction('rw', db.products, db.priceChanges, db.counters, db.categories, db.settings, async () => {
+    return await db.transaction(
+      'rw',
+      [db.products, db.priceChanges, db.counters, db.categories, db.settings, db.stockAlerts],
+      async () => {
       const row = await db.products.get(productId);
       if (!row) throw new UpdateProductError('PRODUCT_NOT_FOUND');
       const product = productSchema.parse(row);
@@ -76,8 +80,11 @@ export async function updateProduct(productId: string, input: ProductFieldsInput
       const updated = productSchema.parse({ ...next, updatedAt: now });
       await db.products.put(updated);
       await db.priceChanges.bulkAdd(priceChanges);
+      // Batas minimum barang bisa berubah, jadi statusnya (dan peringatannya) dievaluasi ulang.
+      await syncStockAlerts([productId], now);
       return updated;
-    });
+    },
+    );
   } catch (error) {
     // Balapan antar tab: indeks unik &sku bisa menolak setelah pengecekan di atas lolos.
     if (error instanceof Error && error.name === 'ConstraintError') {

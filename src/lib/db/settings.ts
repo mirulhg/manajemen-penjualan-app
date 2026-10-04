@@ -1,13 +1,10 @@
 import { z } from 'zod';
 
 import { db } from './database';
+import { FALLBACK_DEFAULT_MIN_STOCK } from './stock-status';
 
 const flagSchema = z.boolean();
 
-// Batas "menipis" untuk barang yang tidak punya batas sendiri; dipakai bila pengaturannya belum pernah diubah.
-export const FALLBACK_DEFAULT_MIN_STOCK = 5;
-export const MIN_DEFAULT_MIN_STOCK = 1;
-export const MAX_DEFAULT_MIN_STOCK = 1000;
 
 // Belum pernah diatur berarti jual melebihi stok ditolak (stok tidak boleh negatif tanpa izin pemilik).
 export async function getAllowOversell(): Promise<boolean> {
@@ -31,4 +28,28 @@ export async function getCurrentActor(): Promise<string> {
 export async function getDefaultMinStock(): Promise<number> {
   const row = await db.settings.get('defaultMinStock');
   return row ? z.number().int().parse(row.value) : FALLBACK_DEFAULT_MIN_STOCK;
+}
+
+export type AlertPreferences = {
+  alertsBellEnabled: boolean;
+  dailySummaryEnabled: boolean;
+  alertsInCashierMode: boolean;
+  // Tanggal lokal (YYYY-MM-DD) ringkasan harian terakhir ditutup; null = belum pernah.
+  dailySummaryDismissedOn: string | null;
+};
+
+export async function getAlertPreferences(): Promise<AlertPreferences> {
+  const [bell, summary, inCashierMode, dismissedOn] = await Promise.all([
+    db.settings.get('alertsBellEnabled'),
+    db.settings.get('dailySummaryEnabled'),
+    db.settings.get('alertsInCashierMode'),
+    db.settings.get('dailySummaryDismissedOn'),
+  ]);
+  return {
+    // Lonceng dan ringkasan aktif sejak awal; peringatan di Mode Kasir sengaja mati (isinya informasi belanja pemilik).
+    alertsBellEnabled: bell ? flagSchema.parse(bell.value) : true,
+    dailySummaryEnabled: summary ? flagSchema.parse(summary.value) : true,
+    alertsInCashierMode: inCashierMode ? flagSchema.parse(inCashierMode.value) : false,
+    dailySummaryDismissedOn: dismissedOn ? z.string().nullable().parse(dismissedOn.value) : null,
+  };
 }

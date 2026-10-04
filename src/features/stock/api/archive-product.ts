@@ -1,4 +1,5 @@
 import { db } from '../../../lib/db/database';
+import { syncStockAlerts } from '../../../lib/db/stock-alerts';
 import { productSchema } from '../../../lib/db/records';
 import type { Product } from '../../../lib/db/records';
 
@@ -21,7 +22,7 @@ export class ArchiveProductError extends Error {
 }
 
 async function setArchived(productId: string, archive: boolean): Promise<Product> {
-  return db.transaction('rw', db.products, async () => {
+  return db.transaction('rw', db.products, db.settings, db.stockAlerts, async () => {
     const row = await db.products.get(productId);
     if (!row) throw new ArchiveProductError('PRODUCT_NOT_FOUND');
     const product = productSchema.parse(row);
@@ -32,6 +33,8 @@ async function setArchived(productId: string, archive: boolean): Promise<Product
     const now = new Date().toISOString();
     const updated = productSchema.parse({ ...product, archivedAt: archive ? now : null, updatedAt: now });
     await db.products.put(updated);
+    // Barang diarsipkan tidak lagi punya peringatan; dipulihkan, statusnya dievaluasi lagi.
+    await syncStockAlerts([productId], now);
     return updated;
   });
 }

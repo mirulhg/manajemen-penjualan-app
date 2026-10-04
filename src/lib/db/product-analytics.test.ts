@@ -120,19 +120,19 @@ describe('analisis produk dengan data penjualan contoh', () => {
     }
   });
 
-  it('perkiraan habis: 27 produk, urutan awal dan saran restock sesuai rumus', async () => {
+  it('perkiraan habis: 27 produk, urutan awal dan saran restock memakai rumus tunggal (batas + 1)', async () => {
     const forecast = await getStockForecast(TODAY);
 
     expect(forecast).toHaveLength(27);
     expect(
       forecast.slice(0, 6).map((row) => [row.name, describeDaysUntilOut(row.daysUntilOut), row.restockSuggestion]),
     ).toEqual([
-      ['Telur Ayam 1 kg', 'Sudah habis', 4],
-      ['Penyedap Rasa 100 g', 'sekitar 3 hari', 4],
-      ['Keripik Singkong 150 g', 'sekitar 6 hari', 3],
-      ['Minyak Goreng 2 L', 'sekitar 8 hari', 2],
+      ['Telur Ayam 1 kg', 'Sudah habis', 6],
+      ['Penyedap Rasa 100 g', 'sekitar 3 hari', 5],
+      ['Keripik Singkong 150 g', 'sekitar 6 hari', 4],
+      ['Minyak Goreng 2 L', 'sekitar 8 hari', 8],
       ['Kecap Manis 520 ml', 'sekitar 11 hari', 3],
-      ['Teh Celup isi 25', 'sekitar 11 hari', 1],
+      ['Teh Celup isi 25', 'sekitar 11 hari', 2],
     ]);
   });
 

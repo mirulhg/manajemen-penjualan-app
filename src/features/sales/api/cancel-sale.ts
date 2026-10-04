@@ -24,6 +24,7 @@ export async function cancelSale(saleId: string, reason: string): Promise<Sale> 
       db.settings,
       db.dailySales,
       db.dailyProductSales,
+      db.stockAlerts,
     ],
     async () => {
       const { sale, items, returns, progress } = await loadActiveSale(saleId);
