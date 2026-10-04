@@ -1,4 +1,6 @@
 import { buildStockMovement } from '../../../lib/db/build-stock-movement';
+import { applyDailySalesChange } from '../../../lib/db/daily-sales';
+import { NO_CONTRIBUTION, saleContribution } from '../../../lib/db/daily-sales-rows';
 import { db } from '../../../lib/db/database';
 import {
   productSchema,
@@ -67,7 +69,7 @@ export async function createSaleAt(input: CreateSaleInput, now: Date): Promise<S
   // Harga dan stok dibaca ulang di dalam transaksi; seluruh penulisan (termasuk penghitung nomor) satu kesatuan.
   return db.transaction(
     'rw',
-    [db.products, db.stockMovements, db.counters, db.sales, db.saleItems, db.settings],
+    [db.products, db.stockMovements, db.counters, db.sales, db.saleItems, db.settings, db.dailySales],
     async () => {
       const lines: SaleLine[] = [];
       for (const item of parsed.items) {
@@ -163,6 +165,7 @@ export async function createSaleAt(input: CreateSaleInput, now: Date): Promise<S
       await db.stockMovements.bulkAdd(movements);
       await db.sales.add(sale);
       await db.saleItems.bulkAdd(saleItems);
+      await applyDailySalesChange(sale.createdAt, NO_CONTRIBUTION, saleContribution(sale, saleItems, []));
       return sale;
     },
   );

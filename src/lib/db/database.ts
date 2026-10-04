@@ -1,10 +1,12 @@
 import Dexie from 'dexie';
 import type { EntityTable } from 'dexie';
 
+import { buildDailySalesRows } from './daily-sales-rows';
 import { STOCK_MOVEMENT_COUNTER, toCategoryKey } from './records';
 import type {
   Category,
   Counter,
+  DailySales,
   PriceChange,
   Product,
   ProductPhoto,
@@ -33,6 +35,7 @@ class StockDatabase extends Dexie {
   priceChanges!: EntityTable<PriceChange, 'id'>;
   productPhotos!: EntityTable<ProductPhoto, 'productId'>;
   categories!: EntityTable<Category, 'id'>;
+  dailySales!: EntityTable<DailySales, 'date'>;
 
   constructor() {
     super('manajemen-stok');
@@ -116,6 +119,16 @@ class StockDatabase extends Dexie {
             const category = byKey.get(toCategoryKey(product.category));
             if (category) product.category = category.name;
           });
+      });
+    this.version(7)
+      .stores({ dailySales: 'date' })
+      .upgrade(async (transaction) => {
+        const rows = buildDailySalesRows(
+          await transaction.table<Sale, string>('sales').toArray(),
+          await transaction.table<SaleItem, string>('saleItems').toArray(),
+          await transaction.table<SaleReturn, string>('saleReturns').toArray(),
+        );
+        await transaction.table<DailySales, string>('dailySales').bulkAdd(rows);
       });
   }
 }

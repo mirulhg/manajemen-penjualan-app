@@ -1,3 +1,5 @@
+import { applyDailySalesChange } from '../../../lib/db/daily-sales';
+import { saleContribution } from '../../../lib/db/daily-sales-rows';
 import { db } from '../../../lib/db/database';
 import { saleReturnSchema, saleSchema } from '../../../lib/db/records';
 import type { SaleReturn } from '../../../lib/db/records';
@@ -18,9 +20,18 @@ export async function returnSaleItems(saleId: string, input: ReturnSaleItemsInpu
 
   return db.transaction(
     'rw',
-    [db.sales, db.saleItems, db.saleReturns, db.products, db.stockMovements, db.counters, db.settings],
+    [
+      db.sales,
+      db.saleItems,
+      db.saleReturns,
+      db.products,
+      db.stockMovements,
+      db.counters,
+      db.settings,
+      db.dailySales,
+    ],
     async () => {
-      const { sale, progress } = await loadActiveSale(saleId);
+      const { sale, items, returns, progress } = await loadActiveSale(saleId);
       const actor = await getCurrentActor();
 
       for (const line of request.items) {
@@ -53,7 +64,14 @@ export async function returnSaleItems(saleId: string, input: ReturnSaleItemsInpu
         now: nowIso,
       });
       await db.saleReturns.add(saleReturn);
-      await db.sales.put(saleSchema.parse({ ...sale, refundedTotal: sale.refundedTotal + refundTotal }));
+      const updatedSale = saleSchema.parse({ ...sale, refundedTotal: sale.refundedTotal + refundTotal });
+      await db.sales.put(updatedSale);
+      // Retur mengurangi rekap di tanggal transaksi asal, bukan tanggal retur.
+      await applyDailySalesChange(
+        sale.createdAt,
+        saleContribution(sale, items, returns),
+        saleContribution(updatedSale, items, [...returns, saleReturn]),
+      );
       return saleReturn;
     },
   );

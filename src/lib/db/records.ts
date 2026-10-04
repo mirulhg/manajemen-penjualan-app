@@ -129,6 +129,16 @@ export const settingSchema = z.discriminatedUnion('key', [
   z.object({ key: z.literal('pinAttempts'), value: pinAttemptsSchema }),
 ]);
 
+// Rekap per tanggal lokal (YYYY-MM-DD), hanya dari transaksi yang tidak dibatalkan.
+// cogs = harga pokok bersih setelah retur; omzet = grossTotal - refundedTotal.
+export const dailySalesSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  transactionCount: z.number().int().nonnegative(),
+  grossTotal: money,
+  refundedTotal: money,
+  cogs: money,
+});
+
 export type Product = z.infer<typeof productSchema>;
 export type StockMovement = z.infer<typeof stockMovementSchema>;
 export type Counter = z.infer<typeof counterSchema>;
@@ -138,6 +148,7 @@ export type SaleItem = z.infer<typeof saleItemSchema>;
 export type Setting = z.infer<typeof settingSchema>;
 export type HashedSecret = z.infer<typeof hashedSecretSchema>;
 export type SaleReturn = z.infer<typeof saleReturnSchema>;
+export type DailySales = z.infer<typeof dailySalesSchema>;
 
 export const priceChangeSchema = z.object({
   id: z.uuid(),

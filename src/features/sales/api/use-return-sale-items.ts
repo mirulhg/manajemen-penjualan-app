@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { DAILY_SALES_QUERY_KEY } from '../../../lib/db/daily-sales';
 import { invalidateStockQueries } from '../../stock';
 import type { ReturnSaleItemsInput } from '../schema';
 import { SALES_QUERY_KEY } from './get-sales';
@@ -14,6 +15,7 @@ export function useReturnSaleItems(saleId: string) {
     onSettled: () =>
       Promise.all([
         queryClient.invalidateQueries({ queryKey: SALES_QUERY_KEY }),
+        queryClient.invalidateQueries({ queryKey: DAILY_SALES_QUERY_KEY }),
         invalidateStockQueries(queryClient),
       ]),
   });

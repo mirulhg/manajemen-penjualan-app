@@ -1,3 +1,5 @@
+import { applyDailySalesChange } from '../../../lib/db/daily-sales';
+import { saleContribution } from '../../../lib/db/daily-sales-rows';
 import { db } from '../../../lib/db/database';
 import { saleSchema } from '../../../lib/db/records';
 import type { Sale } from '../../../lib/db/records';
@@ -12,9 +14,18 @@ export async function cancelSale(saleId: string, reason: string): Promise<Sale> 
 
   return db.transaction(
     'rw',
-    [db.sales, db.saleItems, db.saleReturns, db.products, db.stockMovements, db.counters, db.settings],
+    [
+      db.sales,
+      db.saleItems,
+      db.saleReturns,
+      db.products,
+      db.stockMovements,
+      db.counters,
+      db.settings,
+      db.dailySales,
+    ],
     async () => {
-      const { sale, progress } = await loadActiveSale(saleId);
+      const { sale, items, returns, progress } = await loadActiveSale(saleId);
       const actor = await getCurrentActor();
 
       // Hanya sisa yang belum diretur yang dikembalikan; yang sudah diretur stoknya sudah kembali lewat retur.
@@ -36,6 +47,11 @@ export async function cancelSale(saleId: string, reason: string): Promise<Sale> 
         cancelledBy: actor,
       });
       await db.sales.put(cancelled);
+      await applyDailySalesChange(
+        sale.createdAt,
+        saleContribution(sale, items, returns),
+        saleContribution(cancelled, items, returns),
+      );
       return cancelled;
     },
   );
