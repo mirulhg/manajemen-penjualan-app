@@ -1,8 +1,9 @@
 import { FormField } from '../../../components/ui/FormField';
 import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import type { PaymentMethod } from '../../../lib/db/records';
-import { SALE_PERIODS, toLocalDateText } from '../sale-filters';
-import type { SaleFilters, SalePeriod } from '../sale-filters';
+import { PERIODS, toLocalDateText } from '../../../utils/date-period';
+import type { Period } from '../../../utils/date-period';
+import type { SaleFilters } from '../sale-filters';
 
 type SaleFilterBarProps = {
   filters: SaleFilters;
@@ -10,10 +11,11 @@ type SaleFilterBarProps = {
   onChange: (patch: Partial<SaleFilters>) => void;
 };
 
-const PERIOD_LABELS: Record<SalePeriod, string> = {
+const PERIOD_LABELS: Record<Period, string> = {
   'hari-ini': 'Hari ini',
   kemarin: 'Kemarin',
   '7-hari': '7 hari terakhir',
+  '30-hari': '30 hari terakhir',
   'bulan-ini': 'Bulan ini',
   rentang: 'Rentang tanggal',
 };
@@ -24,8 +26,8 @@ const METHODS: { value: PaymentMethod; label: string }[] = [
   { value: 'qris', label: 'QRIS' },
 ];
 
-function findPeriod(value: string): SalePeriod {
-  return SALE_PERIODS.find((period) => period === value) ?? 'hari-ini';
+function findPeriod(value: string): Period {
+  return PERIODS.find((period) => period === value) ?? 'hari-ini';
 }
 
 function findMethod(value: string): PaymentMethod | null {
@@ -54,7 +56,7 @@ export function SaleFilterBar({ filters, actors, onChange }: SaleFilterBarProps)
             onChange={(event) => handlePeriodChange(event.target.value)}
             className={FIELD_CLASS}
           >
-            {SALE_PERIODS.map((period) => (
+            {PERIODS.map((period) => (
               <option key={period} value={period}>
                 {PERIOD_LABELS[period]}
               </option>
