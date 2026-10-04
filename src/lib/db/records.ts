@@ -124,6 +124,7 @@ export const pinAttemptsSchema = z.object({
 export const settingSchema = z.discriminatedUnion('key', [
   z.object({ key: z.literal('allowOversell'), value: z.boolean() }),
   z.object({ key: z.literal('cashierMode'), value: z.boolean() }),
+  z.object({ key: z.literal('defaultMinStock'), value: z.number().int().min(1).max(1000) }),
   z.object({ key: z.literal('ownerPin'), value: hashedSecretSchema }),
   z.object({ key: z.literal('recoveryCode'), value: hashedSecretSchema }),
   z.object({ key: z.literal('pinAttempts'), value: pinAttemptsSchema }),

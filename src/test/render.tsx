@@ -16,7 +16,7 @@ export function createTestQueryClient() {
 }
 
 // Sesi bawaan = pemilik, dibagikan secara sinkron supaya tes komponen tidak menunggu pembacaan settings.
-const OWNER_SESSION: Session = { isCashierMode: false, hasPin: false };
+const OWNER_SESSION: Session = { isCashierMode: false, hasPin: false, defaultMinStock: 5 };
 
 function createWrapper(queryClient: QueryClient, route: string, session: Session) {
   return function Wrapper({ children }: { children: ReactNode }) {
@@ -34,9 +34,12 @@ export function renderWithProviders(
   ui: ReactElement,
   queryClient = createTestQueryClient(),
   route = '/',
-  session: Session = OWNER_SESSION,
+  session: Partial<Session> = {},
 ) {
-  return { queryClient, ...render(ui, { wrapper: createWrapper(queryClient, route, session) }) };
+  return {
+    queryClient,
+    ...render(ui, { wrapper: createWrapper(queryClient, route, { ...OWNER_SESSION, ...session }) }),
+  };
 }
 
 export function renderHookWithProviders<Result>(

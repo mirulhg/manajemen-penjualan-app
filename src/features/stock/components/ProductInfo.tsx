@@ -4,8 +4,9 @@ import { formatDateTime } from '../../../utils/format-date-time';
 import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
 import { useSession } from '../../session';
+import { useStockThreshold } from '../hooks/use-stock-threshold';
 import type { Product } from '../schema';
-import { DEFAULT_MIN_STOCK, getStockStatus } from '../stock-status';
+import { getStockStatus } from '../stock-status';
 import { StockStatusBadge } from './StockStatusBadge';
 
 type ProductInfoProps = {
@@ -14,8 +15,9 @@ type ProductInfoProps = {
 
 export function ProductInfo({ product }: ProductInfoProps) {
   const { isCashierMode } = useSession();
+  const defaultMinStock = useStockThreshold();
   const minStockText =
-    product.minStock === null ? `${DEFAULT_MIN_STOCK} (default)` : formatNumber(product.minStock);
+    product.minStock === null ? `${formatNumber(defaultMinStock)} (default)` : formatNumber(product.minStock);
   const rows: { label: string; value: ReactNode }[] = [
     { label: 'SKU', value: product.sku },
     { label: 'Kategori', value: product.category },
@@ -25,7 +27,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
       value: (
         <span className="flex items-center gap-2">
           {formatNumber(product.stockQuantity)} {product.unit}
-          <StockStatusBadge status={getStockStatus(product.stockQuantity, product.minStock)} />
+          <StockStatusBadge status={getStockStatus(product.stockQuantity, product.minStock, defaultMinStock)} />
         </span>
       ),
     },

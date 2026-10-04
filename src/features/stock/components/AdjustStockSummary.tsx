@@ -1,4 +1,5 @@
 import { formatNumber } from '../../../utils/format-number';
+import { useStockThreshold } from '../hooks/use-stock-threshold';
 import type { Product } from '../schema';
 import { getStockStatus } from '../stock-status';
 import { StockStatusBadge } from './StockStatusBadge';
@@ -8,7 +9,7 @@ type AdjustStockSummaryProps = {
 };
 
 export function AdjustStockSummary({ product }: AdjustStockSummaryProps) {
-  const status = getStockStatus(product.stockQuantity, product.minStock);
+  const status = getStockStatus(product.stockQuantity, product.minStock, useStockThreshold());
 
   return (
     <div className="rounded-md border border-border bg-surface p-4">

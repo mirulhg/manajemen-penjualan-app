@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router';
 
 import { formatNumber } from '../../../utils/format-number';
+import { useStockThreshold } from '../hooks/use-stock-threshold';
 import type { Product } from '../schema';
 import { getStockStatus } from '../stock-status';
 import { StockStatusBadge } from './StockStatusBadge';
@@ -11,7 +12,7 @@ type StockListItemProps = {
 
 export function StockListItem({ product }: StockListItemProps) {
   const location = useLocation();
-  const status = getStockStatus(product.stockQuantity, product.minStock);
+  const status = getStockStatus(product.stockQuantity, product.minStock, useStockThreshold());
 
   return (
     <Link

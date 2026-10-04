@@ -4,7 +4,7 @@ import { getStockStatus } from './stock-status';
 
 const compareId = (a: string, b: string) => a.localeCompare(b, 'id');
 
-export function filterProducts(products: Product[], filters: StockFilters): Product[] {
+export function filterProducts(products: Product[], filters: StockFilters, defaultMinStock: number): Product[] {
   const needle = filters.query?.trim().toLowerCase() ?? '';
 
   return products
@@ -16,7 +16,7 @@ export function filterProducts(products: Product[], filters: StockFilters): Prod
       const matchesCategory = filters.category === null || product.category === filters.category;
       const matchesStatus =
         filters.status === null ||
-        getStockStatus(product.stockQuantity, product.minStock) === filters.status;
+        getStockStatus(product.stockQuantity, product.minStock, defaultMinStock) === filters.status;
       const matchesArchive = filters.archived || product.archivedAt === null;
       return matchesQuery && matchesCategory && matchesStatus && matchesArchive;
     });

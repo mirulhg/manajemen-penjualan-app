@@ -57,10 +57,10 @@ describe('session', () => {
   it('masuk Mode Kasir butuh PIN; mode tersimpan dan keluar butuh PIN yang benar', async () => {
     await expect(enterCashierMode()).rejects.toMatchObject({ code: 'PIN_NOT_SET' });
     await setupPin('1357');
-    expect(await getSession()).toEqual({ isCashierMode: false, hasPin: true });
+    expect(await getSession()).toEqual({ isCashierMode: false, hasPin: true, defaultMinStock: 5 });
 
     await enterCashierMode();
-    expect(await getSession()).toEqual({ isCashierMode: true, hasPin: true });
+    expect(await getSession()).toEqual({ isCashierMode: true, hasPin: true, defaultMinStock: 5 });
 
     await expect(exitCashierMode('2468')).rejects.toMatchObject({ code: 'WRONG_PIN', remainingAttempts: 4 });
     expect((await getSession()).isCashierMode).toBe(true);

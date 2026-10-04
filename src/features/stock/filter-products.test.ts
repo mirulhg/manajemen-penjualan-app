@@ -6,8 +6,8 @@ import { SEED_AS_PRODUCTS as products } from '../../test/seed-products';
 
 const NO_FILTER: StockFilters = { query: null, category: null, status: null, sort: 'nama', archived: false };
 
-function search(overrides: Partial<StockFilters>) {
-  return filterProducts(products, { ...NO_FILTER, ...overrides });
+function search(overrides: Partial<StockFilters>, defaultMinStock = 5) {
+  return filterProducts(products, { ...NO_FILTER, ...overrides }, defaultMinStock);
 }
 
 describe('filterProducts', () => {
@@ -61,5 +61,15 @@ describe('normalizeFilters', () => {
   it('mempertahankan kategori valid dan filter lainnya', () => {
     const filters: StockFilters = { query: 'mi', category: 'Sembako', status: 'habis', sort: 'nama', archived: false };
     expect(normalizeFilters(filters, categories)).toEqual(filters);
+  });
+});
+
+describe('filterProducts: batas default dari pengaturan', () => {
+  it('batas default 10 mengubah hitungan status barang tanpa batas sendiri', () => {
+    const count = (status: 'aman' | 'menipis' | 'habis', defaultMinStock: number) =>
+      search({ status }, defaultMinStock).length;
+
+    expect([count('aman', 5), count('menipis', 5), count('habis', 5)]).toEqual([18, 8, 4]);
+    expect([count('aman', 10), count('menipis', 10), count('habis', 10)]).toEqual([15, 11, 4]);
   });
 });

@@ -42,9 +42,9 @@ describe('arsip produk', () => {
     await archiveProduct((await findProductBySku('MKR-005')).id);
     const products = await getProducts();
 
-    expect(filterProducts(products, NO_FILTER)).toHaveLength(29);
-    expect(filterProducts(products, { ...NO_FILTER, archived: true })).toHaveLength(30);
-    expect(filterProducts(products, { ...NO_FILTER, query: 'roti' })).toHaveLength(0);
+    expect(filterProducts(products, NO_FILTER, 5)).toHaveLength(29);
+    expect(filterProducts(products, { ...NO_FILTER, archived: true }, 5)).toHaveLength(30);
+    expect(filterProducts(products, { ...NO_FILTER, query: 'roti' }, 5)).toHaveLength(0);
   });
 
   it('ringkasan hanya barang aktif: arsip Roti Tawar (stok 0) tidak mengubah unit dan nilai', async () => {

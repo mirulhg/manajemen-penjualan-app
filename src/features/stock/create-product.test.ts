@@ -112,7 +112,7 @@ describe('createProduct', () => {
     const created = await createProduct(input({ initialStock: '0' }));
 
     expect(created.stockQuantity).toBe(0);
-    expect(getStockStatus(created.stockQuantity, created.minStock)).toBe('habis');
+    expect(getStockStatus(created.stockQuantity, created.minStock, 5)).toBe('habis');
     expect(await db.stockMovements.count()).toBe(31);
   });
 

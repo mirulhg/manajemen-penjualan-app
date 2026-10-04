@@ -51,7 +51,7 @@ describe('sortProducts: mode lain', () => {
   });
 
   it('digabung dengan filter status menipis + stok-sedikit', () => {
-    const menipis = filterProducts(products, { query: null, category: null, status: 'menipis', sort: 'nama', archived: false });
+    const menipis = filterProducts(products, { query: null, category: null, status: 'menipis', sort: 'nama', archived: false }, 5);
 
     expect(sortProducts(menipis, 'stok-sedikit').map((product) => product.name)).toEqual([
       'Penyedap Rasa 100 g',

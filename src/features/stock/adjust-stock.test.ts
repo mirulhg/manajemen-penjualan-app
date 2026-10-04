@@ -15,7 +15,7 @@ async function findBySku(sku: string): Promise<Product> {
 
 async function statusOf(sku: string) {
   const product = await findBySku(sku);
-  return getStockStatus(product.stockQuantity, product.minStock);
+  return getStockStatus(product.stockQuantity, product.minStock, 5);
 }
 
 describe('adjustStock', () => {
@@ -172,7 +172,7 @@ describe('adjustStock: konsistensi data', () => {
   it('menipis turun dari 8 menjadi 7 setelah Teh Celup dikoreksi ke 9', async () => {
     const countMenipis = async () =>
       (await db.products.toArray()).filter(
-        (item) => getStockStatus(item.stockQuantity, item.minStock) === 'menipis',
+        (item) => getStockStatus(item.stockQuantity, item.minStock, 5) === 'menipis',
       ).length;
     expect(await countMenipis()).toBe(8);
 

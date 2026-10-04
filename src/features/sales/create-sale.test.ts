@@ -164,7 +164,7 @@ describe('createSale', () => {
 
     const product = await findProductBySku('SBK-005');
     expect(product.stockQuantity).toBe(-1);
-    expect(getStockStatus(product.stockQuantity, product.minStock)).toBe('habis');
+    expect(getStockStatus(product.stockQuantity, product.minStock, 5)).toBe('habis');
     const movement = await db.stockMovements
       .where('productId')
       .equals(product.id)

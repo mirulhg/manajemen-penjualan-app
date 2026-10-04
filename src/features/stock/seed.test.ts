@@ -70,7 +70,7 @@ describe('seedSampleProducts', () => {
     );
     const statusCount = { aman: 0, menipis: 0, habis: 0 };
     for (const product of products) {
-      statusCount[getStockStatus(product.stockQuantity, product.minStock)] += 1;
+      statusCount[getStockStatus(product.stockQuantity, product.minStock, 5)] += 1;
     }
 
     expect(totalUnits).toBe(406);
@@ -99,7 +99,7 @@ describe('seedSampleProducts dengan produk tambahan', () => {
 
     const extra = (await getProducts()).filter((product) => product.sku.startsWith('GEN-'));
     const statuses = new Set(
-      extra.map((product) => getStockStatus(product.stockQuantity, product.minStock)),
+      extra.map((product) => getStockStatus(product.stockQuantity, product.minStock, 5)),
     );
     expect(statuses).toEqual(new Set(['aman', 'menipis', 'habis']));
   });

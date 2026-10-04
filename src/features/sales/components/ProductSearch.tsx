@@ -4,7 +4,7 @@ import type { RefObject } from 'react';
 import { FIELD_CLASS, LABEL_CLASS } from '../../../components/ui/field-styles';
 import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
-import { filterProducts, sortProducts } from '../../stock';
+import { filterProducts, sortProducts, useStockThreshold } from '../../stock';
 import type { Product } from '../../stock';
 
 type ProductSearchProps = {
@@ -18,10 +18,11 @@ const MAX_RESULTS = 20;
 export function ProductSearch({ products, inputRef, onPick }: ProductSearchProps) {
   // Teks pencarian kasir bersifat sementara (hilang bersama keranjang saat refresh), jadi tidak dimasukkan ke URL.
   const [query, setQuery] = useState('');
+  const defaultMinStock = useStockThreshold();
   const hasQuery = query.trim() !== '';
   const results = hasQuery
     ? sortProducts(
-        filterProducts(products, { query, category: null, status: null, sort: 'nama', archived: false }),
+        filterProducts(products, { query, category: null, status: null, sort: 'nama', archived: false }, defaultMinStock),
         'nama',
       ).slice(0, MAX_RESULTS)
     : [];

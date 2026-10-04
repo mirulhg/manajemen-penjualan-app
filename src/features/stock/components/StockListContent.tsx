@@ -4,6 +4,7 @@ import { useCategoryNames } from '../api/use-categories';
 import { useProducts } from '../api/use-products';
 import { filterProducts, normalizeFilters } from '../filter-products';
 import { useStockFilters } from '../hooks/use-stock-filters';
+import { useStockThreshold } from '../hooks/use-stock-threshold';
 import { sortProducts } from '../sort-products';
 import { AddProductLink } from './AddProductLink';
 import { StockEmptyState } from './StockEmptyState';
@@ -21,6 +22,7 @@ export function StockListContent() {
   const { data: categories } = categoriesQuery;
   const error = productsQuery.error ?? categoriesQuery.error;
   const { isCashierMode } = useSession();
+  const defaultMinStock = useStockThreshold();
   const { filters: urlFilters, setFilters, clearFilters } = useStockFilters();
 
   function handleRetry() {
@@ -38,7 +40,7 @@ export function StockListContent() {
   const activeProducts = products.filter((product) => product.archivedAt === null);
   // Pembanding "dari Y barang": semua barang bila arsip ditampilkan, kalau tidak hanya yang aktif.
   const scopeCount = filters.archived ? products.length : activeProducts.length;
-  const visibleProducts = sortProducts(filterProducts(products, filters), filters.sort);
+  const visibleProducts = sortProducts(filterProducts(products, filters, defaultMinStock), filters.sort);
 
   return (
     <div className="space-y-4">
