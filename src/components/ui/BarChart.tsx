@@ -3,7 +3,8 @@ import { HorizontalBars } from './HorizontalBars';
 import { useChartCursor } from './use-chart-cursor';
 import { VerticalBars } from './VerticalBars';
 
-export type BarDatum = { label: string; value: number };
+// href opsional: label batang horizontal menjadi tautan (mis. ke halaman detail).
+export type BarDatum = { label: string; value: number; href?: string };
 
 type BarChartProps = {
   title: string;

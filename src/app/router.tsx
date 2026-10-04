@@ -54,6 +54,13 @@ export const router = createBrowserRouter([
             },
           },
           {
+            path: 'dasbor/produk',
+            lazy: async () => {
+              const { ProductAnalysisPage } = await import('../features/dashboard/components/ProductAnalysisPage');
+              return { Component: ProductAnalysisPage };
+            },
+          },
+          {
             path: 'penjualan',
             lazy: async () => {
               const { SaleHistoryPage } = await import('../features/sales/components/SaleHistoryPage');

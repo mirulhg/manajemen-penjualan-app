@@ -68,24 +68,31 @@ export function resolvePeriodRange(selection: PeriodSelection, now: Date): { sta
   }
 }
 
-// Parameter URL ?periode=&dari=&sampai=. Nilai tidak valid kembali ke 'hari-ini'; rentang butuh dua tanggal valid dan berurutan.
+// Parameter URL ?periode=&dari=&sampai=. Nilai tidak valid kembali ke periode bawaan (default 'hari-ini');
+// rentang butuh dua tanggal valid dan berurutan.
 export function parsePeriodParams(
   params: URLSearchParams,
   allowed: readonly Period[] = PERIODS,
+  fallback: Period = 'hari-ini',
 ): PeriodSelection {
   const from = parseLocalDate(params.get('dari')) ? params.get('dari') : null;
   const to = parseLocalDate(params.get('sampai')) ? params.get('sampai') : null;
-  const requested = allowed.find((period) => period === params.get('periode')) ?? 'hari-ini';
+  const requested = allowed.find((period) => period === params.get('periode')) ?? fallback;
   const isUsableRange = from !== null && to !== null && from <= to;
   return {
-    period: requested === 'rentang' && !isUsableRange ? 'hari-ini' : requested,
+    period: requested === 'rentang' && !isUsableRange ? fallback : requested,
     from,
     to,
   };
 }
 
-export function serializePeriodParams(selection: PeriodSelection, params = new URLSearchParams()) {
-  if (selection.period !== 'hari-ini') params.set('periode', selection.period);
+// Periode bawaan tidak ditulis ke URL; periode lain (termasuk 'hari-ini' bila bawaannya berbeda) ditulis eksplisit.
+export function serializePeriodParams(
+  selection: PeriodSelection,
+  params = new URLSearchParams(),
+  defaultPeriod: Period = 'hari-ini',
+) {
+  if (selection.period !== defaultPeriod) params.set('periode', selection.period);
   if (selection.period === 'rentang') {
     if (selection.from) params.set('dari', selection.from);
     if (selection.to) params.set('sampai', selection.to);

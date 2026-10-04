@@ -13,3 +13,11 @@ export function formatClock(iso: string, timeZone?: string): string {
     .format(new Date(iso))
     .replace('.', ':');
 }
+
+// Tanggal lokal "YYYY-MM-DD" (kunci rekap harian) ditulis sebagai "3 Okt 2026".
+export function formatLocalDate(dateText: string): string {
+  const [year, month, day] = dateText.split('-').map(Number);
+  return new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium' }).format(
+    new Date(year ?? 0, (month ?? 1) - 1, day ?? 1),
+  );
+}

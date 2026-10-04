@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { Link } from 'react-router';
 
 import { useDashboardData } from '../api/use-dashboard-data';
 import { useDashboardPeriod } from '../hooks/use-dashboard-period';
@@ -26,6 +27,9 @@ export function DashboardContent() {
 
   return (
     <div className="space-y-8">
+      <Link to="/dasbor/produk" className="inline-flex min-h-11 items-center font-medium text-primary">
+        Analisis produk
+      </Link>
       <ComparisonSection today={data.today} yesterday={data.yesterday} />
       <PeriodSection selection={selection} metrics={data.period} previous={data.previous} onChange={setSelection} />
       <Suspense fallback={<ChartSkeleton />}>
