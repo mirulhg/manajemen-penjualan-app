@@ -55,9 +55,13 @@ export class CreateSaleError extends Error {
 
 type SaleLine = { productId: string; quantity: number; discount: number; product: Product };
 
-export async function createSale(input: CreateSaleInput): Promise<Sale> {
+export function createSale(input: CreateSaleInput): Promise<Sale> {
+  return createSaleAt(input, new Date());
+}
+
+// Waktu disuntikkan supaya generator data contoh memakai jalur yang sama dengan kasir untuk transaksi di masa lalu.
+export async function createSaleAt(input: CreateSaleInput, now: Date): Promise<Sale> {
   const parsed = createSaleInputSchema.parse(input);
-  const now = new Date();
   const nowIso = now.toISOString();
 
   // Harga dan stok dibaca ulang di dalam transaksi; seluruh penulisan (termasuk penghitung nomor) satu kesatuan.
