@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { clipRangeToToday, parsePeriodParams, previousPeriod, resolvePeriodRange } from './date-period';
+import {
+  clipRangeToToday,
+  parsePeriodParams,
+  previousPeriod,
+  resolvePeriodRange,
+  serializePeriodParams,
+} from './date-period';
 
 describe('resolvePeriodRange', () => {
   const range = (period: Parameters<typeof resolvePeriodRange>[0]['period'], now: Date) => {
@@ -96,5 +102,24 @@ describe('previousPeriod', () => {
       start: new Date(2024, 10, 1),
       end: new Date(2025, 10, 1),
     });
+  });
+});
+
+describe('periode bawaan yang bisa diganti', () => {
+  it('tanpa ?periode= memakai bawaan yang diberikan, nilai tidak valid juga', () => {
+    expect(parsePeriodParams(new URLSearchParams(''), undefined, '30-hari').period).toBe('30-hari');
+    expect(parsePeriodParams(new URLSearchParams('periode=ngawur'), undefined, '30-hari').period).toBe('30-hari');
+    expect(parsePeriodParams(new URLSearchParams('periode=7-hari'), undefined, '30-hari').period).toBe('7-hari');
+  });
+
+  it('rentang yang tidak valid kembali ke bawaan, bukan ke hari ini', () => {
+    expect(parsePeriodParams(new URLSearchParams('periode=rentang'), undefined, '30-hari').period).toBe('30-hari');
+  });
+
+  it('bawaan tidak ditulis ke URL; hari ini ditulis eksplisit bila bukan bawaan', () => {
+    const base = { from: null, to: null };
+    expect(serializePeriodParams({ period: '30-hari', ...base }, undefined, '30-hari').toString()).toBe('');
+    expect(serializePeriodParams({ period: 'hari-ini', ...base }, undefined, '30-hari').toString()).toBe('periode=hari-ini');
+    expect(serializePeriodParams({ period: 'hari-ini', ...base }).toString()).toBe('');
   });
 });

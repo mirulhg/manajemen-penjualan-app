@@ -54,11 +54,28 @@ async function riwayatItemId(saleId: string, sku: string) {
   return found.id;
 }
 
+async function readRecap() {
+  return {
+    days: await db.dailySales.orderBy('date').toArray(),
+    products: await db.dailyProductSales.orderBy('[date+productId]').toArray(),
+  };
+}
+
+// Invarian: per tanggal, jumlah revenue dan HPP semua produk = omzet dan HPP hari itu; baris produk bernilai nol tidak disimpan.
+function expectProductRecapMatchesDays(recap: Awaited<ReturnType<typeof readRecap>>) {
+  for (const day of recap.days) {
+    const products = recap.products.filter((row) => row.date === day.date);
+    expect(products.reduce((sum, row) => sum + row.revenue, 0)).toBe(day.grossTotal - day.refundedTotal);
+    expect(products.reduce((sum, row) => sum + row.cogs, 0)).toBe(day.cogs);
+  }
+  expect(recap.products.some((row) => row.quantity === 0 && row.revenue === 0 && row.cogs === 0)).toBe(false);
+}
+
 async function expectRecapEqualsRebuild() {
-  const incremental = await db.dailySales.orderBy('date').toArray();
+  const incremental = await readRecap();
+  expectProductRecapMatchesDays(incremental);
   await rebuildDailySales();
-  const rebuilt = await db.dailySales.orderBy('date').toArray();
-  expect(incremental).toEqual(rebuilt);
+  expect(incremental).toEqual(await readRecap());
 }
 
 describe('saleContribution', () => {
@@ -199,6 +216,32 @@ describe('rekap harian', () => {
     const metrics = toMetrics(rows);
     expect(summary).toEqual({ count: metrics.transactionCount, netRevenue: metrics.revenue });
     expect(metrics.revenue).toBe(162_000 - 74_000 + 156_000);
+  });
+
+  it('rekap per produk: retur penuh menghapus baris produk, pembatalan menghapus sisanya', async () => {
+    const sale = await plainSale(DAY_1);
+    expect(await db.dailyProductSales.count()).toBe(3);
+
+    vi.setSystemTime(DAY_2);
+    const itemIds = {
+      beras: await riwayatItemId(sale.id, 'SBK-001'),
+      mi: await riwayatItemId(sale.id, 'MKR-001'),
+    };
+    await returnSaleItems(sale.id, {
+      items: [
+        { saleItemId: itemIds.beras, quantity: 2 },
+        { saleItemId: itemIds.mi, quantity: 3 },
+      ],
+      reason: 'Pembeli batal',
+    });
+    // Beras dan Mi Instan diretur penuh: barisnya hilang, hanya Air Mineral yang tersisa.
+    const remaining = await db.dailyProductSales.toArray();
+    expect(remaining).toHaveLength(1);
+    expect(remaining[0]).toMatchObject({ date: '2026-10-01', quantity: 1, revenue: 3_500, cogs: 2_500 });
+
+    await cancelSale(sale.id, 'Salah input');
+    expect(await db.dailyProductSales.count()).toBe(0);
+    await expectRecapEqualsRebuild();
   });
 
   it('transaksi yang gagal tidak mengubah rekap', async () => {
