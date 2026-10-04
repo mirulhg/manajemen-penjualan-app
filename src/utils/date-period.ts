@@ -1,6 +1,15 @@
 export const PERIODS = ['hari-ini', 'kemarin', '7-hari', '30-hari', 'bulan-ini', 'rentang'] as const;
 export type Period = (typeof PERIODS)[number];
 
+export const PERIOD_LABELS: Record<Period, string> = {
+  'hari-ini': 'Hari ini',
+  kemarin: 'Kemarin',
+  '7-hari': '7 hari terakhir',
+  '30-hari': '30 hari terakhir',
+  'bulan-ini': 'Bulan ini',
+  rentang: 'Rentang tanggal',
+};
+
 export type PeriodSelection = {
   period: Period;
   from: string | null;

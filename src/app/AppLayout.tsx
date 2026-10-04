@@ -7,6 +7,7 @@ import { TabBar } from '../components/layout/TabBar';
 import { useSession } from '../features/session';
 
 const OWNER_ITEMS: NavItem[] = [
+  { to: '/dasbor', label: 'Dasbor' },
   { to: '/stok', label: 'Stok' },
   { to: '/kasir', label: 'Kasir' },
   { to: '/penjualan', label: 'Riwayat' },

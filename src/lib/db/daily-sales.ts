@@ -40,6 +40,10 @@ export async function rebuildDailySales(): Promise<void> {
   });
 }
 
+export async function hasAnyDailySales(): Promise<boolean> {
+  return (await db.dailySales.count()) > 0;
+}
+
 // toDateExclusive eksklusif, sama dengan rentang periode (awal hari berikutnya).
 export async function getDailySalesRange(fromDate: string, toDateExclusive: string): Promise<DailySales[]> {
   const rows = await db.dailySales.where('date').between(fromDate, toDateExclusive, true, false).toArray();

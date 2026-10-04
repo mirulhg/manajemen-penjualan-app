@@ -26,11 +26,11 @@ function labels(navName: string) {
 }
 
 describe('AppLayout', () => {
-  it('pemilik: Stok, Kasir, Riwayat, Pengaturan di tab bar dan header, tanpa penanda mode', () => {
+  it('pemilik: Dasbor, Stok, Kasir, Riwayat, Pengaturan di tab bar dan header, tanpa penanda mode', () => {
     renderLayout(false);
 
-    expect(labels('Menu bawah')).toEqual(['Stok', 'Kasir', 'Riwayat', 'Pengaturan']);
-    expect(labels('Menu utama')).toEqual(['Stok', 'Kasir', 'Riwayat', 'Pengaturan']);
+    expect(labels('Menu bawah')).toEqual(['Dasbor', 'Stok', 'Kasir', 'Riwayat', 'Pengaturan']);
+    expect(labels('Menu utama')).toEqual(['Dasbor', 'Stok', 'Kasir', 'Riwayat', 'Pengaturan']);
     expect(screen.queryByText('Mode Kasir')).toBeNull();
   });
 

@@ -1,13 +1,14 @@
-import { createBrowserRouter, Navigate, Outlet } from 'react-router';
+import { createBrowserRouter, Outlet } from 'react-router';
 
 import { OwnerOnly } from '../features/session';
 import { AppLayout } from './AppLayout';
+import { HomeRedirect } from './HomeRedirect';
 
 export const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
-      { index: true, element: <Navigate to="/stok" replace /> },
+      { index: true, element: <HomeRedirect /> },
       {
         path: 'stok',
         lazy: async () => {
@@ -45,6 +46,13 @@ export const router = createBrowserRouter([
           </OwnerOnly>
         ),
         children: [
+          {
+            path: 'dasbor',
+            lazy: async () => {
+              const { DashboardPage } = await import('../features/dashboard/components/DashboardPage');
+              return { Component: DashboardPage };
+            },
+          },
           {
             path: 'penjualan',
             lazy: async () => {

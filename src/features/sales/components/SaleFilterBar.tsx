@@ -1,7 +1,7 @@
 import { FormField } from '../../../components/ui/FormField';
 import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import type { PaymentMethod } from '../../../lib/db/records';
-import { PERIODS, toLocalDateText } from '../../../utils/date-period';
+import { PERIOD_LABELS, PERIODS, toLocalDateText } from '../../../utils/date-period';
 import type { Period } from '../../../utils/date-period';
 import type { SaleFilters } from '../sale-filters';
 
@@ -9,15 +9,6 @@ type SaleFilterBarProps = {
   filters: SaleFilters;
   actors: string[];
   onChange: (patch: Partial<SaleFilters>) => void;
-};
-
-const PERIOD_LABELS: Record<Period, string> = {
-  'hari-ini': 'Hari ini',
-  kemarin: 'Kemarin',
-  '7-hari': '7 hari terakhir',
-  '30-hari': '30 hari terakhir',
-  'bulan-ini': 'Bulan ini',
-  rentang: 'Rentang tanggal',
 };
 
 const METHODS: { value: PaymentMethod; label: string }[] = [
