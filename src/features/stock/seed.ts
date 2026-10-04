@@ -7,10 +7,11 @@ import { generateExtraProducts } from './generate-extra-products';
 import { resolveCategory } from './resolve-category';
 import { SEED_PRODUCTS } from './seed-data';
 
-export async function seedSampleProducts(extraCount = 0): Promise<void> {
+// Mengembalikan true hanya bila seed benar-benar menulis data (tabel produk tadinya kosong).
+export async function seedSampleProducts(extraCount = 0): Promise<boolean> {
   // Cek tabel kosong di dalam transaksi yang sama dengan penulisan, supaya dua pemanggilan bersamaan tidak menggandakan data.
-  await db.transaction('rw', db.products, db.stockMovements, db.counters, db.categories, async () => {
-    if ((await db.products.count()) > 0) return;
+  return db.transaction('rw', db.products, db.stockMovements, db.counters, db.categories, async () => {
+    if ((await db.products.count()) > 0) return false;
 
     const now = new Date().toISOString();
     const allFields = [...SEED_PRODUCTS, ...generateExtraProducts(extraCount)];
@@ -24,5 +25,6 @@ export async function seedSampleProducts(extraCount = 0): Promise<void> {
     }
     await db.products.bulkAdd(records.map((record) => record.product));
     await db.stockMovements.bulkAdd(records.map((record) => record.movement));
+    return true;
   });
 }

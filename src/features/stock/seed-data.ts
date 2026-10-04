@@ -40,3 +40,6 @@ export const SEED_PRODUCTS: NewProductFields[] = [
   { sku: 'RMH-003', name: 'Tisu Wajah 250 lembar', category: KEBUTUHAN_RUMAH, unit: 'pack', stockQuantity: 22, minStock: null, purchasePrice: 12500, sellingPrice: 15000 },
   { sku: 'RMH-004', name: 'Gas LPG 3 kg', category: KEBUTUHAN_RUMAH, unit: 'tabung', stockQuantity: 4, minStock: 5, purchasePrice: 19000, sellingPrice: 22000 },
 ];
+
+// Urutan SKU sama dengan SEED_PRODUCTS; dipakai generator penjualan contoh untuk menemukan produknya.
+export const SAMPLE_PRODUCT_SKUS = SEED_PRODUCTS.map((product) => product.sku);

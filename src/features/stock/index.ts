@@ -2,6 +2,7 @@ export { invalidateStockQueries } from './api/invalidate-stock-queries';
 export { useProducts } from './api/use-products';
 export { filterProducts } from './filter-products';
 export { seedSampleProducts } from './seed';
+export { SAMPLE_PRODUCT_SKUS } from './seed-data';
 export { sortProducts } from './sort-products';
 export { DEFAULT_MIN_STOCK, getStockStatus } from './stock-status';
 export type { StockStatus } from './stock-status';
