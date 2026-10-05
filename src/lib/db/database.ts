@@ -158,6 +158,10 @@ class StockDatabase extends Dexie {
         const alerts = planAlertChanges(products, [], defaultRow?.value ?? FALLBACK_DEFAULT_MIN_STOCK, new Date().toISOString());
         await transaction.table<StockAlert, string>('stockAlerts').bulkAdd(alerts);
       });
+    // Index createdAt untuk laporan stok per tanggal: pergerakan setelah tanggal tertentu dibaca tanpa memindai seluruh riwayat.
+    this.version(10).stores({
+      stockMovements: 'id, productId, [productId+createdAt], &seq, [productId+seq], createdAt',
+    });
   }
 }
 

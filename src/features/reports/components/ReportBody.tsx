@@ -1,23 +1,18 @@
 import type { ReactNode } from 'react';
 
-import { startOfDay, toLocalDateText } from '../../../utils/date-period';
-import type { DateRange } from '../../../utils/date-period';
-import { formatDateTime, formatLocalDate } from '../../../utils/format-date-time';
+import { formatDateTime } from '../../../utils/format-date-time';
 
 type ReportBodyProps = {
-  range: DateRange;
+  // Kalimat pembuka di atas isi laporan, misalnya periode atau tanggal posisi stok.
+  intro: string;
   children: ReactNode;
 };
 
-// Baris periode di atas isi laporan dan keterangan "Dicetak pada" di bawahnya (hanya tampil saat dicetak).
-export function ReportBody({ range, children }: ReportBodyProps) {
-  const lastDay = range.end > range.start ? startOfDay(range.end, -1) : range.start;
-
+// Keterangan "Dicetak pada" di bawah isi laporan hanya tampil saat dicetak.
+export function ReportBody({ intro, children }: ReportBodyProps) {
   return (
     <div className="space-y-6">
-      <p>
-        Periode: {formatLocalDate(toLocalDateText(range.start))} – {formatLocalDate(toLocalDateText(lastDay))}
-      </p>
+      <p>{intro}</p>
       {children}
       <p className="hidden text-sm print:block">Dicetak pada {formatDateTime(new Date().toISOString())}</p>
     </div>

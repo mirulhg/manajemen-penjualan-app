@@ -3,6 +3,7 @@ import type { PeriodSelection } from '../../../utils/date-period';
 import { getReportRange } from '../api/read-report-sales';
 import { useProfitReport } from '../api/use-profit-report';
 import { ProfitReportTables } from './ProfitReportTables';
+import { describeReportPeriod } from '../report-period-text';
 import { ReportBody } from './ReportBody';
 import { ReportError } from './ReportError';
 import { ReportSkeleton } from './ReportSkeleton';
@@ -27,7 +28,7 @@ export function ProfitReportContent({ selection }: ProfitReportContentProps) {
   const { summary } = data;
 
   return (
-    <ReportBody range={getReportRange(selection, new Date())}>
+    <ReportBody intro={describeReportPeriod(getReportRange(selection, new Date()))}>
       {data.byProduct.length === 0 && <p role="status">Tidak ada penjualan di periode ini.</p>}
       <ReportSummary
         items={[

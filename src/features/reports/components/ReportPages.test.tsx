@@ -38,13 +38,14 @@ describe('halaman laporan', () => {
     expect(screen.getByText('Halaman ini hanya untuk pemilik')).toBeTruthy();
   });
 
-  it('daftar laporan: Penjualan dan Laba kotor menjadi tautan, lainnya "Segera hadir" tanpa tautan', () => {
+  it('daftar laporan: Penjualan, Laba kotor, dan Stok menjadi tautan, lainnya "Segera hadir" tanpa tautan', () => {
     renderRoutes('/laporan');
 
     expect(screen.getByRole('link', { name: /Penjualan/ }).getAttribute('href')).toBe('/laporan/penjualan');
     expect(screen.getByRole('link', { name: /Laba kotor/ }).getAttribute('href')).toBe('/laporan/laba-kotor');
-    expect(screen.getAllByText('Segera hadir')).toHaveLength(2);
-    expect(screen.queryByRole('link', { name: /Stok|Pergerakan stok/ })).toBeNull();
+    expect(screen.getByRole('link', { name: /Posisi stok/ }).getAttribute('href')).toBe('/laporan/stok');
+    expect(screen.getAllByText('Segera hadir')).toHaveLength(1);
+    expect(screen.queryByRole('link', { name: /Pergerakan stok/ })).toBeNull();
   });
 
   it('tanpa profil toko: kop "Toko Saya" dan saran mengisi profil', async () => {

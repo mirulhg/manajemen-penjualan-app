@@ -88,3 +88,25 @@ export const PROFIT_CATEGORY_COLUMNS: ReportColumn<ProfitCategoryRow>[] = [
   { key: 'grossProfit', title: 'Laba kotor', type: 'number', width: 14 },
   { key: 'margin', title: 'Margin (%)', type: 'number', width: 12 },
 ];
+
+export type StockRow = {
+  sku: string;
+  name: string;
+  category: string;
+  unit: string;
+  quantity: number;
+  purchasePrice: number;
+  value: number;
+  status: string;
+};
+
+export const STOCK_COLUMNS: ReportColumn<StockRow>[] = [
+  { key: 'sku', title: 'SKU', type: 'text', width: 14 },
+  { key: 'name', title: 'Nama', type: 'text', width: 30 },
+  { key: 'category', title: 'Kategori', type: 'text', width: 20 },
+  { key: 'unit', title: 'Satuan', type: 'text', width: 10 },
+  { key: 'quantity', title: 'Stok', type: 'number', width: 10 },
+  { key: 'purchasePrice', title: 'Harga beli', type: 'number', width: 14 },
+  { key: 'value', title: 'Nilai persediaan', type: 'number', width: 18 },
+  { key: 'status', title: 'Status', type: 'text', width: 12 },
+];
