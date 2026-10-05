@@ -1,25 +1,25 @@
-import { useSalesReportExport } from '../api/use-sales-report-export';
-import type { PeriodSelection } from '../../../utils/date-period';
+import type { ExportFormat } from '../report-tables';
 
 type ReportActionsProps = {
-  selection: PeriodSelection;
+  onExport: (format: ExportFormat) => void;
+  // Format yang sedang disiapkan; null bila tidak ada ekspor berjalan.
+  pendingFormat: ExportFormat | null;
+  error: Error | null;
 };
 
 const BUTTON_CLASS = 'min-h-11 rounded-md border border-border bg-surface px-4 font-medium disabled:opacity-60';
 
-export function ReportActions({ selection }: ReportActionsProps) {
-  const exportReport = useSalesReportExport(selection);
-
+export function ReportActions({ onExport, pendingFormat, error }: ReportActionsProps) {
   function handlePrint() {
     window.print();
   }
 
   function handleExportCsv() {
-    exportReport.mutate('csv');
+    onExport('csv');
   }
 
   function handleExportXlsx() {
-    exportReport.mutate('xlsx');
+    onExport('xlsx');
   }
 
   return (
@@ -28,16 +28,16 @@ export function ReportActions({ selection }: ReportActionsProps) {
         <button type="button" onClick={handlePrint} className="min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary">
           Cetak / Simpan PDF
         </button>
-        <button type="button" onClick={handleExportCsv} disabled={exportReport.isPending} className={BUTTON_CLASS}>
-          {exportReport.isPending && exportReport.variables === 'csv' ? 'Menyiapkan…' : 'Unduh CSV'}
+        <button type="button" onClick={handleExportCsv} disabled={pendingFormat !== null} className={BUTTON_CLASS}>
+          {pendingFormat === 'csv' ? 'Menyiapkan…' : 'Unduh CSV'}
         </button>
-        <button type="button" onClick={handleExportXlsx} disabled={exportReport.isPending} className={BUTTON_CLASS}>
-          {exportReport.isPending && exportReport.variables === 'xlsx' ? 'Menyiapkan…' : 'Unduh Excel'}
+        <button type="button" onClick={handleExportXlsx} disabled={pendingFormat !== null} className={BUTTON_CLASS}>
+          {pendingFormat === 'xlsx' ? 'Menyiapkan…' : 'Unduh Excel'}
         </button>
       </div>
-      {exportReport.isError && (
+      {error && (
         <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
-          File laporan gagal dibuat: {exportReport.error.message}. Coba lagi; jika masih gagal, muat ulang halaman.
+          File laporan gagal dibuat: {error.message}. Coba lagi; jika masih gagal, muat ulang halaman.
         </p>
       )}
     </div>

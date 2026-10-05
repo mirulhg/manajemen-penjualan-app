@@ -6,7 +6,8 @@ import { saleSchema } from '../../lib/db/records';
 import type { Sale } from '../../lib/db/records';
 import { resetDatabaseWithSeed } from '../../test/reset-database';
 import { getSalesReportRows } from './api/get-sales-report';
-import { buildSalesReportCsv, buildSalesReportFileName, buildSalesReportXlsx } from './sales-report-files';
+import { buildReportFileName } from './report-file-name';
+import { buildSalesReportCsv, buildSalesReportXlsx } from './sales-report-files';
 import type { DailyRow, TransactionRow } from './report-columns';
 
 const TRANSACTION: TransactionRow = {
@@ -54,7 +55,7 @@ describe('ekspor Excel', () => {
 
 describe('nama file', () => {
   it('memakai tanggal awal dan akhir yang inklusif', () => {
-    expect(buildSalesReportFileName({ start: new Date(2026, 8, 1), end: new Date(2026, 9, 1) })).toBe(
+    expect(buildReportFileName('laporan-penjualan', { start: new Date(2026, 8, 1), end: new Date(2026, 9, 1) })).toBe(
       'laporan-penjualan-2026-09-01_2026-09-30',
     );
   });

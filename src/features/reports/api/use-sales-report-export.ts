@@ -2,17 +2,17 @@ import { useMutation } from '@tanstack/react-query';
 
 import { downloadBlob, downloadTextFile } from '../../../utils/download-text-file';
 import type { PeriodSelection } from '../../../utils/date-period';
-import { buildSalesReportCsv, buildSalesReportFileName, buildSalesReportXlsx } from '../sales-report-files';
+import { buildReportFileName } from '../report-file-name';
+import { buildSalesReportCsv, buildSalesReportXlsx } from '../sales-report-files';
+import type { ExportFormat } from '../report-tables';
 import { getSalesReport, getSalesReportRows } from './get-sales-report';
 import { getReportRange } from './read-report-sales';
-
-export type ExportFormat = 'csv' | 'xlsx';
 
 export function useSalesReportExport(selection: PeriodSelection) {
   return useMutation({
     mutationFn: async (format: ExportFormat) => {
       const now = new Date();
-      const baseName = buildSalesReportFileName(getReportRange(selection, now));
+      const baseName = buildReportFileName('laporan-penjualan', getReportRange(selection, now));
 
       if (format === 'csv') {
         const rows = await getSalesReportRows(selection, now);
