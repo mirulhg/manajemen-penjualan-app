@@ -31,7 +31,8 @@ export async function seedSampleSales(sampleSkus: readonly string[], today = new
         }
       }
 
-      const startIso = startOfDay(today, -SAMPLE_SALES_DAYS).toISOString();
+      // Sehari sebelum hari penjualan pertama, supaya stok awal sudah tercatat pada akhir hari sebelum penjualan dimulai (laporan stok per tanggal).
+      const startIso = startOfDay(today, -(SAMPLE_SALES_DAYS + 1)).toISOString();
       for (const [index, sold] of soldByIndex) {
         const product = products[index];
         if (!product) throw new Error(`Indeks produk contoh ${index} tidak ada.`);
