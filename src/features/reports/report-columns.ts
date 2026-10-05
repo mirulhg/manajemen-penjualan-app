@@ -47,3 +47,44 @@ export const DAILY_COLUMNS: ReportColumn<DailyRow>[] = [
   { key: 'transactionCount', title: 'Transaksi', type: 'number', width: 12 },
   { key: 'netRevenue', title: 'Omzet bersih', type: 'number', width: 16 },
 ];
+
+export type ProfitRow = {
+  sku: string;
+  name: string;
+  category: string;
+  status: string;
+  quantity: number;
+  revenue: number;
+  cogs: number;
+  grossProfit: number;
+  // Persen dengan satu desimal; 0 bila omzet 0.
+  margin: number;
+};
+
+export type ProfitCategoryRow = {
+  category: string;
+  revenue: number;
+  cogs: number;
+  grossProfit: number;
+  margin: number;
+};
+
+export const PROFIT_PRODUCT_COLUMNS: ReportColumn<ProfitRow>[] = [
+  { key: 'sku', title: 'SKU', type: 'text', width: 14 },
+  { key: 'name', title: 'Nama', type: 'text', width: 30 },
+  { key: 'category', title: 'Kategori', type: 'text', width: 20 },
+  { key: 'status', title: 'Status', type: 'text', width: 12 },
+  { key: 'quantity', title: 'Terjual', type: 'number', width: 10 },
+  { key: 'revenue', title: 'Omzet', type: 'number', width: 14 },
+  { key: 'cogs', title: 'HPP', type: 'number', width: 14 },
+  { key: 'grossProfit', title: 'Laba kotor', type: 'number', width: 14 },
+  { key: 'margin', title: 'Margin (%)', type: 'number', width: 12 },
+];
+
+export const PROFIT_CATEGORY_COLUMNS: ReportColumn<ProfitCategoryRow>[] = [
+  { key: 'category', title: 'Kategori', type: 'text', width: 24 },
+  { key: 'revenue', title: 'Omzet', type: 'number', width: 14 },
+  { key: 'cogs', title: 'HPP', type: 'number', width: 14 },
+  { key: 'grossProfit', title: 'Laba kotor', type: 'number', width: 14 },
+  { key: 'margin', title: 'Margin (%)', type: 'number', width: 12 },
+];

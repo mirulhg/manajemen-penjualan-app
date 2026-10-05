@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 
-const COMING_SOON = ['Laba kotor', 'Stok', 'Pergerakan stok'];
+const COMING_SOON = ['Stok', 'Pergerakan stok'];
 
 export function ReportsPage() {
   return (
@@ -14,6 +14,12 @@ export function ReportsPage() {
             <span className="block text-sm text-text-muted">
               Transaksi, omzet, diskon, retur, dan metode bayar per periode.
             </span>
+          </Link>
+        </li>
+        <li className="rounded-md border border-border bg-surface">
+          <Link to="/laporan/laba-kotor" className="block min-h-11 p-4">
+            <span className="block font-medium text-primary">Laba kotor</span>
+            <span className="block text-sm text-text-muted">Omzet, HPP, dan laba per kategori dan per produk.</span>
           </Link>
         </li>
         {COMING_SOON.map((name) => (

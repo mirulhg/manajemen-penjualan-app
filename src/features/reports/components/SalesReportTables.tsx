@@ -3,17 +3,13 @@ import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
 import { METHOD_LABELS } from '../sales-report';
 import type { SalesReport } from '../sales-report';
+import { CELL, HEAD_CELL, NUMBER_CELL, NUMBER_HEAD_CELL, ROW } from './report-table-styles';
 
 type SalesReportTablesProps = {
   byPaymentMethod: SalesReport['byPaymentMethod'];
   byDay: SalesReport['byDay'];
 };
 
-const HEAD_CELL = 'px-3 py-2 text-left font-medium';
-const NUMBER_HEAD_CELL = 'px-3 py-2 text-right font-medium';
-const CELL = 'px-3 py-2';
-const NUMBER_CELL = 'px-3 py-2 text-right';
-const ROW = 'border-t border-border print:break-inside-avoid';
 
 export function SalesReportTables({ byPaymentMethod, byDay }: SalesReportTablesProps) {
   return (

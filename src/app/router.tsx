@@ -83,6 +83,13 @@ export const router = createBrowserRouter([
             },
           },
           {
+            path: 'laporan/laba-kotor',
+            lazy: async () => {
+              const { ProfitReportPage } = await import('../features/reports/components/ProfitReportPage');
+              return { Component: ProfitReportPage };
+            },
+          },
+          {
             path: 'penjualan',
             lazy: async () => {
               const { SaleHistoryPage } = await import('../features/sales/components/SaleHistoryPage');
