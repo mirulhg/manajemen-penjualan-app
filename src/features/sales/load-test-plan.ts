@@ -12,13 +12,13 @@ export type PlannedLoadSale = {
   paymentMethod: PaymentMethod;
 };
 
-// Deterministik (tanpa random). LOAD_TEST_SALE_COUNT transaksi tersebar rata di seluruh bulan lalu (waktu lokal perangkat),
+// Deterministik (tanpa random). saleCount (bawaan LOAD_TEST_SALE_COUNT) transaksi tersebar rata di seluruh bulan lalu (waktu lokal perangkat),
 // kronologis, masing-masing 1-3 barang berbeda dari productCount barang.
-export function planLoadTestSales(now: Date, productCount: number): PlannedLoadSale[] {
+export function planLoadTestSales(now: Date, productCount: number, saleCount = LOAD_TEST_SALE_COUNT): PlannedLoadSale[] {
   const monthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   const daysInMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-  const perDay = Math.floor(LOAD_TEST_SALE_COUNT / daysInMonth);
-  const remainder = LOAD_TEST_SALE_COUNT % daysInMonth;
+  const perDay = Math.floor(saleCount / daysInMonth);
+  const remainder = saleCount % daysInMonth;
 
   const plan: PlannedLoadSale[] = [];
   for (let day = 0; day < daysInMonth; day += 1) {

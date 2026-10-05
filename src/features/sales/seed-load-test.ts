@@ -3,7 +3,7 @@ import { productSchema, stockMovementSchema } from '../../lib/db/records';
 import { startOfDay } from '../../utils/date-period';
 import { SAMPLE_PRODUCT_SKUS, seedSampleProducts } from '../stock';
 import { createSaleAt } from './api/create-sale';
-import { planLoadTestSales } from './load-test-plan';
+import { LOAD_TEST_SALE_COUNT, planLoadTestSales } from './load-test-plan';
 
 // 30 barang contoh + 1.970 barang hasil generator = 2.000 barang.
 const EXTRA_PRODUCTS = 2000 - SAMPLE_PRODUCT_SKUS.length;
@@ -16,13 +16,15 @@ export type LoadTestResult = { productCount: number; saleCount: number; seconds:
 export async function seedLoadTest(
   now: Date,
   onProgress: (done: number, total: number) => void,
+  // Hanya diubah oleh test supaya seed bisa dicoba cepat; aplikasi selalu memakai 10.000.
+  saleCount = LOAD_TEST_SALE_COUNT,
 ): Promise<LoadTestResult | null> {
   const started = performance.now();
   if (!(await seedSampleProducts(EXTRA_PRODUCTS))) return null;
 
   // Urutan SKU menetapkan indeks barang untuk rencana penjualan.
   const products = productSchema.array().parse(await db.products.toArray()).sort((a, b) => (a.sku < b.sku ? -1 : 1));
-  const plan = planLoadTestSales(now, products.length);
+  const plan = planLoadTestSales(now, products.length, saleCount);
 
   const soldByIndex = new Map<number, number>();
   for (const sale of plan) {

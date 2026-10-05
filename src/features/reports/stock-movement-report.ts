@@ -12,7 +12,8 @@ type MovementTotals = {
 
 export type StockMovementReport = {
   rows: MovementRow[];
-  // Barang yang punya pergerakan dalam periode; tidak diturunkan dari kolom karena penjualan yang dibatalkan bersih bernilai 0.
+  // Barang yang jumlah fisiknya berubah di periode (ada pergerakan dengan selisih bukan 0). Tidak diturunkan dari kolom: jual lalu
+  // batal, atau koreksi +3 lalu -3, tetap bergerak walau bersihnya 0. Stok awal 0 (barang baru tanpa stok) bukan pergerakan fisik.
   movedSkus: Set<string>;
   summary: MovementTotals & { productCount: number; movedCount: number };
 };
@@ -50,15 +51,17 @@ type MovementReportInput = {
 // sehingga awal + masuk + retur/batal - terjual + koreksi = akhir selalu berlaku.
 export function buildStockMovementReport({ products, periodMovements, deltaAfterPeriod }: MovementReportInput): StockMovementReport {
   const sumsByProduct = new Map<string, PeriodSums>();
+  const movedProductIds = new Set<string>();
   for (const movement of periodMovements) {
     sumsByProduct.set(movement.productId, addMovement(sumsByProduct.get(movement.productId) ?? ZERO_SUMS, movement));
+    if (movement.quantityAfter !== movement.quantityBefore) movedProductIds.add(movement.productId);
   }
 
   const movedSkus = new Set<string>();
   const rows: MovementRow[] = products
     .map((product) => {
       const sums = sumsByProduct.get(product.id);
-      if (sums) movedSkus.add(product.sku);
+      if (movedProductIds.has(product.id)) movedSkus.add(product.sku);
       const { incoming, sold, returned, correction } = sums ?? ZERO_SUMS;
       const closing = product.stockQuantity - (deltaAfterPeriod.get(product.id) ?? 0);
       return {
