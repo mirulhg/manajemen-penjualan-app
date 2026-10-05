@@ -1,8 +1,8 @@
-export function SalesReportSkeleton() {
+export function ReportSkeleton() {
   return (
     <div>
       <p className="sr-only" role="status">
-        Memuat laporan penjualan
+        Memuat laporan
       </p>
       <div aria-hidden="true" className="space-y-6">
         <div className="h-4 w-1/2 rounded-md bg-border" />

@@ -1,10 +1,12 @@
+import { formatNumber } from '../../../utils/format-number';
+import { formatRupiah } from '../../../utils/format-rupiah';
+import type { PeriodSelection } from '../../../utils/date-period';
 import { useSalesReport } from '../api/use-sales-report';
 import { getReportRange } from '../api/read-report-sales';
-import type { PeriodSelection } from '../../../utils/date-period';
-import { toLocalDateText, startOfDay } from '../../../utils/date-period';
-import { formatDateTime, formatLocalDate } from '../../../utils/format-date-time';
-import { SalesReportSkeleton } from './SalesReportSkeleton';
-import { SalesReportSummary } from './SalesReportSummary';
+import { ReportBody } from './ReportBody';
+import { ReportError } from './ReportError';
+import { ReportSkeleton } from './ReportSkeleton';
+import { ReportSummary } from './ReportSummary';
 import { SalesReportTables } from './SalesReportTables';
 
 type SalesReportContentProps = {
@@ -18,36 +20,27 @@ export function SalesReportContent({ selection }: SalesReportContentProps) {
     void refetch();
   }
 
-  if (isPending) return <SalesReportSkeleton />;
-  if (error) {
-    return (
-      <div role="alert" className="space-y-3 print:hidden">
-        <h2 className="text-lg font-semibold">Laporan tidak bisa dibuat</h2>
-        <p className="text-text-muted">
-          Aplikasi gagal membaca data penjualan dari penyimpanan di perangkat ini: {error.message}. Coba lagi; jika
-          masih gagal, muat ulang halaman.
-        </p>
-        <button type="button" onClick={handleRetry} className="min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary">
-          Coba lagi
-        </button>
-      </div>
-    );
-  }
+  if (isPending) return <ReportSkeleton />;
+  if (error) return <ReportError error={error} onRetry={handleRetry} />;
 
-  const now = new Date();
-  const range = getReportRange(selection, now);
-  const lastDay = range.end > range.start ? startOfDay(range.end, -1) : range.start;
-  const isEmpty = data.summary.transactionCount === 0 && data.summary.cancelledCount === 0;
+  const { summary } = data;
+  const isEmpty = summary.transactionCount === 0 && summary.cancelledCount === 0;
 
   return (
-    <div className="space-y-6">
-      <p>
-        Periode: {formatLocalDate(toLocalDateText(range.start))} – {formatLocalDate(toLocalDateText(lastDay))}
-      </p>
+    <ReportBody range={getReportRange(selection, new Date())}>
       {isEmpty && <p role="status">Tidak ada penjualan di periode ini.</p>}
-      <SalesReportSummary summary={data.summary} />
+      <ReportSummary
+        items={[
+          { label: 'Transaksi', value: formatNumber(summary.transactionCount) },
+          { label: 'Penjualan kotor', value: formatRupiah(summary.grossSales) },
+          { label: 'Diskon', value: formatRupiah(summary.discounts) },
+          { label: 'Retur', value: formatRupiah(summary.refunds) },
+          { label: 'Omzet bersih', value: formatRupiah(summary.netRevenue) },
+          { label: 'Transaksi dibatalkan', value: formatNumber(summary.cancelledCount) },
+        ]}
+        note="Transaksi dibatalkan dicatat terpisah dan tidak masuk omzet."
+      />
       <SalesReportTables byPaymentMethod={data.byPaymentMethod} byDay={data.byDay} />
-      <p className="hidden text-sm print:block">Dicetak pada {formatDateTime(now.toISOString())}</p>
-    </div>
+    </ReportBody>
   );
 }
