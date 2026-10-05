@@ -18,18 +18,9 @@ function toCsvTable<Row extends TableRow>(rows: Row[], columns: ReportColumn<Row
   ]);
 }
 
-export type CsvFile = { fileName: string; content: string };
-
-// Satu file per tabel: CSV tidak bisa memuat dua tabel dengan kolom berbeda secara bersih.
-export function buildSalesReportCsvFiles(
-  transactions: TransactionRow[],
-  daily: DailyRow[],
-  baseName: string,
-): CsvFile[] {
-  return [
-    { fileName: `${baseName}-transaksi.csv`, content: toCsvTable(transactions, TRANSACTION_COLUMNS) },
-    { fileName: `${baseName}-per-hari.csv`, content: toCsvTable(daily, DAILY_COLUMNS) },
-  ];
+// CSV hanya memuat rincian per transaksi; ringkasan per hari ada di sheet Excel dan cetakan.
+export function buildSalesReportCsv(transactions: TransactionRow[]): string {
+  return toCsvTable(transactions, TRANSACTION_COLUMNS);
 }
 
 export function buildSalesReportFileName(range: DateRange): string {

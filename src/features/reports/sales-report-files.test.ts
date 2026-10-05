@@ -6,7 +6,7 @@ import { saleSchema } from '../../lib/db/records';
 import type { Sale } from '../../lib/db/records';
 import { resetDatabaseWithSeed } from '../../test/reset-database';
 import { getSalesReportRows } from './api/get-sales-report';
-import { buildSalesReportCsvFiles, buildSalesReportFileName, buildSalesReportXlsx } from './sales-report-files';
+import { buildSalesReportCsv, buildSalesReportFileName, buildSalesReportXlsx } from './sales-report-files';
 import type { DailyRow, TransactionRow } from './report-columns';
 
 const TRANSACTION: TransactionRow = {
@@ -26,19 +26,14 @@ const TRANSACTION: TransactionRow = {
 const DAY: DailyRow = { date: '2026-10-03', transactionCount: 1, netRevenue: 88_000 };
 
 describe('ekspor CSV', () => {
-  it('menghasilkan dua file dengan header, pemisah ; dan angka murni tanpa Rp atau titik ribuan', () => {
-    const [transactions, daily] = buildSalesReportCsvFiles([TRANSACTION], [DAY], 'laporan-penjualan-2026-10-03_2026-10-03');
+  it('satu tabel rincian dengan header, pemisah ; dan angka murni tanpa Rp atau titik ribuan', () => {
+    const lines = buildSalesReportCsv([TRANSACTION]).replace('\uFEFF', '').trim().split('\r\n');
 
-    expect(transactions?.fileName).toBe('laporan-penjualan-2026-10-03_2026-10-03-transaksi.csv');
-    expect(daily?.fileName).toBe('laporan-penjualan-2026-10-03_2026-10-03-per-hari.csv');
-    const lines = (transactions?.content ?? '').replace('﻿', '').trim().split('\r\n');
-    expect(lines[0]).toBe('Nomor;Tanggal;Jam;Kasir;Metode bayar;Subtotal;Diskon barang;Diskon transaksi;Total;Retur;Bersih;Status');
-    expect(lines[1]).toBe('TRX-20261003-0001;2026-10-03;08:00;Pemilik;Tunai;162000;0;0;162000;74000;88000;Retur sebagian');
-    expect(transactions?.content).not.toMatch(/Rp|\d\.\d{3}/);
-    expect((daily?.content ?? '').replace('﻿', '').trim().split('\r\n')).toEqual([
-      'Tanggal;Transaksi;Omzet bersih',
-      '2026-10-03;1;88000',
+    expect(lines).toEqual([
+      'Nomor;Tanggal;Jam;Kasir;Metode bayar;Subtotal;Diskon barang;Diskon transaksi;Total;Retur;Bersih;Status',
+      'TRX-20261003-0001;2026-10-03;08:00;Pemilik;Tunai;162000;0;0;162000;74000;88000;Retur sebagian',
     ]);
+    expect(buildSalesReportCsv([TRANSACTION])).not.toMatch(/Rp|\d\.\d{3}/);
   });
 });
 
@@ -94,7 +89,7 @@ describe('kinerja ekspor', () => {
 
     const csvStart = performance.now();
     const rows = await getSalesReportRows(selection, now);
-    const csvFiles = buildSalesReportCsvFiles(rows, [], 'uji');
+    const csv = buildSalesReportCsv(rows);
     const csvMs = performance.now() - csvStart;
 
     const xlsxStart = performance.now();
@@ -102,7 +97,7 @@ describe('kinerja ekspor', () => {
     const xlsxMs = performance.now() - xlsxStart;
 
     expect(rows).toHaveLength(10_000);
-    expect(csvFiles[0]?.content.split('\r\n')).toHaveLength(10_002);
+    expect(csv.split('\r\n')).toHaveLength(10_002);
     expect(csvMs).toBeLessThan(15_000);
     expect(csvMs + xlsxMs).toBeLessThan(15_000);
     // Dibaca dari keluaran test (--reporter verbose): angka kinerja untuk laporan akhir.
