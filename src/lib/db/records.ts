@@ -121,6 +121,14 @@ export const pinAttemptsSchema = z.object({
   lockedUntil: z.iso.datetime().nullable(),
 });
 
+// Kosong = belum diisi: alamat dan telepon "" (bukan null) supaya form dan kop memakai satu bentuk teks.
+export const storeProfileSchema = z.object({
+  name: z.string().min(2).max(60),
+  address: z.string().max(200),
+  phone: z.string().max(20),
+  logo: z.object({ blob: z.instanceof(Blob), width: z.number().int().positive(), height: z.number().int().positive() }).nullable(),
+});
+
 export const settingSchema = z.discriminatedUnion('key', [
   z.object({ key: z.literal('allowOversell'), value: z.boolean() }),
   z.object({ key: z.literal('cashierMode'), value: z.boolean() }),
@@ -132,6 +140,7 @@ export const settingSchema = z.discriminatedUnion('key', [
   z.object({ key: z.literal('ownerPin'), value: hashedSecretSchema }),
   z.object({ key: z.literal('recoveryCode'), value: hashedSecretSchema }),
   z.object({ key: z.literal('pinAttempts'), value: pinAttemptsSchema }),
+  z.object({ key: z.literal('storeProfile'), value: storeProfileSchema }),
 ]);
 
 // Rekap per tanggal lokal (YYYY-MM-DD), hanya dari transaksi yang tidak dibatalkan.
@@ -180,6 +189,7 @@ export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
 export type Sale = z.infer<typeof saleSchema>;
 export type SaleItem = z.infer<typeof saleItemSchema>;
 export type Setting = z.infer<typeof settingSchema>;
+export type StoreProfile = z.infer<typeof storeProfileSchema>;
 export type HashedSecret = z.infer<typeof hashedSecretSchema>;
 export type SaleReturn = z.infer<typeof saleReturnSchema>;
 export type DailySales = z.infer<typeof dailySalesSchema>;

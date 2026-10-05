@@ -1,6 +1,8 @@
 import { z } from 'zod';
 
 import { db } from './database';
+import { storeProfileSchema } from './records';
+import type { StoreProfile } from './records';
 import { FALLBACK_DEFAULT_MIN_STOCK } from './stock-status';
 
 const flagSchema = z.boolean();
@@ -52,4 +54,9 @@ export async function getAlertPreferences(): Promise<AlertPreferences> {
     alertsInCashierMode: inCashierMode ? flagSchema.parse(inCashierMode.value) : false,
     dailySummaryDismissedOn: dismissedOn ? z.string().nullable().parse(dismissedOn.value) : null,
   };
+}
+
+export async function getStoreProfile(): Promise<StoreProfile | null> {
+  const row = await db.settings.get('storeProfile');
+  return row ? storeProfileSchema.parse(row.value) : null;
 }

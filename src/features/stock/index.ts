@@ -10,3 +10,6 @@ export type { StockStatus } from './stock-status';
 export type { Product, StockMovement } from './schema';
 export { StockListError } from './components/StockListError';
 export { StockStatusBadge } from './components/StockStatusBadge';
+export { compressPhoto, PhotoError } from './photo/compress-photo';
+export type { CompressedPhoto } from './photo/compress-photo';
+export { BlobImage } from './components/BlobImage';

@@ -20,9 +20,10 @@ export type RestockShareItem = { name: string; quantity: number; unit: string };
 const shareDate = new Intl.DateTimeFormat('id-ID', { dateStyle: 'long' });
 
 // Teks biasa untuk dikirim ke supplier. Sengaja tanpa harga beli.
-export function buildRestockShareText(items: RestockShareItem[], date: Date): string {
+export function buildRestockShareText(items: RestockShareItem[], date: Date, storeName?: string): string {
+  const title = storeName ? `Daftar belanja ${storeName}` : 'Daftar belanja barang';
   return [
-    `Daftar belanja barang - ${shareDate.format(date)}`,
+    `${title} - ${shareDate.format(date)}`,
     ...items.map((item) => `- ${item.name}: ${item.quantity} ${item.unit}`),
   ].join('\n');
 }

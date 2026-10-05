@@ -46,4 +46,10 @@ describe('buildRestockShareText', () => {
     ]);
     expect(text).not.toMatch(/Rp|34\.?000|27\.?000/);
   });
+
+  it('memakai nama toko pada judul bila ada', () => {
+    const text = buildRestockShareText([{ name: 'Telur Ayam 1 kg', quantity: 6, unit: 'pack' }], new Date(2026, 9, 4), 'Toko Sari Makmur');
+
+    expect(text.split('\n')[0]).toBe('Daftar belanja Toko Sari Makmur - 4 Oktober 2026');
+  });
 });

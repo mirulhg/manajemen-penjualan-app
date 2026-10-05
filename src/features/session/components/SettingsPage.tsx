@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 
+import { StoreProfileSection } from '../../store-profile';
 import { AlertSettingsSection } from './AlertSettingsSection';
 import { EnterCashierModeSection } from './EnterCashierModeSection';
 import { OversellSetting } from './OversellSetting';
@@ -11,6 +12,7 @@ export function SettingsPage() {
       <title>Pengaturan · Manajemen Stok</title>
       <h1 className="text-xl font-semibold">Pengaturan</h1>
       <OversellSetting />
+      <StoreProfileSection />
       <AlertSettingsSection />
       <PinSection />
       <EnterCashierModeSection />

@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { buildRestockShareText } from '../../../lib/db/restock';
 import type { RestockShareItem } from '../../../lib/db/restock';
+import { useStoreProfile } from '../../store-profile';
 
 type ShareRestockButtonProps = {
   items: RestockShareItem[];
@@ -11,8 +12,9 @@ type ShareStatus = 'idle' | 'shared' | 'copied' | 'failed';
 
 export function ShareRestockButton({ items }: ShareRestockButtonProps) {
   const [status, setStatus] = useState<ShareStatus>('idle');
+  const { data: profile } = useStoreProfile();
   // Diturunkan saat render: dipakai tombol bagikan dan tautan WhatsApp, tanpa menyimpan salinan di state.
-  const shareText = buildRestockShareText(items, new Date());
+  const shareText = buildRestockShareText(items, new Date(), profile?.name);
 
   async function copyToClipboard() {
     try {

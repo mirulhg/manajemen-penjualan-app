@@ -51,7 +51,7 @@ async function encode(width: number, height: number, draw: Draw, type: string) {
 }
 
 // Foto HP biasanya 3–8 MB; setelah dikecilkan menjadi sekitar 100–200 KB. WebP lebih dulu, JPEG bila browser tidak mendukung.
-export async function compressPhoto(file: File): Promise<CompressedPhoto> {
+export async function compressPhoto(file: File, maxSide = MAX_PHOTO_SIDE): Promise<CompressedPhoto> {
   if (!file.type.startsWith('image/')) throw new PhotoError('NOT_AN_IMAGE');
   if (file.size > MAX_PHOTO_FILE_BYTES) throw new PhotoError('TOO_LARGE');
 
@@ -59,7 +59,7 @@ export async function compressPhoto(file: File): Promise<CompressedPhoto> {
     throw new PhotoError('UNREADABLE');
   });
   try {
-    const { width, height } = fitWithin(bitmap.width, bitmap.height, MAX_PHOTO_SIDE);
+    const { width, height } = fitWithin(bitmap.width, bitmap.height, maxSide);
     const draw: Draw = (context) => context.drawImage(bitmap, 0, 0, width, height);
     const webp = await encode(width, height, draw, 'image/webp');
     const blob = webp?.type === 'image/webp' ? webp : await encode(width, height, draw, 'image/jpeg');
