@@ -1,23 +1,78 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
+
+/* Nilai visual hidup di sini (CLAUDE.md §7). Nama token mengikuti shadcn; oranye hanya sebagai isian dengan teks Carbon. */
+:root {
+  --background: #faf3e1;
+  --foreground: #222222;
+  --card: #fffaee;
+  --card-foreground: #222222;
+  --primary: #222222;
+  --primary-foreground: #faf3e1;
+  --secondary: #f5e7c6;
+  --secondary-foreground: #222222;
+  --muted: #f5e7c6;
+  --muted-foreground: #5c5649;
+  --accent: #ff6d1f;
+  --accent-foreground: #222222;
+  --destructive: #b42318;
+  --destructive-bg: #fbe3dc;
+  --success: #1f6b3a;
+  --success-bg: #e2efda;
+  --border: #e6d3a8;
+  --input: #8f7f62;
+  --ring: #222222;
+  --chart-1: #ff6d1f;
+}
 
 @theme {
   --color-*: initial;
 
-  --color-background: #fafaf9;
-  --color-surface: #ffffff;
-  --color-text: #1c1917;
-  --color-text-muted: #57534e;
-  --color-border: #d6d3d1;
-  --color-primary: #1d4ed8;
-  --color-on-primary: #ffffff;
-  --color-focus: #1d4ed8;
+  --color-status-aman-text: #1f5130;
+  --color-status-aman-bg: #dfecd3;
+  --color-status-menipis-text: #6b4500;
+  --color-status-menipis-bg: #f5e7c6;
+  --color-status-habis-text: #9b2c1c;
+  --color-status-habis-bg: #f9dccf;
 
-  --color-status-aman-text: #14532d;
-  --color-status-aman-bg: #dcfce7;
-  --color-status-menipis-text: #713f12;
-  --color-status-menipis-bg: #fef3c7;
-  --color-status-habis-text: #7f1d1d;
-  --color-status-habis-bg: #fee2e2;
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 250ms;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-bg: var(--destructive-bg);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+
+  /* Sementara: nama token lama, dihapus setelah migrasi nama di seluruh kode. */
+  --color-surface: var(--card);
+  --color-text: var(--foreground);
+  --color-text-muted: var(--muted-foreground);
+  --color-on-primary: var(--primary-foreground);
+  --color-focus: var(--ring);
 }
 
 /* Tailwind v4 tidak punya namespace tema untuk z-index, jadi skala bernama dibuat lewat utility sendiri. */
@@ -56,13 +111,31 @@
   margin: 15mm;
 }
 
+/* Tombol ditekan mengecil sedikit; hanya transform dan warna, dan tidak bergerak bila pengguna meminta gerak dikurangi. */
+@utility press {
+  transition-property: transform, color, background-color, border-color, opacity;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:active:not(:disabled, [aria-disabled='true']) {
+      transform: scale(0.97);
+    }
+  }
+}
+
 @layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
   body {
-    @apply bg-background text-text;
+    @apply bg-background font-sans text-foreground;
+    font-variant-numeric: tabular-nums;
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-focus);
+    outline: 2px solid var(--color-ring);
     outline-offset: 2px;
   }
 }

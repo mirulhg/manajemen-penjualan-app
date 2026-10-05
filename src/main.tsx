@@ -7,6 +7,7 @@ import { router } from './app/router';
 import { StartupError } from './app/StartupError';
 import { SAMPLE_PRODUCT_SKUS, seedSampleProducts } from './features/stock';
 import { getEnv } from './lib/env';
+import '@fontsource-variable/archivo';
 import './styles/theme.css';
 
 const rootElement = document.getElementById('root');
