@@ -31,7 +31,12 @@ async function seedSales() {
 async function start() {
   try {
     const env = getEnv();
-    if (env.VITE_SEED_SAMPLE_DATA) {
+    if (import.meta.env.DEV && env.VITE_SEED_LOAD_TEST) {
+      // Uji beban memakai database terpisah dan menggantikan seed contoh biasa.
+      const { runLoadTest } = await import('./app/run-load-test');
+      const ignored = env.VITE_SEED_SAMPLE_SALES ? 'VITE_SEED_SAMPLE_SALES diabaikan selama uji beban.' : null;
+      await runLoadTest(root, ignored);
+    } else if (env.VITE_SEED_SAMPLE_DATA) {
       const isSeeded = await seedSampleProducts(env.VITE_SEED_EXTRA_PRODUCTS);
       if (isSeeded && env.VITE_SEED_SAMPLE_SALES) {
         await seedSales();

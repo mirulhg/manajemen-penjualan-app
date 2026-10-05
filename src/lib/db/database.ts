@@ -28,6 +28,11 @@ type LegacySale = Omit<Sale, 'status' | 'refundedTotal'> & {
   refundedTotal?: number;
 };
 
+// Uji beban (hanya dev) memakai database terpisah supaya data uji biasa tidak tersentuh. Di build produksi import.meta.env.DEV
+// bernilai false, jadi nama ini selalu "manajemen-stok".
+const DATABASE_NAME =
+  import.meta.env.DEV && import.meta.env.VITE_SEED_LOAD_TEST === 'true' ? 'manajemen-stok-uji-beban' : 'manajemen-stok';
+
 class StockDatabase extends Dexie {
   products!: EntityTable<Product, 'id'>;
   stockMovements!: EntityTable<StockMovement, 'id'>;
@@ -44,7 +49,7 @@ class StockDatabase extends Dexie {
   stockAlerts!: EntityTable<StockAlert, 'id'>;
 
   constructor() {
-    super('manajemen-stok');
+    super(DATABASE_NAME);
     this.version(1).stores({
       products: 'id, &sku, category, updatedAt',
       stockMovements: 'id, productId, [productId+createdAt]',
