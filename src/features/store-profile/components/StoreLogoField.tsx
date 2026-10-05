@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 
-import { LABEL_CLASS } from '../../../components/ui/field-styles';
 import { BlobImage, compressPhoto, PhotoError } from '../../stock';
 import { LOGO_MAX_SIDE } from '../schema';
 import type { LogoDraft, StoreLogo } from '../schema';
+import { Label } from '@/components/ui/label';
 
 type StoreLogoFieldProps = {
   storedLogo: StoreLogo | null;
@@ -46,9 +46,9 @@ export function StoreLogoField({ storedLogo, draft, onChange }: StoreLogoFieldPr
 
   return (
     <div>
-      <label htmlFor="store-logo" className={LABEL_CLASS}>
+      <Label htmlFor="store-logo">
         Logo toko (opsional)
-      </label>
+      </Label>
       {shown && (
         <BlobImage
           blob={shown.blob}

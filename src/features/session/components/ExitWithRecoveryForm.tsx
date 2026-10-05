@@ -4,13 +4,13 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { FormField } from '../../../components/ui/FormField';
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import { SessionError } from '../api/session-error';
 import { useExitCashierMode, useResetPin } from '../api/use-session-mutations';
 import { describeSessionError } from '../describe-session-error';
 import { newPinSchema } from '../schema';
 import { PinField } from './PinField';
 import { Alert } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
 
 type ExitWithRecoveryFormProps = {
   onRecovered: (newRecoveryCode: string) => void;
@@ -51,7 +51,7 @@ export function ExitWithRecoveryForm({ onRecovered }: ExitWithRecoveryFormProps)
     <form onSubmit={handleFormSubmit} noValidate className="space-y-3">
       <FormField id="recovery-code" label="Kode pemulihan" error={formState.errors.code?.message}>
         {(control) => (
-          <input type="text" autoComplete="off" className={FIELD_CLASS} {...control} {...register('code')} />
+          <Input type="text" autoComplete="off" className="mt-1" {...control} {...register('code')} />
         )}
       </FormField>
       <PinField id="new-pin" label="PIN baru" hint="4–6 angka." error={formState.errors.newPin?.message} registration={register('newPin')} />

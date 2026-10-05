@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { FormField } from '../../../components/ui/FormField';
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import { CategoryError } from '../api/category-error';
 import { useCreateCategory } from '../api/use-category-mutations';
 import { categoryNameSchema } from '../schema';
 import { Alert } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
 
 const createCategoryFormSchema = z.object({ name: categoryNameSchema });
 type CreateCategoryFormInput = z.input<typeof createCategoryFormSchema>;
@@ -46,7 +46,7 @@ export function CategoryCreateForm() {
     <form onSubmit={handleFormSubmit} noValidate className="space-y-3">
       <FormField id="category-name" label="Kategori baru" error={formState.errors.name?.message}>
         {(control) => (
-          <input type="text" autoComplete="off" className={FIELD_CLASS} {...control} {...register('name')} />
+          <Input type="text" autoComplete="off" className="mt-1" {...control} {...register('name')} />
         )}
       </FormField>
       {hasSaved && (

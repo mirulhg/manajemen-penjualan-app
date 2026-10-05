@@ -2,6 +2,7 @@ import { PERIOD_LABELS, toLocalDateText } from '../../utils/date-period';
 import type { Period, PeriodSelection } from '../../utils/date-period';
 import { FormField } from './FormField';
 import { FIELD_CLASS } from './field-styles';
+import { Input } from '@/components/ui/input';
 
 type PeriodFilterProps = {
   selection: PeriodSelection;
@@ -44,23 +45,23 @@ export function PeriodFilter({ selection, periods, onChange }: PeriodFilterProps
         <>
           <FormField id="period-filter-from" label="Dari tanggal" error={undefined}>
             {(control) => (
-              <input
+              <Input
                 {...control}
                 type="date"
                 value={selection.from ?? ''}
                 onChange={(event) => onChange({ from: event.target.value || null })}
-                className={FIELD_CLASS}
+                className="mt-1"
               />
             )}
           </FormField>
           <FormField id="period-filter-to" label="Sampai tanggal" error={undefined}>
             {(control) => (
-              <input
+              <Input
                 {...control}
                 type="date"
                 value={selection.to ?? ''}
                 onChange={(event) => onChange({ to: event.target.value || null })}
-                className={FIELD_CLASS}
+                className="mt-1"
               />
             )}
           </FormField>

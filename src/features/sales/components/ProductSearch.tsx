@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import type { RefObject } from 'react';
 
-import { FIELD_CLASS, LABEL_CLASS } from '../../../components/ui/field-styles';
 import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
 import { filterProducts, sortProducts, useStockThreshold } from '../../stock';
 import type { Product } from '../../stock';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 type ProductSearchProps = {
   products: Product[];
@@ -36,10 +37,10 @@ export function ProductSearch({ products, inputRef, onPick }: ProductSearchProps
 
   return (
     <div>
-      <label htmlFor="cashier-search" className={LABEL_CLASS}>
+      <Label htmlFor="cashier-search">
         Cari barang
-      </label>
-      <input
+      </Label>
+      <Input
         id="cashier-search"
         ref={inputRef}
         type="search"
@@ -47,7 +48,7 @@ export function ProductSearch({ products, inputRef, onPick }: ProductSearchProps
         placeholder="Nama atau SKU"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        className={FIELD_CLASS}
+        className="mt-1"
       />
       {hasQuery && results.length === 0 && (
         <p className="mt-2 text-muted-foreground">Tidak ada barang yang cocok.</p>

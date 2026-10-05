@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { LABEL_CLASS } from './field-styles';
+import { Label } from '@/components/ui/label';
 
 type FieldControlProps = {
   id: string;
@@ -23,9 +23,9 @@ export function FormField({ id, label, hint, error, children }: FormFieldProps) 
 
   return (
     <div>
-      <label htmlFor={id} className={LABEL_CLASS}>
+      <Label htmlFor={id}>
         {label}
-      </label>
+      </Label>
       {children({
         id,
         'aria-describedby': describedBy || undefined,

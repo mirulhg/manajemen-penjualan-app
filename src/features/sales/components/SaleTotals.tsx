@@ -1,9 +1,10 @@
 import type { Dispatch } from 'react';
 
-import { FIELD_CLASS, LABEL_CLASS } from '../../../components/ui/field-styles';
 import { formatRupiah } from '../../../utils/format-rupiah';
 import type { CartAction } from '../cart-reducer';
 import type { CartView } from '../cart-view';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 type SaleTotalsProps = {
   view: CartView;
@@ -26,10 +27,10 @@ export function SaleTotals({ view, transactionDiscountText, dispatch }: SaleTota
         <summary className="inline-flex min-h-11 cursor-pointer items-center font-medium text-primary">
           Diskon transaksi
         </summary>
-        <label htmlFor="transaction-discount" className={LABEL_CLASS}>
+        <Label htmlFor="transaction-discount">
           Diskon transaksi (Rp)
-        </label>
-        <input
+        </Label>
+        <Input
           id="transaction-discount"
           type="text"
           inputMode="numeric"
@@ -38,7 +39,7 @@ export function SaleTotals({ view, transactionDiscountText, dispatch }: SaleTota
           aria-invalid={discountError ? true : undefined}
           aria-describedby={discountError ? 'transaction-discount-error' : undefined}
           onChange={(event) => dispatch({ type: 'setTransactionDiscount', text: event.target.value })}
-          className={FIELD_CLASS}
+          className="mt-1"
         />
         {discountError && (
           <p id="transaction-discount-error" className="mt-1 text-sm text-destructive">

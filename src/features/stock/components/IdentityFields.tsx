@@ -1,8 +1,8 @@
 import type { FieldErrors, UseFormRegister } from 'react-hook-form';
 
 import { FormField } from '../../../components/ui/FormField';
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import type { ProductFieldsInput } from '../schema';
+import { Input } from '@/components/ui/input';
 
 type IdentityFieldsProps = {
   register: UseFormRegister<ProductFieldsInput>;
@@ -16,16 +16,16 @@ export function IdentityFields({ register, errors, categories, units }: Identity
     <>
       <FormField id="product-name" label="Nama barang" error={errors.name?.message}>
         {(control) => (
-          <input type="text" autoComplete="off" className={FIELD_CLASS} {...control} {...register('name')} />
+          <Input type="text" autoComplete="off" className="mt-1" {...control} {...register('name')} />
         )}
       </FormField>
       <FormField id="product-sku" label="SKU" error={errors.sku?.message}>
         {(control) => (
-          <input
+          <Input
             type="text"
             autoComplete="off"
             autoCapitalize="characters"
-            className={FIELD_CLASS}
+            className="mt-1"
             {...control}
             {...register('sku')}
           />
@@ -33,11 +33,11 @@ export function IdentityFields({ register, errors, categories, units }: Identity
       </FormField>
       <FormField id="product-category" label="Kategori" error={errors.category?.message}>
         {(control) => (
-          <input
+          <Input
             type="text"
             list="category-options"
             autoComplete="off"
-            className={FIELD_CLASS}
+            className="mt-1"
             {...control}
             {...register('category')}
           />
@@ -45,11 +45,11 @@ export function IdentityFields({ register, errors, categories, units }: Identity
       </FormField>
       <FormField id="product-unit" label="Satuan" error={errors.unit?.message}>
         {(control) => (
-          <input
+          <Input
             type="text"
             list="unit-options"
             autoComplete="off"
-            className={FIELD_CLASS}
+            className="mt-1"
             {...control}
             {...register('unit')}
           />

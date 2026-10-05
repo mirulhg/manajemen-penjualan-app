@@ -1,7 +1,8 @@
 import type { UseFormRegister } from 'react-hook-form';
 
-import { FIELD_CLASS, LABEL_CLASS } from '../../../components/ui/field-styles';
 import type { StockAdjustmentInput } from '../schema';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 type AdjustQuantityFieldProps = {
   register: UseFormRegister<StockAdjustmentInput>;
@@ -13,18 +14,18 @@ type AdjustQuantityFieldProps = {
 export function AdjustQuantityField({ register, label, unit, error }: AdjustQuantityFieldProps) {
   return (
     <div>
-      <label htmlFor="adjust-quantity" className={LABEL_CLASS}>
+      <Label htmlFor="adjust-quantity">
         {label}
-      </label>
+      </Label>
       <div className="flex items-center gap-2">
-        <input
+        <Input
           id="adjust-quantity"
           type="text"
           inputMode="numeric"
           autoComplete="off"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? 'adjust-quantity-error' : undefined}
-          className={FIELD_CLASS}
+          className="mt-1"
           {...register('quantity')}
         />
         <span className="mt-1 shrink-0 text-muted-foreground">{unit}</span>

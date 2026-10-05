@@ -1,11 +1,11 @@
 import type { Dispatch } from 'react';
 
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
 import type { CartAction } from '../cart-reducer';
 import type { CartViewLine } from '../cart-view';
 import { Alert } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
 
 type CartLineProps = {
   line: CartViewLine;
@@ -46,13 +46,13 @@ export function CartLine({ line, dispatch }: CartLineProps) {
         >
           −
         </button>
-        <input
+        <Input
           type="text"
           inputMode="numeric"
           aria-label={`Jumlah ${product.name}`}
           value={String(line.quantity)}
           onChange={(event) => handleQuantityChange(event.target.value)}
-          className={`${FIELD_CLASS} mt-0 w-20 text-center`}
+          className="w-20 text-center"
         />
         <button
           type="button"
@@ -92,7 +92,7 @@ export function CartLine({ line, dispatch }: CartLineProps) {
         <label className="text-sm font-medium" htmlFor={`discount-${product.id}`}>
           Diskon {product.name} (Rp)
         </label>
-        <input
+        <Input
           id={`discount-${product.id}`}
           type="text"
           inputMode="numeric"
@@ -103,7 +103,7 @@ export function CartLine({ line, dispatch }: CartLineProps) {
           onChange={(event) =>
             dispatch({ type: 'setLineDiscount', productId: product.id, text: event.target.value })
           }
-          className={FIELD_CLASS}
+          className="mt-1"
         />
         {discountError && (
           <p id={`discount-error-${product.id}`} className="mt-1 text-sm text-destructive">

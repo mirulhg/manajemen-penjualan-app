@@ -11,6 +11,7 @@ import { storeProfileFormSchema } from '../schema';
 import type { LogoDraft, StoreProfileFormInput, StoreProfileFormValues } from '../schema';
 import { StoreLogoField } from './StoreLogoField';
 import { Alert } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
 
 type StoreProfileFormProps = {
   profile: StoreProfile | null;
@@ -48,13 +49,13 @@ export function StoreProfileForm({ profile }: StoreProfileFormProps) {
   return (
     <form onSubmit={handleFormSubmit} noValidate className="space-y-3">
       <FormField id="store-name" label="Nama toko" error={formState.errors.name?.message}>
-        {(control) => <input {...control} {...register('name')} type="text" autoComplete="organization" className={FIELD_CLASS} />}
+        {(control) => <Input {...control} {...register('name')} type="text" autoComplete="organization" className="mt-1" />}
       </FormField>
       <FormField id="store-address" label="Alamat (opsional)" error={formState.errors.address?.message}>
         {(control) => <textarea {...control} {...register('address')} rows={2} className={FIELD_CLASS} />}
       </FormField>
       <FormField id="store-phone" label="Telepon (opsional)" error={formState.errors.phone?.message}>
-        {(control) => <input {...control} {...register('phone')} type="tel" inputMode="tel" className={FIELD_CLASS} />}
+        {(control) => <Input {...control} {...register('phone')} type="tel" inputMode="tel" className="mt-1" />}
       </FormField>
       <StoreLogoField storedLogo={profile?.logo ?? null} draft={logoDraft} onChange={setLogoDraft} />
       {hasSaved && (

@@ -1,7 +1,8 @@
 import type { UseFormRegister } from 'react-hook-form';
 
-import { FIELD_CLASS, LABEL_CLASS } from '../../../components/ui/field-styles';
+import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import type { StockAdjustmentInput } from '../schema';
+import { Label } from '@/components/ui/label';
 
 type AdjustReasonFieldProps = {
   register: UseFormRegister<StockAdjustmentInput>;
@@ -13,9 +14,9 @@ export function AdjustReasonField({ register, error }: AdjustReasonFieldProps) {
 
   return (
     <div>
-      <label htmlFor="adjust-reason" className={LABEL_CLASS}>
+      <Label htmlFor="adjust-reason">
         Alasan
-      </label>
+      </Label>
       <textarea
         id="adjust-reason"
         rows={3}

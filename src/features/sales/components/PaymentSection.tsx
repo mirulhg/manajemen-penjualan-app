@@ -1,12 +1,13 @@
 import type { Dispatch } from 'react';
 
-import { FIELD_CLASS, LABEL_CLASS } from '../../../components/ui/field-styles';
 import type { PaymentMethod } from '../../../lib/db/records';
 import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
 import { getCashSuggestions } from '../cash-suggestions';
 import type { CartAction } from '../cart-reducer';
 import type { CartView } from '../cart-view';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 type PaymentSectionProps = {
   paymentMethod: PaymentMethod;
@@ -47,17 +48,17 @@ export function PaymentSection({ paymentMethod, cashText, view, dispatch }: Paym
       </div>
       {paymentMethod === 'tunai' ? (
         <div>
-          <label htmlFor="cash-received" className={LABEL_CLASS}>
+          <Label htmlFor="cash-received">
             Uang diterima
-          </label>
-          <input
+          </Label>
+          <Input
             id="cash-received"
             type="text"
             inputMode="numeric"
             autoComplete="off"
             value={cashText}
             onChange={(event) => dispatch({ type: 'setCash', text: event.target.value })}
-            className={FIELD_CLASS}
+            className="mt-1"
           />
           <div className="mt-2 flex flex-wrap gap-2">
             {suggestions.map((amount) => (

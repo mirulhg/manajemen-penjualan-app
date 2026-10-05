@@ -1,11 +1,11 @@
 import { FormField } from '../../../components/ui/FormField';
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import { formatLocalDate } from '../../../utils/format-date-time';
 import { useStockReportExport } from '../api/use-stock-report';
 import { useReportDate } from '../hooks/use-report-date';
 import { ReportActions } from './ReportActions';
 import { ReportShell } from './ReportShell';
 import { StockReportContent } from './StockReportContent';
+import { Input } from '@/components/ui/input';
 
 export function StockReportPage() {
   const { date, setDate } = useReportDate();
@@ -21,12 +21,12 @@ export function StockReportPage() {
       filters={
         <FormField id="report-date" label="Tanggal posisi stok" error={undefined}>
           {(control) => (
-            <input
+            <Input
               {...control}
               type="date"
               value={date}
               onChange={(event) => handleDateChange(event.target.value)}
-              className={FIELD_CLASS}
+              className="mt-1"
             />
           )}
         </FormField>

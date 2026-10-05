@@ -1,7 +1,7 @@
 import type { UseFormRegisterReturn } from 'react-hook-form';
 
 import { FormField } from '../../../components/ui/FormField';
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
+import { Input } from '@/components/ui/input';
 
 type PinFieldProps = {
   id: string;
@@ -15,11 +15,11 @@ export function PinField({ id, label, hint, error, registration }: PinFieldProps
   return (
     <FormField id={id} label={label} hint={hint} error={error}>
       {(control) => (
-        <input
+        <Input
           type="password"
           inputMode="numeric"
           autoComplete="off"
-          className={FIELD_CLASS}
+          className="mt-1"
           {...control}
           {...registration}
         />

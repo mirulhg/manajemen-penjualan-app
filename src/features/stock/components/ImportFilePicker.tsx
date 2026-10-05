@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 
-import { FIELD_CLASS, LABEL_CLASS } from '../../../components/ui/field-styles';
 import { downloadTextFile } from '../../../utils/download-text-file';
 import { buildTemplateCsv } from '../import/import-reports';
 import { readImportFile } from '../import/read-import-file';
 import { toImportRows } from '../import/to-import-rows';
 import type { ImportRow } from '../import/to-import-rows';
 import { Alert } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 type ImportFilePickerProps = {
   onRowsRead: (rows: ImportRow[]) => void;
@@ -60,16 +61,16 @@ export function ImportFilePicker({ onRowsRead }: ImportFilePickerProps) {
         Unduh template CSV
       </button>
       <div>
-        <label htmlFor="import-file" className={LABEL_CLASS}>
+        <Label htmlFor="import-file">
           File barang
-        </label>
-        <input
+        </Label>
+        <Input
           id="import-file"
           type="file"
           accept=".csv,.xlsx"
           disabled={isReading}
           onChange={handleChange}
-          className={FIELD_CLASS}
+          className="mt-1"
         />
       </div>
       {isReading && <p role="status">Membaca file…</p>}

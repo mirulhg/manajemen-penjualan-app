@@ -1,7 +1,9 @@
-import { FIELD_CLASS, LABEL_CLASS } from '../../../components/ui/field-styles';
+import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import type { StockFilters as StockFiltersValue } from '../parse-filter-params';
 import type { StockSort } from '../sort-products';
 import type { StockStatus } from '../stock-status';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 type StockFiltersProps = {
   filters: StockFiltersValue;
@@ -42,22 +44,22 @@ export function StockFilters({
   return (
     <div className="grid gap-4 sm:grid-cols-3">
       <div className="sm:col-span-3">
-        <label htmlFor="stock-search" className={LABEL_CLASS}>
+        <Label htmlFor="stock-search">
           Cari barang
-        </label>
-        <input
+        </Label>
+        <Input
           id="stock-search"
           type="search"
           placeholder="Nama atau SKU"
           value={filters.query ?? ''}
           onChange={(event) => onChange({ query: event.target.value || null })}
-          className={FIELD_CLASS}
+          className="mt-1"
         />
       </div>
       <div>
-        <label htmlFor="stock-category" className={LABEL_CLASS}>
+        <Label htmlFor="stock-category">
           Kategori
-        </label>
+        </Label>
         <select
           id="stock-category"
           value={filters.category ?? ''}
@@ -73,9 +75,9 @@ export function StockFilters({
         </select>
       </div>
       <div>
-        <label htmlFor="stock-status" className={LABEL_CLASS}>
+        <Label htmlFor="stock-status">
           Status
-        </label>
+        </Label>
         <select
           id="stock-status"
           value={filters.status ?? ''}
@@ -91,9 +93,9 @@ export function StockFilters({
         </select>
       </div>
       <div>
-        <label htmlFor="stock-sort" className={LABEL_CLASS}>
+        <Label htmlFor="stock-sort">
           Urutkan
-        </label>
+        </Label>
         <select
           id="stock-sort"
           value={filters.sort}

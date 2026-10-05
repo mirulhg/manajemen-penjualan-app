@@ -5,6 +5,7 @@ import { PERIOD_LABELS, toLocalDateText } from '../../../utils/date-period';
 import type { Period } from '../../../utils/date-period';
 import { SALE_PERIODS } from '../sale-filters';
 import type { SaleFilters } from '../sale-filters';
+import { Input } from '@/components/ui/input';
 
 type SaleFilterBarProps = {
   filters: SaleFilters;
@@ -94,23 +95,23 @@ export function SaleFilterBar({ filters, actors, onChange }: SaleFilterBarProps)
         <>
           <FormField id="sale-from" label="Dari tanggal" error={undefined}>
             {(control) => (
-              <input
+              <Input
                 {...control}
                 type="date"
                 value={filters.from ?? ''}
                 onChange={(event) => onChange({ from: event.target.value || null })}
-                className={FIELD_CLASS}
+                className="mt-1"
               />
             )}
           </FormField>
           <FormField id="sale-to" label="Sampai tanggal" error={undefined}>
             {(control) => (
-              <input
+              <Input
                 {...control}
                 type="date"
                 value={filters.to ?? ''}
                 onChange={(event) => onChange({ to: event.target.value || null })}
-                className={FIELD_CLASS}
+                className="mt-1"
               />
             )}
           </FormField>

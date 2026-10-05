@@ -12,6 +12,7 @@ import type { SaleItemProgress } from '../sale-returns';
 import { buildReturnFormSchema } from '../schema';
 import type { ReturnFormInput, ReturnFormValues } from '../schema';
 import { Alert } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
 
 type ReturnFormProps = {
   saleId: string;
@@ -71,11 +72,11 @@ export function ReturnForm({ saleId, progress }: ReturnFormProps) {
             error={formState.errors.items?.[index]?.quantity?.message}
           >
             {(controlProps) => (
-              <input
+              <Input
                 type="text"
                 inputMode="numeric"
                 autoComplete="off"
-                className={FIELD_CLASS}
+                className="mt-1"
                 {...controlProps}
                 {...register(`items.${index}.quantity`)}
               />

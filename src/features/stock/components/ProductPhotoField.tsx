@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 
-import { LABEL_CLASS } from '../../../components/ui/field-styles';
 import { compressPhoto, PhotoError } from '../photo/compress-photo';
 import type { PhotoDraft } from '../photo/photo-draft';
 import { UNCHANGED_PHOTO } from '../photo/photo-draft';
 import { useProductPhoto } from '../photo/use-product-photo';
 import { BlobImage } from './BlobImage';
+import { Label } from '@/components/ui/label';
 
 type ProductPhotoFieldProps = {
   // Kosong untuk barang yang belum dibuat (form tambah barang).
@@ -52,9 +52,9 @@ export function ProductPhotoField({ productId, productName, draft, onChange }: P
 
   return (
     <div>
-      <label htmlFor="product-photo" className={LABEL_CLASS}>
+      <Label htmlFor="product-photo">
         Foto barang (opsional)
-      </label>
+      </Label>
       {shown && (
         <BlobImage
           blob={shown.blob}

@@ -1,8 +1,8 @@
 import type { FieldErrors, UseFormRegister } from 'react-hook-form';
 
 import { FormField } from '../../../components/ui/FormField';
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import type { ProductFieldsInput } from '../schema';
+import { Input } from '@/components/ui/input';
 
 type PriceAndLimitFieldsProps = {
   register: UseFormRegister<ProductFieldsInput>;
@@ -19,17 +19,17 @@ export function PriceAndLimitFields({ register, errors }: PriceAndLimitFieldsPro
         error={errors.minStock?.message}
       >
         {(control) => (
-          <input type="text" inputMode="numeric" autoComplete="off" className={FIELD_CLASS} {...control} {...register('minStock')} />
+          <Input type="text" inputMode="numeric" autoComplete="off" className="mt-1" {...control} {...register('minStock')} />
         )}
       </FormField>
       <FormField id="product-purchase-price" label="Harga beli (Rp)" error={errors.purchasePrice?.message}>
         {(control) => (
-          <input type="text" inputMode="numeric" autoComplete="off" className={FIELD_CLASS} {...control} {...register('purchasePrice')} />
+          <Input type="text" inputMode="numeric" autoComplete="off" className="mt-1" {...control} {...register('purchasePrice')} />
         )}
       </FormField>
       <FormField id="product-selling-price" label="Harga jual (Rp)" error={errors.sellingPrice?.message}>
         {(control) => (
-          <input type="text" inputMode="numeric" autoComplete="off" className={FIELD_CLASS} {...control} {...register('sellingPrice')} />
+          <Input type="text" inputMode="numeric" autoComplete="off" className="mt-1" {...control} {...register('sellingPrice')} />
         )}
       </FormField>
     </>

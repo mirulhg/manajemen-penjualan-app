@@ -4,12 +4,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { FormField } from '../../../components/ui/FormField';
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import { CategoryError } from '../api/category-error';
 import type { CategoryWithCounts } from '../api/get-categories';
 import { useRenameCategory } from '../api/use-category-mutations';
 import { categoryNameSchema } from '../schema';
 import { Alert } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
 
 type CategoryRenameFormProps = {
   category: CategoryWithCounts;
@@ -53,10 +53,10 @@ export function CategoryRenameForm({ category, onDone, onCancel }: CategoryRenam
     <form onSubmit={handleFormSubmit} noValidate className="mt-3 space-y-3">
       <FormField id={`category-rename-${category.id}`} label="Nama kategori" error={formState.errors.name?.message}>
         {(control) => (
-          <input
+          <Input
             type="text"
             autoComplete="off"
-            className={FIELD_CLASS}
+            className="mt-1"
             {...control}
             {...register('name')}
           />

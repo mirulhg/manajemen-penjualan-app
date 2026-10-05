@@ -3,12 +3,12 @@ import type { FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { FormField } from '../../../components/ui/FormField';
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import { useSetDefaultMinStock } from '../api/use-session-mutations';
 import { defaultMinStockSchema } from '../schema';
 import type { DefaultMinStockInput } from '../schema';
 import { useSession } from '../session-context';
 import { Alert } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
 
 export function DefaultMinStockForm() {
   const { defaultMinStock } = useSession();
@@ -39,7 +39,7 @@ export function DefaultMinStockForm() {
         error={formState.errors.defaultMinStock?.message}
       >
         {(control) => (
-          <input {...control} {...register('defaultMinStock')} type="text" inputMode="numeric" className={FIELD_CLASS} />
+          <Input {...control} {...register('defaultMinStock')} type="text" inputMode="numeric" className="mt-1" />
         )}
       </FormField>
       {hasSaved && (
