@@ -8,7 +8,9 @@ import { resetDatabaseWithSeed } from '../../../test/reset-database';
 import { saveStoreProfile } from '../../store-profile/api/save-store-profile';
 import { OwnerOnly } from '../../session';
 import { ReportsPage } from './ReportsPage';
+import { ProfitReportPage } from './ProfitReportPage';
 import { SalesReportPage } from './SalesReportPage';
+import { StockReportPage } from './StockReportPage';
 
 function renderRoutes(route: string, isCashierMode = false) {
   return renderWithProviders(
@@ -22,6 +24,8 @@ function renderRoutes(route: string, isCashierMode = false) {
       >
         <Route path="/laporan" element={<ReportsPage />} />
         <Route path="/laporan/penjualan" element={<SalesReportPage />} />
+        <Route path="/laporan/laba-kotor" element={<ProfitReportPage />} />
+        <Route path="/laporan/stok" element={<StockReportPage />} />
       </Route>
     </Routes>,
     createTestQueryClient(),
@@ -33,10 +37,13 @@ function renderRoutes(route: string, isCashierMode = false) {
 describe('halaman laporan', () => {
   beforeEach(resetDatabaseWithSeed);
 
-  it('Mode Kasir: /laporan dan /laporan/penjualan diblokir', () => {
-    renderRoutes('/laporan', true);
-    expect(screen.getByText('Halaman ini hanya untuk pemilik')).toBeTruthy();
-  });
+  it.each(['/laporan', '/laporan/penjualan', '/laporan/laba-kotor', '/laporan/stok'])(
+    'Mode Kasir: %s diblokir',
+    (route) => {
+      renderRoutes(route, true);
+      expect(screen.getByText('Halaman ini hanya untuk pemilik')).toBeTruthy();
+    },
+  );
 
   it('daftar laporan: Penjualan, Laba kotor, dan Stok menjadi tautan, lainnya "Segera hadir" tanpa tautan', () => {
     renderRoutes('/laporan');
@@ -65,5 +72,28 @@ describe('halaman laporan', () => {
     expect(screen.getByText('Jl. Melati 5')).toBeTruthy();
     expect(screen.getByText('Telp. 0812345678')).toBeTruthy();
     expect(screen.queryByText(/Isi profil toko di/)).toBeNull();
+  });
+
+  it('laba kotor tanpa penjualan: kop, ringkasan 0, dan catatan metode HPP', async () => {
+    renderRoutes('/laporan/laba-kotor');
+
+    expect(await screen.findByText('Toko Saya')).toBeTruthy();
+    expect(await screen.findByText('Tidak ada penjualan di periode ini.')).toBeTruthy();
+    expect(screen.getByText('HPP memakai harga beli saat transaksi (harga beli terakhir).')).toBeTruthy();
+  });
+
+  it('stok per tanggal: tanggal masa depan menampilkan pesan penolakan', async () => {
+    renderRoutes('/laporan/stok?tanggal=2099-01-01');
+
+    expect(await screen.findByText(/Tanggal laporan tidak boleh di masa depan/)).toBeTruthy();
+  });
+
+  it('stok per tanggal: bawaan hari ini menampilkan ringkasan 30 jenis, 406 unit', async () => {
+    renderRoutes('/laporan/stok');
+
+    expect(await screen.findByText('Nilai persediaan')).toBeTruthy();
+    expect(screen.getByText('406')).toBeTruthy();
+    expect(screen.getByText('Rp 4.025.100')).toBeTruthy();
+    expect(screen.getByText('Air Mineral 600 ml')).toBeTruthy();
   });
 });

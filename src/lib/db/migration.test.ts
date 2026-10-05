@@ -588,3 +588,59 @@ describe('migrasi database v8 ke v9', () => {
     expect(await db.stockAlerts.where('[productId+isOpen]').equals([HABIS, 1]).count()).toBe(1);
   });
 });
+
+describe('migrasi database v9 ke v10', () => {
+  const PRODUCT = '00000000-0000-4000-8000-0000000000b1';
+
+  async function createV9Database() {
+    db.close();
+    await Dexie.delete(DB_NAME);
+    const legacy = new Dexie(DB_NAME);
+    legacy.version(1).stores({
+      products: 'id, &sku, category, updatedAt',
+      stockMovements: 'id, productId, [productId+createdAt]',
+    });
+    legacy.version(2).stores({
+      stockMovements: 'id, productId, [productId+createdAt], &seq, [productId+seq]',
+      counters: 'name',
+    });
+    legacy.version(3).stores({ sales: 'id, &number, createdAt', saleItems: 'id, saleId, productId', settings: 'key' });
+    legacy.version(4).stores({
+      sales: 'id, &number, createdAt, actor',
+      saleReturns: 'id, &number, saleId, createdAt',
+    });
+    legacy.version(5).stores({ priceChanges: 'id, productId, [productId+seq]', productPhotos: 'productId' });
+    legacy.version(6).stores({ categories: 'id, &nameKey' });
+    legacy.version(7).stores({ dailySales: 'date' });
+    legacy.version(8).stores({ dailyProductSales: '[date+productId], [productId+date]' });
+    legacy.version(9).stores({ stockAlerts: 'id, productId, [productId+isOpen], isOpen' });
+    await legacy.table('stockMovements').bulkAdd(
+      ['2026-10-01T09:00:00.000Z', '2026-10-02T09:00:00.000Z', '2026-10-03T09:00:00.000Z'].map((createdAt, index) => ({
+        id: `00000000-0000-4000-8000-0000000000c${index}`,
+        seq: index + 1,
+        productId: PRODUCT,
+        type: 'masuk',
+        quantityBefore: index,
+        quantityAfter: index + 1,
+        reason: 'Data lama',
+        actor: 'Pemilik',
+        createdAt,
+      })),
+    );
+    legacy.close();
+  }
+
+  it('index createdAt tersedia dan data pergerakan tidak berubah', async () => {
+    await createV9Database();
+    await db.open();
+
+    expect(await db.stockMovements.count()).toBe(3);
+    const after = await db.stockMovements.where('createdAt').aboveOrEqual('2026-10-02T00:00:00.000Z').toArray();
+    expect(after.map((movement) => movement.seq).sort()).toEqual([2, 3]);
+    expect(await db.stockMovements.get('00000000-0000-4000-8000-0000000000c0')).toMatchObject({
+      quantityBefore: 0,
+      quantityAfter: 1,
+      reason: 'Data lama',
+    });
+  });
+});
