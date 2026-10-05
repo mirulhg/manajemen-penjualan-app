@@ -1,6 +1,11 @@
 import { Link } from 'react-router';
 
-const COMING_SOON = ['Pergerakan stok'];
+const REPORTS = [
+  { to: '/laporan/penjualan', name: 'Penjualan', description: 'Transaksi, omzet, diskon, retur, dan metode bayar per periode.' },
+  { to: '/laporan/laba-kotor', name: 'Laba kotor', description: 'Omzet, HPP, dan laba per kategori dan per produk.' },
+  { to: '/laporan/stok', name: 'Stok', description: 'Posisi stok dan nilai persediaan pada tanggal tertentu.' },
+  { to: '/laporan/pergerakan-stok', name: 'Pergerakan stok', description: 'Stok awal, masuk, terjual, retur, koreksi, dan stok akhir per barang.' },
+];
 
 export function ReportsPage() {
   return (
@@ -8,30 +13,12 @@ export function ReportsPage() {
       <title>Laporan · Manajemen Stok</title>
       <h1 className="mb-4 text-xl font-semibold">Laporan</h1>
       <ul className="space-y-3">
-        <li className="rounded-md border border-border bg-surface">
-          <Link to="/laporan/penjualan" className="block min-h-11 p-4">
-            <span className="block font-medium text-primary">Penjualan</span>
-            <span className="block text-sm text-text-muted">
-              Transaksi, omzet, diskon, retur, dan metode bayar per periode.
-            </span>
-          </Link>
-        </li>
-        <li className="rounded-md border border-border bg-surface">
-          <Link to="/laporan/laba-kotor" className="block min-h-11 p-4">
-            <span className="block font-medium text-primary">Laba kotor</span>
-            <span className="block text-sm text-text-muted">Omzet, HPP, dan laba per kategori dan per produk.</span>
-          </Link>
-        </li>
-        <li className="rounded-md border border-border bg-surface">
-          <Link to="/laporan/stok" className="block min-h-11 p-4">
-            <span className="block font-medium text-primary">Stok</span>
-            <span className="block text-sm text-text-muted">Posisi stok dan nilai persediaan pada tanggal tertentu.</span>
-          </Link>
-        </li>
-        {COMING_SOON.map((name) => (
-          <li key={name} className="rounded-md border border-border bg-surface p-4">
-            <span className="block font-medium">{name}</span>
-            <span className="block text-sm text-text-muted">Segera hadir</span>
+        {REPORTS.map((report) => (
+          <li key={report.to} className="rounded-md border border-border bg-surface">
+            <Link to={report.to} className="block min-h-11 p-4">
+              <span className="block font-medium text-primary">{report.name}</span>
+              <span className="block text-sm text-text-muted">{report.description}</span>
+            </Link>
           </li>
         ))}
       </ul>

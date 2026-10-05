@@ -110,3 +110,32 @@ export const STOCK_COLUMNS: ReportColumn<StockRow>[] = [
   { key: 'value', title: 'Nilai persediaan', type: 'number', width: 18 },
   { key: 'status', title: 'Status', type: 'text', width: 12 },
 ];
+
+export type MovementRow = {
+  sku: string;
+  name: string;
+  category: string;
+  unit: string;
+  opening: number;
+  incoming: number;
+  sold: number;
+  returned: number;
+  // Bertanda: positif menambah stok, negatif mengurangi.
+  correction: number;
+  closing: number;
+  status: string;
+};
+
+export const MOVEMENT_COLUMNS: ReportColumn<MovementRow>[] = [
+  { key: 'sku', title: 'SKU', type: 'text', width: 14 },
+  { key: 'name', title: 'Nama', type: 'text', width: 30 },
+  { key: 'category', title: 'Kategori', type: 'text', width: 20 },
+  { key: 'unit', title: 'Satuan', type: 'text', width: 10 },
+  { key: 'opening', title: 'Stok awal', type: 'number', width: 11 },
+  { key: 'incoming', title: 'Masuk', type: 'number', width: 10 },
+  { key: 'sold', title: 'Terjual', type: 'number', width: 10 },
+  { key: 'returned', title: 'Retur/batal', type: 'number', width: 12 },
+  { key: 'correction', title: 'Koreksi (±)', type: 'number', width: 12 },
+  { key: 'closing', title: 'Stok akhir', type: 'number', width: 11 },
+  { key: 'status', title: 'Status', type: 'text', width: 12 },
+];

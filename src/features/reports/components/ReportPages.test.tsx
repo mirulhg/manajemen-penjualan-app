@@ -10,6 +10,7 @@ import { OwnerOnly } from '../../session';
 import { ReportsPage } from './ReportsPage';
 import { ProfitReportPage } from './ProfitReportPage';
 import { SalesReportPage } from './SalesReportPage';
+import { StockMovementReportPage } from './StockMovementReportPage';
 import { StockReportPage } from './StockReportPage';
 
 function renderRoutes(route: string, isCashierMode = false) {
@@ -26,6 +27,7 @@ function renderRoutes(route: string, isCashierMode = false) {
         <Route path="/laporan/penjualan" element={<SalesReportPage />} />
         <Route path="/laporan/laba-kotor" element={<ProfitReportPage />} />
         <Route path="/laporan/stok" element={<StockReportPage />} />
+        <Route path="/laporan/pergerakan-stok" element={<StockMovementReportPage />} />
       </Route>
     </Routes>,
     createTestQueryClient(),
@@ -37,7 +39,7 @@ function renderRoutes(route: string, isCashierMode = false) {
 describe('halaman laporan', () => {
   beforeEach(resetDatabaseWithSeed);
 
-  it.each(['/laporan', '/laporan/penjualan', '/laporan/laba-kotor', '/laporan/stok'])(
+  it.each(['/laporan', '/laporan/penjualan', '/laporan/laba-kotor', '/laporan/stok', '/laporan/pergerakan-stok'])(
     'Mode Kasir: %s diblokir',
     (route) => {
       renderRoutes(route, true);
@@ -45,14 +47,15 @@ describe('halaman laporan', () => {
     },
   );
 
-  it('daftar laporan: Penjualan, Laba kotor, dan Stok menjadi tautan, lainnya "Segera hadir" tanpa tautan', () => {
+  it('daftar laporan: keempat laporan menjadi tautan, tanpa "Segera hadir"', () => {
     renderRoutes('/laporan');
 
     expect(screen.getByRole('link', { name: /Penjualan/ }).getAttribute('href')).toBe('/laporan/penjualan');
     expect(screen.getByRole('link', { name: /Laba kotor/ }).getAttribute('href')).toBe('/laporan/laba-kotor');
     expect(screen.getByRole('link', { name: /Posisi stok/ }).getAttribute('href')).toBe('/laporan/stok');
-    expect(screen.getAllByText('Segera hadir')).toHaveLength(1);
-    expect(screen.queryByRole('link', { name: /Pergerakan stok/ })).toBeNull();
+    expect(screen.getByRole('link', { name: /Stok awal, masuk/ }).getAttribute('href')).toBe('/laporan/pergerakan-stok');
+    expect(screen.getAllByRole('link')).toHaveLength(4);
+    expect(screen.queryByText('Segera hadir')).toBeNull();
   });
 
   it('tanpa profil toko: kop "Toko Saya" dan saran mengisi profil', async () => {

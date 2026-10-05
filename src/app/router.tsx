@@ -97,6 +97,13 @@ export const router = createBrowserRouter([
             },
           },
           {
+            path: 'laporan/pergerakan-stok',
+            lazy: async () => {
+              const { StockMovementReportPage } = await import('../features/reports/components/StockMovementReportPage');
+              return { Component: StockMovementReportPage };
+            },
+          },
+          {
             path: 'penjualan',
             lazy: async () => {
               const { SaleHistoryPage } = await import('../features/sales/components/SaleHistoryPage');
