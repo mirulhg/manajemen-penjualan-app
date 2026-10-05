@@ -42,6 +42,21 @@ describe('12 bulan', () => {
   });
 });
 
+describe('bulan lalu', () => {
+  const lastMonth = (now: Date) => {
+    const { start, end } = resolvePeriodRange({ period: 'bulan-lalu', from: null, to: null }, now);
+    return [start, end];
+  };
+
+  it('tanggal 1 sampai akhir bulan lalu', () => {
+    expect(lastMonth(new Date(2026, 9, 3, 14, 0))).toEqual([new Date(2026, 8, 1), new Date(2026, 9, 1)]);
+  });
+
+  it('Januari mundur ke Desember tahun sebelumnya', () => {
+    expect(lastMonth(new Date(2026, 0, 15))).toEqual([new Date(2025, 11, 1), new Date(2026, 0, 1)]);
+  });
+});
+
 describe('clipRangeToToday', () => {
   it('Bulan ini dipotong sampai hari ini, rentang di masa depan menjadi kosong', () => {
     const now = new Date(2026, 9, 3, 10, 0);

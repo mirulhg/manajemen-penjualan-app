@@ -6,8 +6,8 @@ import { parsePeriodParams, PERIODS, resolvePeriodRange, serializePeriodParams }
 import type { Period } from '../../utils/date-period';
 import { parsePageParam } from '../../utils/pagination';
 
-// 12 bulan hanya ada di dasbor; Riwayat bertahan di pilihan harian sampai bulanan.
-export const SALE_PERIODS = PERIODS.filter((period) => period !== '12-bulan');
+// 12 bulan hanya ada di dasbor dan Bulan lalu hanya di laporan; Riwayat bertahan di pilihan harian sampai bulan ini.
+export const SALE_PERIODS = PERIODS.filter((period) => period !== '12-bulan' && period !== 'bulan-lalu');
 
 export type SaleFilters = {
   period: Period;

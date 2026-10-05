@@ -1,4 +1,4 @@
-export const PERIODS = ['hari-ini', 'kemarin', '7-hari', '30-hari', 'bulan-ini', '12-bulan', 'rentang'] as const;
+export const PERIODS = ['hari-ini', 'kemarin', '7-hari', '30-hari', 'bulan-ini', 'bulan-lalu', '12-bulan', 'rentang'] as const;
 export type Period = (typeof PERIODS)[number];
 
 export const PERIOD_LABELS: Record<Period, string> = {
@@ -7,6 +7,7 @@ export const PERIOD_LABELS: Record<Period, string> = {
   '7-hari': '7 hari terakhir',
   '30-hari': '30 hari terakhir',
   'bulan-ini': 'Bulan ini',
+  'bulan-lalu': 'Bulan lalu',
   '12-bulan': '12 bulan terakhir',
   rentang: 'Rentang tanggal',
 };
@@ -56,6 +57,12 @@ export function resolvePeriodRange(selection: PeriodSelection, now: Date): { sta
       return {
         start: new Date(now.getFullYear(), now.getMonth(), 1),
         end: new Date(now.getFullYear(), now.getMonth() + 1, 1),
+      };
+    // Tanggal 1 sampai akhir bulan lalu; Januari mundur ke Desember tahun sebelumnya.
+    case 'bulan-lalu':
+      return {
+        start: new Date(now.getFullYear(), now.getMonth() - 1, 1),
+        end: new Date(now.getFullYear(), now.getMonth(), 1),
       };
     // Hari ini + 11 bulan kalender sebelumnya, mulai tanggal 1.
     case '12-bulan':
