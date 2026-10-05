@@ -4,9 +4,10 @@ import type { SalesMetrics } from '../../../lib/db/daily-sales-rows';
 import { serializePeriodParams } from '../../../utils/date-period';
 import type { PeriodSelection } from '../../../utils/date-period';
 import { describePeriodChange } from '../change-text';
+import { DASHBOARD_PERIODS } from '../hooks/use-dashboard-period';
 import { toHistorySelection } from '../dashboard-range';
 import { METRICS } from '../metric-definitions';
-import { PeriodFilter } from './PeriodFilter';
+import { PeriodFilter } from '../../../components/ui/PeriodFilter';
 
 type PeriodSectionProps = {
   selection: PeriodSelection;
@@ -23,7 +24,7 @@ export function PeriodSection({ selection, metrics, previous, onChange }: Period
       <h2 id="period-heading" className="text-lg font-semibold">
         Ringkasan periode
       </h2>
-      <PeriodFilter selection={selection} onChange={onChange} />
+      <PeriodFilter selection={selection} periods={DASHBOARD_PERIODS} onChange={onChange} />
       <dl aria-live="polite" className="grid gap-4 sm:grid-cols-2">
         {METRICS.map((metric) => (
           <div key={metric.key} className="rounded-md border border-border bg-surface p-4">

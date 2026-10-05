@@ -1,21 +1,18 @@
-import { FormField } from '../../../components/ui/FormField';
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
-import { PERIOD_LABELS, toLocalDateText } from '../../../utils/date-period';
-import type { Period, PeriodSelection } from '../../../utils/date-period';
-import { DASHBOARD_PERIODS } from '../hooks/use-dashboard-period';
+import { PERIOD_LABELS, toLocalDateText } from '../../utils/date-period';
+import type { Period, PeriodSelection } from '../../utils/date-period';
+import { FormField } from './FormField';
+import { FIELD_CLASS } from './field-styles';
 
 type PeriodFilterProps = {
   selection: PeriodSelection;
+  // Pilihan periode yang tersedia di halaman pemakai; berbeda antara dasbor dan laporan.
+  periods: readonly Period[];
   onChange: (patch: Partial<PeriodSelection>) => void;
 };
 
-function findPeriod(value: string): Period {
-  return DASHBOARD_PERIODS.find((period) => period === value) ?? 'hari-ini';
-}
-
-export function PeriodFilter({ selection, onChange }: PeriodFilterProps) {
+export function PeriodFilter({ selection, periods, onChange }: PeriodFilterProps) {
   function handlePeriodChange(value: string) {
-    const period = findPeriod(value);
+    const period = periods.find((option) => option === value) ?? selection.period;
     // Rentang butuh dua tanggal yang valid; mulai dari hari ini supaya pilihan langsung berlaku.
     if (period === 'rentang') {
       const today = toLocalDateText(new Date());
@@ -27,7 +24,7 @@ export function PeriodFilter({ selection, onChange }: PeriodFilterProps) {
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
-      <FormField id="dashboard-period" label="Periode" error={undefined}>
+      <FormField id="period-filter" label="Periode" error={undefined}>
         {(control) => (
           <select
             {...control}
@@ -35,7 +32,7 @@ export function PeriodFilter({ selection, onChange }: PeriodFilterProps) {
             onChange={(event) => handlePeriodChange(event.target.value)}
             className={FIELD_CLASS}
           >
-            {DASHBOARD_PERIODS.map((period) => (
+            {periods.map((period) => (
               <option key={period} value={period}>
                 {PERIOD_LABELS[period]}
               </option>
@@ -45,7 +42,7 @@ export function PeriodFilter({ selection, onChange }: PeriodFilterProps) {
       </FormField>
       {selection.period === 'rentang' && (
         <>
-          <FormField id="dashboard-from" label="Dari tanggal" error={undefined}>
+          <FormField id="period-filter-from" label="Dari tanggal" error={undefined}>
             {(control) => (
               <input
                 {...control}
@@ -56,7 +53,7 @@ export function PeriodFilter({ selection, onChange }: PeriodFilterProps) {
               />
             )}
           </FormField>
-          <FormField id="dashboard-to" label="Sampai tanggal" error={undefined}>
+          <FormField id="period-filter-to" label="Sampai tanggal" error={undefined}>
             {(control) => (
               <input
                 {...control}

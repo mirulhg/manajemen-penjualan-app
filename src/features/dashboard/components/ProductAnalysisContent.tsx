@@ -4,7 +4,8 @@ import { useAnalysisReadiness } from '../api/use-product-analysis';
 import { getDashboardRanges } from '../dashboard-range';
 import { useAnalysisParams } from '../hooks/use-analysis-params';
 import { DashboardSkeleton } from './DashboardSkeleton';
-import { PeriodFilter } from './PeriodFilter';
+import { PeriodFilter } from '../../../components/ui/PeriodFilter';
+import { DASHBOARD_PERIODS } from '../hooks/use-dashboard-period';
 import { RevenueProfitSection } from './RevenueProfitSection';
 import { SlowMoversSection } from './SlowMoversSection';
 import { StockForecastSection } from './StockForecastSection';
@@ -44,7 +45,7 @@ export function ProductAnalysisContent() {
         <h2 id="analysis-period-heading" className="text-lg font-semibold">
           Periode penjualan
         </h2>
-        <PeriodFilter selection={params.selection} onChange={params.setSelection} />
+        <PeriodFilter selection={params.selection} periods={DASHBOARD_PERIODS} onChange={params.setSelection} />
       </section>
       <TopSellingSection range={current} />
       <RevenueProfitSection range={current} ranking={params.ranking} onRankingChange={params.setRanking} />
