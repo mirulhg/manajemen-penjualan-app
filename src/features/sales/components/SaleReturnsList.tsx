@@ -18,14 +18,14 @@ export function SaleReturnsList({ returns, progress }: SaleReturnsListProps) {
       <h2 id="sale-returns-heading" className="mb-2 text-lg font-semibold">
         Retur
       </h2>
-      <ul className="rounded-md border border-border bg-surface">
+      <ul className="rounded-md border border-border bg-card">
         {returns.map((saleReturn) => (
           <li key={saleReturn.id} className="border-b border-border px-4 py-3 last:border-b-0">
             <div className="flex items-baseline justify-between gap-4">
               <p className="font-medium">{saleReturn.number}</p>
               <p className="shrink-0 font-medium">{formatRupiah(saleReturn.refundTotal)}</p>
             </div>
-            <p className="text-sm text-text-muted">{formatDateTime(saleReturn.createdAt)}</p>
+            <p className="text-sm text-muted-foreground">{formatDateTime(saleReturn.createdAt)}</p>
             <ul className="text-sm">
               {saleReturn.items.map((line) => {
                 const item = itemsById.get(line.saleItemId);
@@ -36,7 +36,7 @@ export function SaleReturnsList({ returns, progress }: SaleReturnsListProps) {
                 );
               })}
             </ul>
-            <p className="text-sm text-text-muted">Alasan: {saleReturn.reason}</p>
+            <p className="text-sm text-muted-foreground">Alasan: {saleReturn.reason}</p>
           </li>
         ))}
       </ul>

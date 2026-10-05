@@ -50,7 +50,7 @@ export function ProductSearch({ products, inputRef, onPick }: ProductSearchProps
         className={FIELD_CLASS}
       />
       {hasQuery && results.length === 0 && (
-        <p className="mt-2 text-text-muted">Tidak ada barang yang cocok.</p>
+        <p className="mt-2 text-muted-foreground">Tidak ada barang yang cocok.</p>
       )}
       <ul className="mt-2 space-y-2">
         {results.map((product) => (
@@ -58,10 +58,10 @@ export function ProductSearch({ products, inputRef, onPick }: ProductSearchProps
             <button
               type="button"
               onClick={() => handlePick(product)}
-              className="min-h-11 w-full rounded-md border border-border bg-surface px-3 py-2 text-left"
+              className="min-h-11 w-full rounded-md border border-border bg-card px-3 py-2 text-left"
             >
               <span className="block font-medium">{product.name}</span>
-              <span className="block text-sm text-text-muted">
+              <span className="block text-sm text-muted-foreground">
                 {product.sku} · {formatRupiah(product.sellingPrice)} · Stok{' '}
                 {formatNumber(Math.max(0, product.stockQuantity))} {product.unit}
               </span>

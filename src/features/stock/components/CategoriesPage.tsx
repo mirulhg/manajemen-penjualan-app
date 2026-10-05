@@ -15,7 +15,7 @@ function CategoriesContent() {
   if (isPending) return <CategoriesSkeleton />;
   if (error) return <StockListError error={error} onRetry={handleRetry} />;
   if (categories.length === 0) {
-    return <p className="text-text-muted">Belum ada kategori. Tambahkan kategori pertama di atas.</p>;
+    return <p className="text-muted-foreground">Belum ada kategori. Tambahkan kategori pertama di atas.</p>;
   }
 
   return <CategoryList categories={categories} />;

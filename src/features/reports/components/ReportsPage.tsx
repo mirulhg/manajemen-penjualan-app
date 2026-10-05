@@ -14,10 +14,10 @@ export function ReportsPage() {
       <h1 className="mb-4 text-xl font-semibold">Laporan</h1>
       <ul className="space-y-3">
         {REPORTS.map((report) => (
-          <li key={report.to} className="rounded-md border border-border bg-surface">
+          <li key={report.to} className="rounded-md border border-border bg-card">
             <Link to={report.to} className="block min-h-11 p-4">
               <span className="block font-medium text-primary">{report.name}</span>
-              <span className="block text-sm text-text-muted">{report.description}</span>
+              <span className="block text-sm text-muted-foreground">{report.description}</span>
             </Link>
           </li>
         ))}

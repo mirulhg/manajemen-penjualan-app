@@ -17,7 +17,7 @@ export function MainNav({ items }: MainNavProps) {
               to={item.to}
               className={({ isActive }) =>
                 `inline-flex min-h-11 items-center rounded-md px-3 ${
-                  isActive ? 'font-semibold text-primary underline' : 'text-text'
+                  isActive ? 'font-semibold text-primary underline' : 'text-foreground'
                 }`
               }
             >

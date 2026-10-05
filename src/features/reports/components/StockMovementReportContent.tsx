@@ -53,8 +53,8 @@ export function StockMovementReportContent({ selection }: StockMovementReportCon
       {shownRows.length > 0 && <StockMovementTable rows={shownRows} />}
       {(hiddenCount > 0 || showAll) && (
         <div className="flex flex-wrap items-center gap-3 print:hidden">
-          {hiddenCount > 0 && <p className="text-sm text-text-muted">{formatNumber(hiddenCount)} barang tanpa pergerakan disembunyikan.</p>}
-          <button type="button" onClick={handleToggleAll} className="min-h-11 rounded-md border border-border bg-surface px-4 font-medium">
+          {hiddenCount > 0 && <p className="text-sm text-muted-foreground">{formatNumber(hiddenCount)} barang tanpa pergerakan disembunyikan.</p>}
+          <button type="button" onClick={handleToggleAll} className="min-h-11 rounded-md border border-border bg-card px-4 font-medium">
             {showAll ? 'Hanya yang bergerak' : 'Tampilkan semua'}
           </button>
         </div>

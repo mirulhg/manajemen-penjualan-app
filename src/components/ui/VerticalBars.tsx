@@ -42,7 +42,7 @@ export function VerticalBars({ data, maxValue, active, onActivate, formatValue }
           );
         })}
       </div>
-      <div className="flex gap-0.5 text-xs text-text-muted">
+      <div className="flex gap-0.5 text-xs text-muted-foreground">
         {data.map((datum, index) => (
           <span key={datum.label} className="mt-1 flex-1 text-center">
             {labelIndexes.has(index) ? datum.label : ''}

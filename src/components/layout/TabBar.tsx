@@ -10,7 +10,7 @@ export function TabBar({ items }: TabBarProps) {
   return (
     <nav
       aria-label="Menu bawah"
-      className="fixed inset-x-0 bottom-0 z-sticky border-t border-border bg-surface pb-safe md:hidden print:hidden"
+      className="fixed inset-x-0 bottom-0 z-sticky border-t border-border bg-card pb-safe md:hidden print:hidden"
     >
       <ul className="flex">
         {items.map((item) => (
@@ -19,7 +19,7 @@ export function TabBar({ items }: TabBarProps) {
               to={item.to}
               className={({ isActive }) =>
                 `flex min-h-12 items-center justify-center px-2 ${
-                  isActive ? 'font-semibold text-primary underline' : 'text-text'
+                  isActive ? 'font-semibold text-primary underline' : 'text-foreground'
                 }`
               }
             >

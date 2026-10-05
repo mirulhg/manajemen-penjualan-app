@@ -7,7 +7,7 @@ type ProductArchiveSectionProps = {
 };
 
 const SUMMARY_CLASS = 'inline-flex min-h-11 cursor-pointer items-center font-medium text-primary';
-const BUTTON_CLASS = 'min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary';
+const BUTTON_CLASS = 'min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground';
 
 // Arsip dan pulihkan dibuka lewat <details> bawaan browser (tanpa state), dengan konfirmasi di halaman.
 export function ProductArchiveSection({ product }: ProductArchiveSectionProps) {
@@ -21,7 +21,7 @@ export function ProductArchiveSection({ product }: ProductArchiveSectionProps) {
   }
 
   return (
-    <details className="mt-4 rounded-md border border-border bg-surface px-4">
+    <details className="mt-4 rounded-md border border-border bg-card px-4">
       <summary className={SUMMARY_CLASS}>{isArchived ? 'Pulihkan barang' : 'Arsipkan barang'}</summary>
       <div className="space-y-3 pb-4">
         {isArchived ? (

@@ -57,7 +57,7 @@ export function PinSetupForm({ onCreated }: PinSetupFormProps) {
           Penyimpanan di perangkat ini gagal. Coba simpan lagi.
         </p>
       )}
-      <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary">
+      <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
         {isSaving ? 'Menyimpan…' : 'Buat PIN'}
       </button>
     </form>

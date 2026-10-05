@@ -38,7 +38,7 @@ export function OversellSetting() {
             />
             Izinkan jual melebihi stok
           </label>
-          <p className="text-sm text-text-muted">Stok bisa menjadi minus. Peringatan tetap muncul di kasir.</p>
+          <p className="text-sm text-muted-foreground">Stok bisa menjadi minus. Peringatan tetap muncul di kasir.</p>
         </>
       )}
       {mutation.isError && (

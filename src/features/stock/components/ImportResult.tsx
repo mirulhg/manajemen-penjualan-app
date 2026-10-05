@@ -29,18 +29,18 @@ export function ImportResult({ imported, skippedCount, failed, onImportAnother }
           <button
             type="button"
             onClick={handleDownloadFailed}
-            className="min-h-11 rounded-md border border-border bg-surface px-4 font-medium"
+            className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
           >
             Unduh laporan baris gagal
           </button>
         )}
-        <Link to="/stok" className="inline-flex min-h-11 items-center rounded-md bg-primary px-4 font-medium text-on-primary">
+        <Link to="/stok" className="inline-flex min-h-11 items-center rounded-md bg-primary px-4 font-medium text-primary-foreground">
           Lihat daftar stok
         </Link>
         <button
           type="button"
           onClick={onImportAnother}
-          className="min-h-11 rounded-md border border-border bg-surface px-4 font-medium"
+          className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
         >
           Impor file lain
         </button>

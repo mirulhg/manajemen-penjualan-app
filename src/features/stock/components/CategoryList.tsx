@@ -7,7 +7,7 @@ type CategoryListProps = {
 
 export function CategoryList({ categories }: CategoryListProps) {
   return (
-    <ul className="rounded-md border border-border bg-surface">
+    <ul className="rounded-md border border-border bg-card">
       {categories.map((category) => (
         <CategoryRow key={category.id} category={category} />
       ))}

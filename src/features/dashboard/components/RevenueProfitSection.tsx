@@ -70,7 +70,7 @@ export function RevenueProfitSection({ range, ranking, onRankingChange }: Revenu
                 <td className="px-3 py-1">
                   <ProductNameLink productId={row.productId} name={row.name} isArchived={row.isArchived} />
                   {showPareto && pareto.contributorIds.has(row.productId) && (
-                    <p className="text-xs text-text-muted">Penyumbang 80% omzet</p>
+                    <p className="text-xs text-muted-foreground">Penyumbang 80% omzet</p>
                   )}
                 </td>
                 <td className="px-3 py-1 text-right">{formatNumber(row.quantity)}</td>

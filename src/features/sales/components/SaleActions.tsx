@@ -16,17 +16,17 @@ export function SaleActions({ detail }: SaleActionsProps) {
 
   return (
     <section aria-label="Tindakan transaksi" className="mt-6 space-y-4">
-      <details className="rounded-md border border-border bg-surface px-4">
+      <details className="rounded-md border border-border bg-card px-4">
         <summary className={SUMMARY_CLASS}>Retur barang</summary>
         <div className="pb-4">
           {hasReturnableItems ? (
             <ReturnForm saleId={sale.id} progress={progress} />
           ) : (
-            <p className="text-text-muted">Semua barang di transaksi ini sudah diretur.</p>
+            <p className="text-muted-foreground">Semua barang di transaksi ini sudah diretur.</p>
           )}
         </div>
       </details>
-      <details className="rounded-md border border-border bg-surface px-4">
+      <details className="rounded-md border border-border bg-card px-4">
         <summary className={SUMMARY_CLASS}>Batalkan transaksi</summary>
         <div className="pb-4">
           <CancelForm saleId={sale.id} saleNumber={sale.number} />

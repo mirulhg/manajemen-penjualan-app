@@ -32,21 +32,21 @@ function ChartSectionBody({ isPending, error, isEmpty, onRetry, children }: Char
   if (error) {
     return (
       <div role="alert">
-        <p className="text-text-muted">
+        <p className="text-muted-foreground">
           Grafik gagal dibaca dari penyimpanan di perangkat ini. Coba lagi; jika masih gagal, muat ulang halaman.
         </p>
-        <p className="mt-2 rounded-md border border-border bg-surface p-3 text-sm">{error.message}</p>
+        <p className="mt-2 rounded-md border border-border bg-card p-3 text-sm">{error.message}</p>
         <button
           type="button"
           onClick={onRetry}
-          className="mt-3 min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary"
+          className="mt-3 min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
         >
           Coba lagi
         </button>
       </div>
     );
   }
-  if (isEmpty) return <p className="text-text-muted">Belum ada penjualan di periode ini.</p>;
+  if (isEmpty) return <p className="text-muted-foreground">Belum ada penjualan di periode ini.</p>;
   return children;
 }
 
@@ -56,7 +56,7 @@ export function ChartSkeleton() {
       <p className="sr-only" role="status">
         Memuat grafik
       </p>
-      <div aria-hidden="true" className="h-52 rounded-md border border-border bg-surface" />
+      <div aria-hidden="true" className="h-52 rounded-md border border-border bg-card" />
     </div>
   );
 }

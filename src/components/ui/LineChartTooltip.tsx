@@ -17,7 +17,7 @@ export function LineChartTooltip({ series, active, count, formatValue }: LineCha
     <div
       aria-hidden="true"
       style={{ left: `${x}%` }}
-      className={`pointer-events-none absolute top-0 rounded-md border border-border bg-surface p-2 text-sm ${
+      className={`pointer-events-none absolute top-0 rounded-md border border-border bg-card p-2 text-sm ${
         x > 55 ? '-ml-2 -translate-x-full' : 'ml-2'
       }`}
     >

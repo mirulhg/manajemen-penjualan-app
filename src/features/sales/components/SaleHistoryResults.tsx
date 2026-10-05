@@ -21,14 +21,14 @@ export function SaleHistoryResults({ filters, onPageChange }: SaleHistoryResults
 
   if (isPending) return <SaleHistorySkeleton />;
   if (error) return <StockListError error={error} onRetry={handleRetry} />;
-  if (data.total === 0) return <p className="text-text-muted">Belum ada transaksi di periode ini.</p>;
+  if (data.total === 0) return <p className="text-muted-foreground">Belum ada transaksi di periode ini.</p>;
 
   return (
     <div className="space-y-4">
       <p aria-live="polite" className="font-medium">
         {formatNumber(data.summary.count)} transaksi · Omzet {formatRupiah(data.summary.netRevenue)}
       </p>
-      <ul className="rounded-md border border-border bg-surface">
+      <ul className="rounded-md border border-border bg-card">
         {data.items.map((sale) => (
           <SaleHistoryItem key={sale.id} sale={sale} />
         ))}

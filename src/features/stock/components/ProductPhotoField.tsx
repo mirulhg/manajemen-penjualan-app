@@ -65,7 +65,7 @@ export function ProductPhotoField({ productId, productName, draft, onChange }: P
         />
       )}
       {draft.kind === 'remove' && (
-        <p className="my-2 text-text-muted">Foto akan dihapus saat perubahan disimpan.</p>
+        <p className="my-2 text-muted-foreground">Foto akan dihapus saat perubahan disimpan.</p>
       )}
       <input
         id="product-photo"
@@ -75,7 +75,7 @@ export function ProductPhotoField({ productId, productName, draft, onChange }: P
         aria-describedby={message ? 'product-photo-error' : undefined}
         className="mt-1 block min-h-11 w-full"
       />
-      {isProcessing && <p className="mt-1 text-sm text-text-muted">Memproses foto…</p>}
+      {isProcessing && <p className="mt-1 text-sm text-muted-foreground">Memproses foto…</p>}
       {message && (
         <p id="product-photo-error" role="alert" className="mt-1 text-sm text-status-habis-text">
           {message}
@@ -85,7 +85,7 @@ export function ProductPhotoField({ productId, productName, draft, onChange }: P
         <button
           type="button"
           onClick={handleRemove}
-          className="mt-2 min-h-11 rounded-md border border-border bg-surface px-4 font-medium"
+          className="mt-2 min-h-11 rounded-md border border-border bg-card px-4 font-medium"
         >
           Hapus foto
         </button>

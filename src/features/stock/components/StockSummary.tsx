@@ -16,12 +16,12 @@ export function StockSummary({ products }: StockSummaryProps) {
   ];
 
   return (
-    <div className="rounded-md border border-border bg-surface p-4">
-      <p className="mb-2 text-sm text-text-muted">Barang aktif</p>
+    <div className="rounded-md border border-border bg-card p-4">
+      <p className="mb-2 text-sm text-muted-foreground">Barang aktif</p>
       <dl className="grid grid-cols-3 gap-4">
         {figures.map((figure) => (
           <div key={figure.label}>
-            <dt className="text-sm text-text-muted">{figure.label}</dt>
+            <dt className="text-sm text-muted-foreground">{figure.label}</dt>
             <dd className="font-semibold">{figure.value}</dd>
           </div>
         ))}

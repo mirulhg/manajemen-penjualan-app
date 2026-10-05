@@ -60,7 +60,7 @@ export function Cashier({ products, allowOversell }: CashierProps) {
       {mutation.isSuccess && <SaleSuccessPanel sale={mutation.data} onNewSale={handleNewSale} />}
       <ProductSearch products={products} inputRef={searchRef} onPick={handlePick} />
       {view.lines.length > 0 && (
-        <ul aria-label="Keranjang" className="rounded-md border border-border bg-surface">
+        <ul aria-label="Keranjang" className="rounded-md border border-border bg-card">
           {view.lines.map((line) => (
             <CartLine key={line.product.id} line={line} dispatch={handleCartAction} />
           ))}

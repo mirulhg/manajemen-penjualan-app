@@ -58,7 +58,7 @@ export function StoreLogoField({ storedLogo, draft, onChange }: StoreLogoFieldPr
           className="my-2 h-auto max-h-24 w-auto max-w-full rounded-md border border-border"
         />
       )}
-      {draft.kind === 'remove' && <p className="my-2 text-text-muted">Logo akan dihapus saat perubahan disimpan.</p>}
+      {draft.kind === 'remove' && <p className="my-2 text-muted-foreground">Logo akan dihapus saat perubahan disimpan.</p>}
       <input
         id="store-logo"
         type="file"
@@ -67,7 +67,7 @@ export function StoreLogoField({ storedLogo, draft, onChange }: StoreLogoFieldPr
         aria-describedby={message ? 'store-logo-error' : undefined}
         className="mt-1 block min-h-11 w-full"
       />
-      {isProcessing && <p className="mt-1 text-sm text-text-muted">Memproses logo…</p>}
+      {isProcessing && <p className="mt-1 text-sm text-muted-foreground">Memproses logo…</p>}
       {message && (
         <p id="store-logo-error" role="alert" className="mt-1 text-sm text-status-habis-text">
           {message}
@@ -77,7 +77,7 @@ export function StoreLogoField({ storedLogo, draft, onChange }: StoreLogoFieldPr
         <button
           type="button"
           onClick={handleRemove}
-          className="mt-2 min-h-11 rounded-md border border-border bg-surface px-4 font-medium"
+          className="mt-2 min-h-11 rounded-md border border-border bg-card px-4 font-medium"
         >
           Hapus logo
         </button>

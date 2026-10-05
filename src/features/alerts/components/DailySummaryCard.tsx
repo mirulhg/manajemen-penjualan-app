@@ -22,10 +22,10 @@ export function DailySummaryCard() {
   }
 
   if (!dailySummaryEnabled || dailySummaryDismissedOn === today) return null;
-  if (isPending) return <div aria-hidden="true" className="mb-6 h-24 rounded-md border border-border bg-surface" />;
+  if (isPending) return <div aria-hidden="true" className="mb-6 h-24 rounded-md border border-border bg-card" />;
   if (error) {
     return (
-      <div role="alert" className="mb-6 rounded-md border border-border bg-surface p-4">
+      <div role="alert" className="mb-6 rounded-md border border-border bg-card p-4">
         <p>Ringkasan harian gagal dibaca. </p>
         <button type="button" onClick={handleRetry} className="min-h-11 font-medium text-primary underline">
           Coba lagi
@@ -35,14 +35,14 @@ export function DailySummaryCard() {
   }
 
   return (
-    <section aria-labelledby="daily-summary-heading" className="mb-6 space-y-2 rounded-md border border-border bg-surface p-4">
+    <section aria-labelledby="daily-summary-heading" className="mb-6 space-y-2 rounded-md border border-border bg-card p-4">
       <h2 id="daily-summary-heading" className="font-semibold">
         Ringkasan hari ini
       </h2>
       <p>
         Barang habis {formatNumber(data.soldOut)} · menipis {formatNumber(data.low)}
       </p>
-      <p className="text-text-muted">
+      <p className="text-muted-foreground">
         Kemarin: omzet {formatRupiah(data.yesterday.revenue)} dari {formatNumber(data.yesterday.transactionCount)} transaksi
       </p>
       <div className="flex flex-wrap items-center gap-x-4">

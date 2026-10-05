@@ -24,12 +24,12 @@ export function StockListItem({ product }: StockListItemProps) {
         <p className="font-medium">
           {product.name}
           {product.archivedAt !== null && (
-            <span className="ml-2 rounded-md border border-border px-2 py-1 text-sm font-normal text-text-muted">
+            <span className="ml-2 rounded-md border border-border px-2 py-1 text-sm font-normal text-muted-foreground">
               Diarsipkan
             </span>
           )}
         </p>
-        <p className="text-sm text-text-muted">
+        <p className="text-sm text-muted-foreground">
           {product.sku} · {product.category}
         </p>
       </div>

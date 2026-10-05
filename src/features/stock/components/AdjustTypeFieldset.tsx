@@ -19,12 +19,12 @@ export function AdjustTypeFieldset({ register }: AdjustTypeFieldsetProps) {
         {TYPE_OPTIONS.map((option) => (
           <label
             key={option.value}
-            className="flex min-h-11 items-start gap-3 rounded-md border border-border bg-surface p-3"
+            className="flex min-h-11 items-start gap-3 rounded-md border border-border bg-card p-3"
           >
             <input type="radio" value={option.value} className="mt-1" {...register('type')} />
             <span>
               <span className="block font-medium">{option.label}</span>
-              <span className="block text-sm text-text-muted">{option.description}</span>
+              <span className="block text-sm text-muted-foreground">{option.description}</span>
             </span>
           </label>
         ))}

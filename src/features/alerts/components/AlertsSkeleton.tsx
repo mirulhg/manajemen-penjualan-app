@@ -6,7 +6,7 @@ export function AlertsSkeleton() {
       <p className="sr-only" role="status">
         Memuat peringatan stok
       </p>
-      <ul aria-hidden="true" className="rounded-md border border-border bg-surface">
+      <ul aria-hidden="true" className="rounded-md border border-border bg-card">
         {Array.from({ length: ROW_COUNT }, (_, index) => (
           <li key={index} className="flex items-center justify-between gap-4 border-b border-border px-4 py-3 last:border-b-0">
             <div className="flex-1">

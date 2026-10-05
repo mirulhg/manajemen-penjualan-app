@@ -24,7 +24,7 @@ export function PinSection() {
           <button
             type="button"
             onClick={handleDismiss}
-            className="min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary"
+            className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
           >
             Sudah saya catat
           </button>

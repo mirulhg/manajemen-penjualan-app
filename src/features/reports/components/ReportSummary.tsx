@@ -14,12 +14,12 @@ export function ReportSummary({ items, note }: ReportSummaryProps) {
       <dl className="grid grid-cols-2 gap-3">
         {items.map((item) => (
           <div key={item.label} className="rounded-md border border-border p-3">
-            <dt className="text-sm text-text-muted">{item.label}</dt>
+            <dt className="text-sm text-muted-foreground">{item.label}</dt>
             <dd className="mt-1 font-semibold">{item.value}</dd>
           </div>
         ))}
       </dl>
-      {note && <p className="text-sm text-text-muted">{note}</p>}
+      {note && <p className="text-sm text-muted-foreground">{note}</p>}
     </section>
   );
 }

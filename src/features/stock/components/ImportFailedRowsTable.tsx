@@ -12,7 +12,7 @@ export function ImportFailedRowsTable({ failed }: ImportFailedRowsTableProps) {
   return (
     <div className="space-y-2">
       <h3 className="font-semibold">Baris yang gagal</h3>
-      <div className="overflow-x-auto rounded-md border border-border bg-surface">
+      <div className="overflow-x-auto rounded-md border border-border bg-card">
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-border">
@@ -33,7 +33,7 @@ export function ImportFailedRowsTable({ failed }: ImportFailedRowsTableProps) {
         </table>
       </div>
       {failed.length > shown.length && (
-        <p className="text-sm text-text-muted">
+        <p className="text-sm text-muted-foreground">
           Menampilkan {shown.length} dari {failed.length} baris gagal. Daftar lengkap ada di laporan yang bisa diunduh
           setelah impor.
         </p>

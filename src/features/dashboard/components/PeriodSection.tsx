@@ -27,10 +27,10 @@ export function PeriodSection({ selection, metrics, previous, onChange }: Period
       <PeriodFilter selection={selection} periods={DASHBOARD_PERIODS} onChange={onChange} />
       <dl aria-live="polite" className="grid gap-4 sm:grid-cols-2">
         {METRICS.map((metric) => (
-          <div key={metric.key} className="rounded-md border border-border bg-surface p-4">
-            <dt className="text-sm text-text-muted">{metric.label}</dt>
+          <div key={metric.key} className="rounded-md border border-border bg-card p-4">
+            <dt className="text-sm text-muted-foreground">{metric.label}</dt>
             <dd className="mt-1 text-2xl font-semibold">{metric.format(metrics[metric.key])}</dd>
-            <dd className="mt-1 text-sm text-text-muted">{describePeriodChange(metrics[metric.key], previous[metric.key])}</dd>
+            <dd className="mt-1 text-sm text-muted-foreground">{describePeriodChange(metrics[metric.key], previous[metric.key])}</dd>
           </div>
         ))}
       </dl>

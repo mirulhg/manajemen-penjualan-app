@@ -13,14 +13,14 @@ export function PriceChangeItem({ change }: PriceChangeItemProps) {
     <li className="border-b border-border px-4 py-3 last:border-b-0">
       <div className="flex items-baseline justify-between gap-4">
         <p className="font-medium">{FIELD_LABELS[change.field]}</p>
-        <time dateTime={change.createdAt} className="text-sm text-text-muted">
+        <time dateTime={change.createdAt} className="text-sm text-muted-foreground">
           {formatDateTime(change.createdAt)}
         </time>
       </div>
       <p>
         {formatRupiah(change.before)} → {formatRupiah(change.after)}
       </p>
-      <p className="text-sm text-text-muted">{change.actor}</p>
+      <p className="text-sm text-muted-foreground">{change.actor}</p>
     </li>
   );
 }

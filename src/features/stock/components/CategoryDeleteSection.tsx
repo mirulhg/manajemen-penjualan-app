@@ -25,11 +25,11 @@ export function CategoryDeleteSection({ category }: CategoryDeleteSectionProps) 
           type="button"
           disabled
           aria-describedby={reasonId}
-          className="min-h-11 rounded-md border border-border px-4 font-medium text-text-muted"
+          className="min-h-11 rounded-md border border-border px-4 font-medium text-muted-foreground"
         >
           Hapus
         </button>
-        <p id={reasonId} className="text-sm text-text-muted">
+        <p id={reasonId} className="text-sm text-muted-foreground">
           {categoryUsageMessage(usageCount)}
         </p>
       </div>
@@ -37,7 +37,7 @@ export function CategoryDeleteSection({ category }: CategoryDeleteSectionProps) 
   }
 
   return (
-    <details className="rounded-md border border-border bg-surface px-4">
+    <details className="rounded-md border border-border bg-card px-4">
       <summary className={SUMMARY_CLASS}>Hapus</summary>
       <div className="space-y-3 pb-4">
         <p>Kategori {category.name} akan dihapus dari daftar kategori.</p>
@@ -50,7 +50,7 @@ export function CategoryDeleteSection({ category }: CategoryDeleteSectionProps) 
           type="button"
           onClick={handleConfirm}
           disabled={mutation.isPending}
-          className="min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary"
+          className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
         >
           {mutation.isPending ? 'Menghapus…' : 'Ya, hapus'}
         </button>

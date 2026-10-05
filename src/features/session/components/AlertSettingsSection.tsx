@@ -29,7 +29,7 @@ export function AlertSettingsSection() {
         label="Tampilkan peringatan di Mode Kasir"
         description="Kasir bisa melihat daftar barang menipis, tetapi tidak melihat daftar perlu restock."
       />
-      <p className="text-sm text-text-muted">Jam tenang dan penerima: butuh akun online (fase berikutnya).</p>
+      <p className="text-sm text-muted-foreground">Jam tenang dan penerima: butuh akun online (fase berikutnya).</p>
     </section>
   );
 }

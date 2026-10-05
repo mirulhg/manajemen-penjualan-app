@@ -32,7 +32,7 @@ export function FormField({ id, label, hint, error, children }: FormFieldProps) 
         'aria-invalid': error ? true : undefined,
       })}
       {hint && (
-        <p id={hintId} className="mt-1 text-sm text-text-muted">
+        <p id={hintId} className="mt-1 text-sm text-muted-foreground">
           {hint}
         </p>
       )}

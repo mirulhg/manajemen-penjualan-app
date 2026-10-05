@@ -8,7 +8,7 @@ type ScrollTableProps = {
 // Tabel lebar bergulir di dalam kotaknya sendiri, sehingga halaman tidak ikut bergulir ke samping di layar kecil.
 export function ScrollTable({ caption, children }: ScrollTableProps) {
   return (
-    <div className="overflow-x-auto rounded-md border border-border bg-surface">
+    <div className="overflow-x-auto rounded-md border border-border bg-card">
       <table className="w-full min-w-max text-left text-sm">
         <caption className="sr-only">{caption}</caption>
         {children}

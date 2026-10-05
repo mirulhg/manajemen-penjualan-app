@@ -20,7 +20,7 @@ export function SalesReportTables({ byPaymentMethod, byDay }: SalesReportTablesP
         </h2>
         <div className="overflow-x-auto print:overflow-visible">
           <table className="w-full text-sm">
-            <thead className="bg-surface">
+            <thead className="bg-card">
               <tr>
                 <th scope="col" className={HEAD_CELL}>Metode</th>
                 <th scope="col" className={NUMBER_HEAD_CELL}>Transaksi</th>
@@ -49,7 +49,7 @@ export function SalesReportTables({ byPaymentMethod, byDay }: SalesReportTablesP
         </h2>
         <div className="overflow-x-auto print:overflow-visible">
           <table className="w-full text-sm">
-            <thead className="bg-surface">
+            <thead className="bg-card">
               <tr>
                 <th scope="col" className={HEAD_CELL}>Tanggal</th>
                 <th scope="col" className={NUMBER_HEAD_CELL}>Transaksi</th>

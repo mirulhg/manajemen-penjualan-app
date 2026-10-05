@@ -32,7 +32,7 @@ export function PaymentSection({ paymentMethod, cashText, view, dispatch }: Paym
         {METHODS.map((method) => (
           <label
             key={method.value}
-            className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md border border-border bg-surface px-3"
+            className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md border border-border bg-card px-3"
           >
             <input
               type="radio"
@@ -65,7 +65,7 @@ export function PaymentSection({ paymentMethod, cashText, view, dispatch }: Paym
                 key={amount}
                 type="button"
                 onClick={() => dispatch({ type: 'setCash', text: String(amount) })}
-                className="min-h-11 rounded-md border border-border bg-surface px-4 font-medium"
+                className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
               >
                 {amount === total ? 'Uang pas' : formatNumber(amount)}
               </button>
@@ -78,7 +78,7 @@ export function PaymentSection({ paymentMethod, cashText, view, dispatch }: Paym
           )}
         </div>
       ) : (
-        <p className="text-text-muted">Dicatat pas sesuai total, tanpa kembalian.</p>
+        <p className="text-muted-foreground">Dicatat pas sesuai total, tanpa kembalian.</p>
       )}
     </fieldset>
   );

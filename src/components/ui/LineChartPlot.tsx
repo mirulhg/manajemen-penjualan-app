@@ -5,8 +5,8 @@ export type ChartSeries = { name: string; points: ChartPoint[] };
 
 // Seri pertama = periode ini (utuh, warna primary); seri kedua = pembanding (putus-putus), jadi tidak bergantung pada warna saja.
 export const SERIES_STYLES = [
-  { line: 'stroke-primary', dot: 'bg-primary', dash: undefined },
-  { line: 'stroke-text-muted', dot: 'bg-text-muted', dash: '6 4' },
+  { line: 'stroke-chart-1', dot: 'bg-primary', dash: undefined },
+  { line: 'stroke-muted-foreground', dot: 'bg-muted-foreground', dash: '6 4' },
 ] as const;
 
 type LineChartPlotProps = {
@@ -66,7 +66,7 @@ export function LineChartPlot({ series, count, top, ticks, active }: LineChartPl
             y2={100}
             strokeWidth={1}
             vectorEffect="non-scaling-stroke"
-            className="stroke-text-muted"
+            className="stroke-muted-foreground"
           />
         )}
       </svg>
@@ -78,7 +78,7 @@ export function LineChartPlot({ series, count, top, ticks, active }: LineChartPl
             key={entry.name}
             aria-hidden="true"
             style={{ left: `${pointPercent(active ?? 0, count)}%`, top: `${yPercent(point.value, top)}%` }}
-            className={`absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface ${SERIES_STYLES[seriesIndex]?.dot ?? ''}`}
+            className={`absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-card ${SERIES_STYLES[seriesIndex]?.dot ?? ''}`}
           />
         );
       })}

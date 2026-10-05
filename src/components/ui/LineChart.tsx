@@ -42,7 +42,7 @@ export function LineChart({ title, series, formatValue, formatAxis, labelHeader 
 
   function renderLabels(maxLabels: number, className: string) {
     return (
-      <div aria-hidden="true" className={`relative h-6 text-xs text-text-muted ${className}`}>
+      <div aria-hidden="true" className={`relative h-6 text-xs text-muted-foreground ${className}`}>
         {visibleLabelIndexes(count, maxLabels).map((index) => {
           const percent = pointPercent(index, count);
           return (
@@ -75,7 +75,7 @@ export function LineChart({ title, series, formatValue, formatAxis, labelHeader 
         </ul>
       )}
       <div className="mt-3 flex gap-2">
-        <div aria-hidden="true" className="relative h-52 w-16 shrink-0 text-xs text-text-muted">
+        <div aria-hidden="true" className="relative h-52 w-16 shrink-0 text-xs text-muted-foreground">
           {ticks.map((tick) => (
             <span key={tick} style={{ top: `${100 - (tick / top) * 100}%` }} className="absolute right-0 -translate-y-1/2">
               {formatAxis(tick)}

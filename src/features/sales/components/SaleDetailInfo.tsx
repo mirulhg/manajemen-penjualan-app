@@ -27,7 +27,7 @@ export function SaleDetailInfo({ sale }: SaleDetailInfoProps) {
   ];
 
   return (
-    <div className="rounded-md border border-border bg-surface p-4">
+    <div className="rounded-md border border-border bg-card p-4">
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-lg font-semibold">{sale.number}</h2>
         <SaleStatusLabel status={saleDisplayStatus(sale)} />
@@ -35,7 +35,7 @@ export function SaleDetailInfo({ sale }: SaleDetailInfoProps) {
       <dl className="mt-4 grid gap-3 sm:grid-cols-2">
         {rows.map((row) => (
           <div key={row.label}>
-            <dt className="text-sm text-text-muted">{row.label}</dt>
+            <dt className="text-sm text-muted-foreground">{row.label}</dt>
             <dd className="font-medium">{row.value}</dd>
           </div>
         ))}

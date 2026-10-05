@@ -15,7 +15,7 @@ export function StockReportTable({ rows }: StockReportTableProps) {
       </h2>
       <div className={TABLE_WRAPPER}>
         <table className={TABLE}>
-          <thead className="bg-surface">
+          <thead className="bg-card">
             <tr>
               <th scope="col" className={HEAD_CELL}>Produk</th>
               <th scope="col" className={NUMBER_HEAD_CELL}>Stok</th>
@@ -28,7 +28,7 @@ export function StockReportTable({ rows }: StockReportTableProps) {
               <tr key={row.sku} className={ROW}>
                 <th scope="row" className={`${CELL} text-left font-normal`}>
                   {row.name}
-                  <span className="block text-xs text-text-muted">
+                  <span className="block text-xs text-muted-foreground">
                     {row.sku} · {row.category}
                     {row.status === 'Diarsipkan' && ' · Diarsipkan'}
                   </span>

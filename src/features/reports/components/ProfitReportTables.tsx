@@ -23,7 +23,7 @@ export function ProfitReportTables({ byCategory, byProduct }: ProfitReportTables
         </h2>
         <div className={TABLE_WRAPPER}>
           <table className={TABLE}>
-            <thead className="bg-surface">
+            <thead className="bg-card">
               <tr>
                 <th scope="col" className={HEAD_CELL}>Kategori</th>
                 <th scope="col" className={NUMBER_HEAD_CELL}>Omzet</th>
@@ -52,7 +52,7 @@ export function ProfitReportTables({ byCategory, byProduct }: ProfitReportTables
         </h2>
         <div className={TABLE_WRAPPER}>
           <table className={TABLE}>
-            <thead className="bg-surface">
+            <thead className="bg-card">
               <tr>
                 <th scope="col" className={HEAD_CELL}>Produk</th>
                 <th scope="col" className={NUMBER_HEAD_CELL}>Terjual</th>
@@ -67,7 +67,7 @@ export function ProfitReportTables({ byCategory, byProduct }: ProfitReportTables
                 <tr key={`${row.sku}-${row.name}`} className={ROW}>
                   <th scope="row" className={`${CELL} text-left font-normal`}>
                     {row.name}
-                    <span className="block text-xs text-text-muted">
+                    <span className="block text-xs text-muted-foreground">
                       {row.sku} · {row.category}
                       {row.status === 'Diarsipkan' && ' · Diarsipkan'}
                     </span>

@@ -27,7 +27,7 @@ export function StockMovementHistory({ productId, unit }: StockMovementHistoryPr
         <p className="sr-only" role="status">
           Memuat riwayat
         </p>
-        <ul aria-hidden="true" className="rounded-md border border-border bg-surface">
+        <ul aria-hidden="true" className="rounded-md border border-border bg-card">
           {Array.from({ length: SKELETON_ROW_COUNT }, (_, index) => (
             <li key={index} className="border-b border-border px-4 py-3 last:border-b-0">
               <div className="h-4 w-1/2 rounded-md bg-border" />
@@ -40,11 +40,11 @@ export function StockMovementHistory({ productId, unit }: StockMovementHistoryPr
   } else if (error) {
     content = <StockListError error={error} onRetry={handleRetry} />;
   } else if (data.total === 0) {
-    content = <p className="text-text-muted">Belum ada riwayat.</p>;
+    content = <p className="text-muted-foreground">Belum ada riwayat.</p>;
   } else {
     content = (
       <div className="space-y-4">
-        <ol className="rounded-md border border-border bg-surface">
+        <ol className="rounded-md border border-border bg-card">
           {data.items.map((movement) => (
             <StockMovementItem key={movement.id} movement={movement} unit={unit} />
           ))}
@@ -59,7 +59,7 @@ export function StockMovementHistory({ productId, unit }: StockMovementHistoryPr
       <h2 id="movement-heading" className="text-lg font-semibold">
         Riwayat pergerakan
       </h2>
-      {data && <p className="mb-3 text-sm text-text-muted">{formatNumber(data.total)} pergerakan</p>}
+      {data && <p className="mb-3 text-sm text-muted-foreground">{formatNumber(data.total)} pergerakan</p>}
       {content}
     </section>
   );

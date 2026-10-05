@@ -20,16 +20,16 @@ export function RestockSection() {
       {isPending && <AlertsSkeleton />}
       {error && (
         <div role="alert">
-          <p className="text-text-muted">Daftar belanja gagal dibaca dari penyimpanan di perangkat ini.</p>
-          <button type="button" onClick={handleRetry} className="mt-2 min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary">
+          <p className="text-muted-foreground">Daftar belanja gagal dibaca dari penyimpanan di perangkat ini.</p>
+          <button type="button" onClick={handleRetry} className="mt-2 min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
             Coba lagi
           </button>
         </div>
       )}
-      {data && data.length === 0 && <p className="text-text-muted">Tidak ada barang yang perlu dibeli.</p>}
+      {data && data.length === 0 && <p className="text-muted-foreground">Tidak ada barang yang perlu dibeli.</p>}
       {data && data.length > 0 && (
         <>
-          <p className="text-sm text-text-muted">
+          <p className="text-sm text-muted-foreground">
             Saran jumlah cukup untuk 14 hari ke depan dan mengangkat stok di atas batas menipis.
           </p>
           <ScrollTable caption="Barang yang perlu dibeli beserta saran jumlahnya">

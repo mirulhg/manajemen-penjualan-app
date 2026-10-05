@@ -4,7 +4,7 @@ type PaginationProps = {
   onPageChange: (page: number) => void;
 };
 
-const BUTTON_CLASS = 'min-h-11 rounded-md border border-border bg-surface px-4 font-medium';
+const BUTTON_CLASS = 'min-h-11 rounded-md border border-border bg-card px-4 font-medium';
 
 export function Pagination({
   page,
@@ -21,7 +21,7 @@ export function Pagination({
       >
         Sebelumnya
       </button>
-      <p className="text-sm text-text-muted">
+      <p className="text-sm text-muted-foreground">
         Halaman {page} dari {pageCount}
       </p>
       <button

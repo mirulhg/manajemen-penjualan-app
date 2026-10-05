@@ -57,7 +57,7 @@ export function ImportPreview({ validation, isPending, hasError, onImport, onCho
           type="button"
           onClick={onImport}
           disabled={ready.length === 0 || isPending}
-          className="min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary"
+          className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
         >
           {isPending ? 'Mengimpor…' : `Impor ${readyCount} barang`}
         </button>
@@ -65,7 +65,7 @@ export function ImportPreview({ validation, isPending, hasError, onImport, onCho
           type="button"
           onClick={onChooseOther}
           disabled={isPending}
-          className="min-h-11 rounded-md border border-border bg-surface px-4 font-medium"
+          className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
         >
           Pilih file lain
         </button>

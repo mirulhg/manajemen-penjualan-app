@@ -50,7 +50,7 @@ export function SlowMoversSection({ threshold, onThresholdChange }: SlowMoversSe
           )}
         </FormField>
         {data && data.length === 0 ? (
-          <p className="text-text-muted">Semua barang aktif terjual dalam {threshold} hari terakhir.</p>
+          <p className="text-muted-foreground">Semua barang aktif terjual dalam {threshold} hari terakhir.</p>
         ) : (
           <ScrollTable caption={`Barang aktif tanpa penjualan dalam ${threshold} hari terakhir`}>
             <thead>

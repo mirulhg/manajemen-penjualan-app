@@ -15,10 +15,10 @@ export function ComparisonSection({ today, yesterday }: ComparisonSectionProps) 
       </h2>
       <dl className="grid gap-4 sm:grid-cols-2">
         {METRICS.map((metric) => (
-          <div key={metric.key} className="rounded-md border border-border bg-surface p-4">
-            <dt className="text-sm text-text-muted">{metric.label}</dt>
+          <div key={metric.key} className="rounded-md border border-border bg-card p-4">
+            <dt className="text-sm text-muted-foreground">{metric.label}</dt>
             <dd className="mt-1 text-2xl font-semibold">{metric.format(today[metric.key])}</dd>
-            <dd className="mt-1 text-sm text-text-muted">
+            <dd className="mt-1 text-sm text-muted-foreground">
               Kemarin {metric.format(yesterday[metric.key])} · {describeChange(today[metric.key], yesterday[metric.key])}
             </dd>
           </div>

@@ -19,7 +19,7 @@ export function LoadTestScreen({ state, notice, onContinue }: LoadTestScreenProp
     <main className="mx-auto max-w-3xl space-y-4 p-6">
       <title>Uji Beban · Manajemen Stok</title>
       <h1 className="text-xl font-semibold">Uji beban (database manajemen-stok-uji-beban)</h1>
-      {notice && <p className="rounded-md border border-border bg-surface p-3">{notice}</p>}
+      {notice && <p className="rounded-md border border-border bg-card p-3">{notice}</p>}
       {state.phase === 'running' && (
         <p role="status">
           Membuat data uji: {formatNumber(state.done)} dari {formatNumber(state.total)} transaksi. Jangan tutup tab ini.
@@ -39,7 +39,7 @@ export function LoadTestScreen({ state, notice, onContinue }: LoadTestScreenProp
         </p>
       )}
       {state.phase !== 'running' && (
-        <button type="button" onClick={onContinue} className="min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary">
+        <button type="button" onClick={onContinue} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
           Buka aplikasi
         </button>
       )}

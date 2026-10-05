@@ -25,7 +25,7 @@ export function SaleHistoryItem({ sale }: SaleHistoryItemProps) {
       >
         <div className="min-w-0">
           <p className="font-medium">{sale.number}</p>
-          <p className="text-sm text-text-muted">
+          <p className="text-sm text-muted-foreground">
             {formatDateTime(sale.createdAt)} · {METHOD_LABELS[sale.paymentMethod]} ·{' '}
             {formatNumber(sale.itemCount)} barang
           </p>

@@ -66,13 +66,6 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
-
-  /* Sementara: nama token lama, dihapus setelah migrasi nama di seluruh kode. */
-  --color-surface: var(--card);
-  --color-text: var(--foreground);
-  --color-text-muted: var(--muted-foreground);
-  --color-on-primary: var(--primary-foreground);
-  --color-focus: var(--ring);
 }
 
 /* Tailwind v4 tidak punya namespace tema untuk z-index, jadi skala bernama dibuat lewat utility sendiri. */

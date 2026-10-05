@@ -12,9 +12,9 @@ export function AdjustStockSummary({ product }: AdjustStockSummaryProps) {
   const status = getStockStatus(product.stockQuantity, product.minStock, useStockThreshold());
 
   return (
-    <div className="rounded-md border border-border bg-surface p-4">
+    <div className="rounded-md border border-border bg-card p-4">
       <h2 className="text-lg font-semibold">{product.name}</h2>
-      <p className="text-sm text-text-muted">
+      <p className="text-sm text-muted-foreground">
         {product.sku} · {product.category}
       </p>
       <p className="mt-4 flex items-center gap-2">

@@ -54,7 +54,7 @@ export function CancelForm({ saleId, saleNumber }: CancelFormProps) {
       <button
         type="submit"
         disabled={isSaving}
-        className="min-h-11 w-full rounded-md bg-status-habis-text px-4 font-medium text-on-primary sm:w-auto"
+        className="min-h-11 w-full rounded-md bg-status-habis-text px-4 font-medium text-primary-foreground sm:w-auto"
       >
         {isSaving ? 'Membatalkan…' : 'Ya, batalkan'}
       </button>

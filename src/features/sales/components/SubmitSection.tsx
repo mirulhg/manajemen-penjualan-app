@@ -46,11 +46,11 @@ export function SubmitSection({ blockReason, isPending, error }: SubmitSectionPr
   return (
     <div className="space-y-3">
       {error && <SaleErrorMessage error={error} />}
-      {blockReason && !isPending && <p className="text-text-muted">{blockReason}</p>}
+      {blockReason && !isPending && <p className="text-muted-foreground">{blockReason}</p>}
       <button
         type="submit"
         disabled={blockReason !== null || isPending}
-        className="min-h-12 w-full rounded-md bg-primary px-4 text-lg font-medium text-on-primary"
+        className="min-h-12 w-full rounded-md bg-primary px-4 text-lg font-medium text-primary-foreground"
       >
         {isPending ? 'Menyimpan…' : 'Simpan transaksi'}
       </button>

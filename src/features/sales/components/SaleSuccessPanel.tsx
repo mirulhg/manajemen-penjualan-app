@@ -31,7 +31,7 @@ export function SaleSuccessPanel({ sale, onNewSale }: SaleSuccessPanelProps) {
         type="button"
         ref={focusOnMount}
         onClick={onNewSale}
-        className="min-h-12 w-full rounded-md bg-primary px-4 text-lg font-medium text-on-primary"
+        className="min-h-12 w-full rounded-md bg-primary px-4 text-lg font-medium text-primary-foreground"
       >
         Transaksi baru
       </button>

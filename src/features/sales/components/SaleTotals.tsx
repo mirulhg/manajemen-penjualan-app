@@ -21,7 +21,7 @@ export function SaleTotals({ view, transactionDiscountText, dispatch }: SaleTota
       : null;
 
   return (
-    <div className="space-y-2 rounded-md border border-border bg-surface p-4">
+    <div className="space-y-2 rounded-md border border-border bg-card p-4">
       <details>
         <summary className="inline-flex min-h-11 cursor-pointer items-center font-medium text-primary">
           Diskon transaksi
@@ -48,11 +48,11 @@ export function SaleTotals({ view, transactionDiscountText, dispatch }: SaleTota
       </details>
       <dl>
         <div className="flex justify-between">
-          <dt className="text-text-muted">Subtotal</dt>
+          <dt className="text-muted-foreground">Subtotal</dt>
           <dd>{formatRupiah(totals.subtotal)}</dd>
         </div>
         <div className="flex justify-between">
-          <dt className="text-text-muted">Diskon</dt>
+          <dt className="text-muted-foreground">Diskon</dt>
           <dd>{formatRupiah(discountTotal)}</dd>
         </div>
         <div className="flex items-baseline justify-between">

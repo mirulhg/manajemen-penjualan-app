@@ -12,7 +12,7 @@ export function StoreLetterhead() {
   return (
     <div>
       {needsProfile && (
-        <p className="mb-3 rounded-md border border-border bg-surface p-3 text-sm print:hidden">
+        <p className="mb-3 rounded-md border border-border bg-card p-3 text-sm print:hidden">
           Isi profil toko di{' '}
           <Link to="/pengaturan" className="font-medium text-primary underline">
             Pengaturan

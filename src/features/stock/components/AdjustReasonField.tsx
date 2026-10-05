@@ -24,7 +24,7 @@ export function AdjustReasonField({ register, error }: AdjustReasonFieldProps) {
         className={FIELD_CLASS}
         {...register('reason')}
       />
-      <p id="adjust-reason-hint" className="mt-1 text-sm text-text-muted">
+      <p id="adjust-reason-hint" className="mt-1 text-sm text-muted-foreground">
         Contoh: “Kiriman supplier”, “Hasil stock opname”.
       </p>
       {error && (

@@ -16,7 +16,7 @@ export function OwnerOnly({ children }: OwnerOnlyProps) {
     <section>
       <title>Khusus pemilik · Manajemen Stok</title>
       <h1 className="text-xl font-semibold">Halaman ini hanya untuk pemilik</h1>
-      <p className="mt-2 text-text-muted">Keluar dari Mode Kasir dengan PIN untuk membukanya.</p>
+      <p className="mt-2 text-muted-foreground">Keluar dari Mode Kasir dengan PIN untuk membukanya.</p>
       <Link to="/keluar-mode-kasir" className="mt-4 inline-flex min-h-11 items-center font-medium text-primary">
         Keluar Mode Kasir
       </Link>

@@ -23,7 +23,7 @@ export function StockForecastSection() {
       onRetry={handleRetry}
     >
       <div className="space-y-3">
-        <p className="text-text-muted">
+        <p className="text-muted-foreground">
           Dihitung dari penjualan {FORECAST_DAYS} hari terakhir. Saran restock cukup untuk {FORECAST_DAYS} hari ke depan.
         </p>
         <ScrollTable caption="Barang aktif menurut perkiraan waktu habis, paling cepat habis di atas">

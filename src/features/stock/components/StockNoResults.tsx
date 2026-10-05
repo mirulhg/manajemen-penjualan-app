@@ -7,7 +7,7 @@ export function StockNoResults({ query, onClear }: StockNoResultsProps) {
   return (
     <div>
       <h2 className="text-lg font-semibold">Tidak ada barang yang cocok</h2>
-      <p className="mt-2 text-text-muted">
+      <p className="mt-2 text-muted-foreground">
         {query
           ? `Tidak ada barang untuk kata kunci “${query.trim()}” dengan filter yang dipilih.`
           : 'Tidak ada barang dengan filter yang dipilih.'}
@@ -15,7 +15,7 @@ export function StockNoResults({ query, onClear }: StockNoResultsProps) {
       <button
         type="button"
         onClick={onClear}
-        className="mt-4 min-h-11 rounded-md border border-border bg-surface px-4 font-medium"
+        className="mt-4 min-h-11 rounded-md border border-border bg-card px-4 font-medium"
       >
         Hapus filter
       </button>

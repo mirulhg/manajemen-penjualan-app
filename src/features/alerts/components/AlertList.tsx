@@ -26,7 +26,7 @@ export function AlertList({ alerts }: AlertListProps) {
   }
 
   return (
-    <ul ref={handleListRef} className="rounded-md border border-border bg-surface">
+    <ul ref={handleListRef} className="rounded-md border border-border bg-card">
       {alerts.map(({ alert, product }) => (
         <li
           key={alert.id}
@@ -36,10 +36,10 @@ export function AlertList({ alerts }: AlertListProps) {
             <Link to={`/stok/${product.id}`} className="inline-flex min-h-11 items-center font-medium text-primary underline">
               {product.name}
             </Link>
-            <p className="text-sm text-text-muted">
+            <p className="text-sm text-muted-foreground">
               Stok {formatNumber(product.stockQuantity)} {product.unit} · Batas {formatNumber(product.minStock ?? defaultMinStock)}
             </p>
-            <p className="text-sm text-text-muted">Sejak {formatDateTime(alert.openedAt)}</p>
+            <p className="text-sm text-muted-foreground">Sejak {formatDateTime(alert.openedAt)}</p>
           </div>
           <StockStatusBadge status={alert.level} />
         </li>

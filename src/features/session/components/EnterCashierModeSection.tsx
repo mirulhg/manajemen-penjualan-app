@@ -26,7 +26,7 @@ export function EnterCashierModeSection() {
       <h2 id="cashier-mode-heading" className="text-lg font-semibold">
         Mode Kasir
       </h2>
-      <p className="text-sm text-text-muted">
+      <p className="text-sm text-muted-foreground">
         Kasir hanya bisa memakai kasir dan melihat daftar stok, tanpa harga beli atau laporan. Keluar dari mode ini
         butuh PIN.
       </p>
@@ -41,7 +41,7 @@ export function EnterCashierModeSection() {
         onClick={handleEnter}
         disabled={!hasPin || mutation.isPending}
         aria-describedby={hasPin ? undefined : 'cashier-mode-hint'}
-        className="min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary"
+        className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
       >
         Masuk Mode Kasir
       </button>

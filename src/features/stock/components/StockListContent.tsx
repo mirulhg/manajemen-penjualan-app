@@ -53,7 +53,7 @@ export function StockListContent() {
         onChange={setFilters}
         onClear={clearFilters}
       />
-      <p aria-live="polite" className="text-sm text-text-muted">
+      <p aria-live="polite" className="text-sm text-muted-foreground">
         Menampilkan {formatNumber(visibleProducts.length)} dari {formatNumber(scopeCount)}{' '}
         barang
       </p>

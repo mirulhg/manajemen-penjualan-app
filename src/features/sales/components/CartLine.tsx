@@ -11,7 +11,7 @@ type CartLineProps = {
   dispatch: Dispatch<CartAction>;
 };
 
-const STEP_BUTTON_CLASS = 'min-h-11 min-w-11 rounded-md border border-border bg-surface font-medium';
+const STEP_BUTTON_CLASS = 'min-h-11 min-w-11 rounded-md border border-border bg-card font-medium';
 
 export function CartLine({ line, dispatch }: CartLineProps) {
   const { product } = line;
@@ -33,7 +33,7 @@ export function CartLine({ line, dispatch }: CartLineProps) {
         <p className="font-medium">{product.name}</p>
         <p className="shrink-0 font-medium">{formatRupiah(line.lineTotal)}</p>
       </div>
-      <p className="text-sm text-text-muted">
+      <p className="text-sm text-muted-foreground">
         {formatRupiah(product.sellingPrice)} per {product.unit}
       </p>
       <div className="flex items-center gap-2">
@@ -64,7 +64,7 @@ export function CartLine({ line, dispatch }: CartLineProps) {
         <button
           type="button"
           onClick={() => dispatch({ type: 'remove', productId: product.id })}
-          className="ml-auto min-h-11 rounded-md border border-border bg-surface px-3 font-medium"
+          className="ml-auto min-h-11 rounded-md border border-border bg-card px-3 font-medium"
         >
           Hapus
         </button>

@@ -31,14 +31,14 @@ export function StockMovementItem({ movement, unit }: StockMovementItemProps) {
         <p className="font-medium">
           {TYPE_LABELS[movement.type]} {formatDelta(delta)}
         </p>
-        <time dateTime={movement.createdAt} className="text-sm text-text-muted">
+        <time dateTime={movement.createdAt} className="text-sm text-muted-foreground">
           {formatDateTime(movement.createdAt)}
         </time>
       </div>
       <p>
         {formatNumber(movement.quantityBefore)} → {formatNumber(movement.quantityAfter)} {unit}
       </p>
-      <p className="text-sm text-text-muted">
+      <p className="text-sm text-muted-foreground">
         {movement.reason} · {movement.actor}
       </p>
     </li>

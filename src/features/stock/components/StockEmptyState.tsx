@@ -7,7 +7,7 @@ export function StockEmptyState() {
   return (
     <div>
       <h2 className="text-lg font-semibold">Belum ada barang di toko ini</h2>
-      <p className="mt-2 text-text-muted">Barang yang ditambahkan akan muncul di daftar ini.</p>
+      <p className="mt-2 text-muted-foreground">Barang yang ditambahkan akan muncul di daftar ini.</p>
       {!isCashierMode && (
         <div className="mt-4">
           <AddProductLink />

@@ -8,7 +8,7 @@ type AdjustStockPreviewProps = {
 
 export function AdjustStockPreview({ quantityAfter, delta, unit }: AdjustStockPreviewProps) {
   if (delta === 0) {
-    return <p className="text-text-muted">Sama dengan stok sekarang</p>;
+    return <p className="text-muted-foreground">Sama dengan stok sekarang</p>;
   }
 
   const sign = delta > 0 ? '+' : '−';

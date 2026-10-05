@@ -26,7 +26,7 @@ export function CategoryRow({ category }: CategoryRowProps) {
   return (
     <li className="border-b border-border px-4 py-3 last:border-b-0">
       <p className="font-medium">{category.name}</p>
-      <p className="text-sm text-text-muted">
+      <p className="text-sm text-muted-foreground">
         {formatNumber(category.activeCount)} barang aktif
         {category.archivedCount > 0 && ` · ${formatNumber(category.archivedCount)} diarsipkan`}
       </p>
@@ -36,7 +36,7 @@ export function CategoryRow({ category }: CategoryRowProps) {
           type="button"
           aria-expanded={isRenaming}
           onClick={handleOpenRename}
-          className="min-h-11 rounded-md border border-border bg-surface px-4 font-medium"
+          className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
         >
           Ubah nama
         </button>

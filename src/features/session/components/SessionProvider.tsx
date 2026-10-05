@@ -19,14 +19,14 @@ export function SessionProvider({ children }: SessionProviderProps) {
     return (
       <div role="alert" className="mx-auto max-w-3xl p-4">
         <h1 className="text-xl font-semibold">Pengaturan perangkat tidak bisa dibaca</h1>
-        <p className="mt-2 text-text-muted">
+        <p className="mt-2 text-muted-foreground">
           Aplikasi gagal membaca pengaturan dari penyimpanan di perangkat ini. Coba lagi; jika masih gagal, muat
           ulang halaman.
         </p>
         <button
           type="button"
           onClick={handleRetry}
-          className="mt-4 min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary"
+          className="mt-4 min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
         >
           Coba lagi
         </button>
@@ -35,7 +35,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
   }
   if (!session) {
     return (
-      <p role="status" className="p-4 text-text-muted">
+      <p role="status" className="p-4 text-muted-foreground">
         Memuat aplikasi…
       </p>
     );

@@ -122,7 +122,7 @@ export function StockFilters({
           <button
             type="button"
             onClick={onClear}
-            className="min-h-11 rounded-md border border-border bg-surface px-4 font-medium"
+            className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
           >
             Hapus filter
           </button>

@@ -44,7 +44,7 @@ export function ShareRestockButton({ items }: ShareRestockButtonProps) {
       <button
         type="button"
         onClick={() => void handleShare()}
-        className="min-h-11 rounded-md bg-primary px-4 font-medium text-on-primary"
+        className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
       >
         Bagikan daftar
       </button>

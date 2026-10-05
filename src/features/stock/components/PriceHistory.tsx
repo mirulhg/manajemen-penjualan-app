@@ -26,11 +26,11 @@ export function PriceHistory({ productId }: PriceHistoryProps) {
   } else if (error) {
     content = <StockListError error={error} onRetry={handleRetry} />;
   } else if (data.total === 0) {
-    content = <p className="text-text-muted">Belum ada perubahan harga.</p>;
+    content = <p className="text-muted-foreground">Belum ada perubahan harga.</p>;
   } else {
     content = (
       <div className="space-y-4">
-        <ul className="rounded-md border border-border bg-surface">
+        <ul className="rounded-md border border-border bg-card">
           {data.items.map((change) => (
             <PriceChangeItem key={change.id} change={change} />
           ))}

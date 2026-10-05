@@ -26,7 +26,7 @@ export function StockList({ products }: StockListProps) {
       ref={(element) => {
         if (element) setScrollMargin(element.offsetTop);
       }}
-      className="relative rounded-md border border-border bg-surface"
+      className="relative rounded-md border border-border bg-card"
       style={{ height: virtualizer.getTotalSize() }}
     >
       {virtualizer.getVirtualItems().map((row) => {

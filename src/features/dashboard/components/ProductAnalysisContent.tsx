@@ -26,7 +26,7 @@ export function ProductAnalysisContent() {
     return (
       <div role="status" className="space-y-2">
         <h2 className="text-lg font-semibold">Data belum cukup</h2>
-        <p className="text-text-muted">
+        <p className="text-muted-foreground">
           Analisis butuh penjualan minimal 7 hari; saat ini baru {data.daysOfData} hari. Catat penjualan di Kasir,
           lalu buka halaman ini lagi.
         </p>

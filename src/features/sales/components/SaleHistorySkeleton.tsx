@@ -6,7 +6,7 @@ export function SaleHistorySkeleton() {
       <p className="sr-only" role="status">
         Memuat riwayat transaksi
       </p>
-      <ul aria-hidden="true" className="rounded-md border border-border bg-surface">
+      <ul aria-hidden="true" className="rounded-md border border-border bg-card">
         {Array.from({ length: SKELETON_ROW_COUNT }, (_, index) => (
           <li
             key={index}
