@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { formatRupiah } from '../../../utils/format-rupiah';
 import type { Sale } from '../../../lib/db/records';
 import { useSession } from '../../session';
+import { Alert } from '@/components/ui/alert';
 
 type SaleSuccessPanelProps = {
   sale: Sale;
@@ -18,7 +19,7 @@ export function SaleSuccessPanel({ sale, onNewSale }: SaleSuccessPanelProps) {
   const { isCashierMode } = useSession();
 
   return (
-    <div role="status" className="space-y-2 rounded-md bg-status-aman-bg p-4 text-status-aman-text">
+    <Alert variant="success" role="status" className="space-y-2 p-4">
       <p className="font-medium">Transaksi {sale.number} tersimpan</p>
       <p>Total {formatRupiah(sale.total)}</p>
       <p className="text-2xl font-semibold">Kembalian {formatRupiah(sale.change)}</p>
@@ -35,6 +36,6 @@ export function SaleSuccessPanel({ sale, onNewSale }: SaleSuccessPanelProps) {
       >
         Transaksi baru
       </button>
-    </div>
+    </Alert>
   );
 }

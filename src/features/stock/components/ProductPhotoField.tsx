@@ -77,7 +77,7 @@ export function ProductPhotoField({ productId, productName, draft, onChange }: P
       />
       {isProcessing && <p className="mt-1 text-sm text-muted-foreground">Memproses foto…</p>}
       {message && (
-        <p id="product-photo-error" role="alert" className="mt-1 text-sm text-status-habis-text">
+        <p id="product-photo-error" role="alert" className="mt-1 text-sm text-destructive">
           {message}
         </p>
       )}

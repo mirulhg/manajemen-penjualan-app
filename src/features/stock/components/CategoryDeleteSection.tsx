@@ -1,6 +1,7 @@
 import { categoryUsageMessage } from '../api/category-error';
 import type { CategoryWithCounts } from '../api/get-categories';
 import { useDeleteCategory } from '../api/use-category-mutations';
+import { Alert } from '@/components/ui/alert';
 
 type CategoryDeleteSectionProps = {
   category: CategoryWithCounts;
@@ -42,9 +43,9 @@ export function CategoryDeleteSection({ category }: CategoryDeleteSectionProps) 
       <div className="space-y-3 pb-4">
         <p>Kategori {category.name} akan dihapus dari daftar kategori.</p>
         {mutation.isError && (
-          <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+          <Alert variant="destructive" className="p-3">
             {mutation.error.message}
-          </p>
+          </Alert>
         )}
         <button
           type="button"

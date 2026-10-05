@@ -1,6 +1,7 @@
 import { formatNumber } from '../../../utils/format-number';
 import { useArchiveProduct, useUnarchiveProduct } from '../api/use-archive-product';
 import type { Product } from '../schema';
+import { Alert } from '@/components/ui/alert';
 
 type ProductArchiveSectionProps = {
   product: Product;
@@ -40,9 +41,9 @@ export function ProductArchiveSection({ product }: ProductArchiveSectionProps) {
           </>
         )}
         {mutation.isError && (
-          <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+          <Alert variant="destructive" className="p-3">
             {mutation.error.message}
-          </p>
+          </Alert>
         )}
         <button type="button" onClick={handleConfirm} disabled={mutation.isPending} className={BUTTON_CLASS}>
           {mutation.isPending

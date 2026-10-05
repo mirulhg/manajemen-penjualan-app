@@ -28,7 +28,7 @@ export function AdjustReasonField({ register, error }: AdjustReasonFieldProps) {
         Contoh: “Kiriman supplier”, “Hasil stock opname”.
       </p>
       {error && (
-        <p id="adjust-reason-error" className="mt-1 text-sm text-status-habis-text">
+        <p id="adjust-reason-error" className="mt-1 text-sm text-destructive">
           {error}
         </p>
       )}

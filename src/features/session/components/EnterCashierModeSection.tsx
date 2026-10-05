@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router';
 
 import { useEnterCashierMode } from '../api/use-session-mutations';
 import { useSession } from '../session-context';
+import { Alert } from '@/components/ui/alert';
 
 export function EnterCashierModeSection() {
   const { hasPin } = useSession();
@@ -32,9 +33,9 @@ export function EnterCashierModeSection() {
       </p>
       {!hasPin && <p id="cashier-mode-hint">Buat PIN pemilik dulu sebelum masuk Mode Kasir.</p>}
       {mutation.isError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           {mutation.error.message}
-        </p>
+        </Alert>
       )}
       <button
         type="button"

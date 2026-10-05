@@ -8,6 +8,7 @@ import { SessionError } from '../api/session-error';
 import { useChangePin } from '../api/use-session-mutations';
 import { newPinSchema } from '../schema';
 import { PinField } from './PinField';
+import { Alert } from '@/components/ui/alert';
 
 const changePinSchema = z
   .object({ oldPin: z.string().min(1, 'Isi PIN lama.') })
@@ -60,14 +61,14 @@ export function PinChangeForm() {
         registration={register('confirmPin')}
       />
       {hasSaved && (
-        <p role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
+        <Alert variant="success" role="status" className="p-3">
           PIN diubah.
-        </p>
+        </Alert>
       )}
       {hasUnexpectedError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Coba simpan lagi.
-        </p>
+        </Alert>
       )}
       <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
         {isSaving ? 'Menyimpan…' : 'Ubah PIN'}

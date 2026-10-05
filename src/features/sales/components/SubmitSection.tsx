@@ -1,4 +1,5 @@
 import { CreateSaleError } from '../api/create-sale';
+import { Alert } from '@/components/ui/alert';
 
 type SubmitSectionProps = {
   blockReason: string | null;
@@ -9,7 +10,7 @@ type SubmitSectionProps = {
 function SaleErrorMessage({ error }: { error: Error }) {
   if (error instanceof CreateSaleError && error.code === 'INSUFFICIENT_STOCK') {
     return (
-      <div role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+      <Alert variant="destructive" className="p-3">
         <p>Stok tidak cukup untuk:</p>
         <ul className="list-disc pl-5">
           {error.shortages.map((shortage) => (
@@ -18,27 +19,27 @@ function SaleErrorMessage({ error }: { error: Error }) {
             </li>
           ))}
         </ul>
-      </div>
+      </Alert>
     );
   }
   if (error instanceof CreateSaleError && error.code === 'TOTAL_CHANGED') {
     return (
-      <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+      <Alert variant="destructive" className="p-3">
         Harga barang berubah. Periksa total lalu simpan lagi.
-      </p>
+      </Alert>
     );
   }
   if (error instanceof CreateSaleError && error.code === 'PRODUCT_ARCHIVED') {
     return (
-      <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+      <Alert variant="destructive" className="p-3">
         {error.message}
-      </p>
+      </Alert>
     );
   }
   return (
-    <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+    <Alert variant="destructive" className="p-3">
       Transaksi tidak tersimpan. Isian dan keranjang Anda masih ada; periksa lalu coba simpan lagi.
-    </p>
+    </Alert>
   );
 }
 

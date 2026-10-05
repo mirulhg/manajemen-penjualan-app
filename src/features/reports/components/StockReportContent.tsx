@@ -8,6 +8,7 @@ import { ReportError } from './ReportError';
 import { ReportSkeleton } from './ReportSkeleton';
 import { ReportSummary } from './ReportSummary';
 import { StockReportTable } from './StockReportTable';
+import { Alert } from '@/components/ui/alert';
 
 type StockReportContentProps = {
   date: string;
@@ -23,9 +24,9 @@ export function StockReportContent({ date }: StockReportContentProps) {
   if (isPending) return <ReportSkeleton />;
   if (error instanceof StockReportError) {
     return (
-      <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text print:hidden">
+      <Alert variant="destructive" className="p-3 print:hidden">
         {error.message}
-      </p>
+      </Alert>
     );
   }
   if (error) return <ReportError error={error} onRetry={handleRetry} />;

@@ -17,6 +17,7 @@ import { InitialStockField } from './InitialStockField';
 import { PriceAndLimitFields } from './PriceAndLimitFields';
 import { ProductPhotoField } from './ProductPhotoField';
 import { SoldAtLossWarning } from './SoldAtLossWarning';
+import { Alert } from '@/components/ui/alert';
 
 type NewProductFormProps = {
   categories: string[];
@@ -90,7 +91,7 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
       <SoldAtLossWarning purchasePriceText={purchasePriceText} sellingPriceText={sellingPriceText} />
       <ProductPhotoField productId={null} productName={nameText} draft={photoDraft} onChange={setPhotoDraft} />
       {hasSaved && (
-        <div role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
+        <Alert variant="success" role="status" className="p-3">
           <p>
             Tersimpan. {mutation.data.name} ditambahkan dengan stok{' '}
             {formatNumber(mutation.data.stockQuantity)} {mutation.data.unit}.
@@ -101,17 +102,17 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
           >
             Lihat di daftar stok
           </Link>
-        </div>
+        </Alert>
       )}
       {hasUnexpectedError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Isian Anda masih ada; coba simpan lagi.
-        </p>
+        </Alert>
       )}
       {hasPhotoFailed && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Barang tersimpan, tetapi foto gagal disimpan. Buka Ubah barang untuk mencoba lagi.
-        </p>
+        </Alert>
       )}
       <button
         type="submit"

@@ -11,6 +11,7 @@ import { calculateReturn } from '../sale-returns';
 import type { SaleItemProgress } from '../sale-returns';
 import { buildReturnFormSchema } from '../schema';
 import type { ReturnFormInput, ReturnFormValues } from '../schema';
+import { Alert } from '@/components/ui/alert';
 
 type ReturnFormProps = {
   saleId: string;
@@ -83,7 +84,7 @@ export function ReturnForm({ saleId, progress }: ReturnFormProps) {
         ) : null,
       )}
       {formState.errors.items?.root?.message && (
-        <p role="alert" className="text-sm text-status-habis-text">
+        <p role="alert" className="text-sm text-destructive">
           {formState.errors.items.root.message}
         </p>
       )}
@@ -96,14 +97,14 @@ export function ReturnForm({ saleId, progress }: ReturnFormProps) {
         <p className="text-lg font-semibold">Uang dikembalikan {formatRupiah(preview.refundTotal)}</p>
       )}
       {hasSaved && (
-        <p role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
+        <Alert variant="success" role="status" className="p-3">
           Tersimpan. Retur {mutation.data.number} sebesar {formatRupiah(mutation.data.refundTotal)} dicatat.
-        </p>
+        </Alert>
       )}
       {hasUnexpectedError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Retur tidak tersimpan. Isian Anda masih ada; periksa lalu coba simpan lagi.
-        </p>
+        </Alert>
       )}
       <button
         type="submit"

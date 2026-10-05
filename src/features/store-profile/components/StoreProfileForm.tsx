@@ -10,6 +10,7 @@ import { useSaveStoreProfile } from '../api/use-store-profile';
 import { storeProfileFormSchema } from '../schema';
 import type { LogoDraft, StoreProfileFormInput, StoreProfileFormValues } from '../schema';
 import { StoreLogoField } from './StoreLogoField';
+import { Alert } from '@/components/ui/alert';
 
 type StoreProfileFormProps = {
   profile: StoreProfile | null;
@@ -57,14 +58,14 @@ export function StoreProfileForm({ profile }: StoreProfileFormProps) {
       </FormField>
       <StoreLogoField storedLogo={profile?.logo ?? null} draft={logoDraft} onChange={setLogoDraft} />
       {hasSaved && (
-        <p role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
+        <Alert variant="success" role="status" className="p-3">
           Tersimpan. Profil toko dipakai di kop laporan.
-        </p>
+        </Alert>
       )}
       {mutation.isError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Isian tidak hilang; coba simpan lagi.
-        </p>
+        </Alert>
       )}
       <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
         {isSaving ? 'Menyimpan…' : hasSaved ? 'Tersimpan' : 'Simpan profil'}

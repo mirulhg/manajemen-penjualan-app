@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { buildRestockShareText } from '../../../lib/db/restock';
 import type { RestockShareItem } from '../../../lib/db/restock';
 import { useStoreProfile } from '../../store-profile';
+import { Alert } from '@/components/ui/alert';
 
 type ShareRestockButtonProps = {
   items: RestockShareItem[];
@@ -51,9 +52,9 @@ export function ShareRestockButton({ items }: ShareRestockButtonProps) {
       {status === 'shared' && <p role="status">Daftar dibagikan.</p>}
       {status === 'copied' && <p role="status">Daftar disalin. Tempel di WhatsApp atau catatan.</p>}
       {status === 'failed' && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Daftar tidak bisa disalin otomatis. Buka WhatsApp dengan tautan di bawah, atau salin daftar secara manual.
-        </p>
+        </Alert>
       )}
       {(status === 'copied' || status === 'failed') && (
         <a

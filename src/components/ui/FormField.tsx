@@ -37,7 +37,7 @@ export function FormField({ id, label, hint, error, children }: FormFieldProps) 
         </p>
       )}
       {error && (
-        <p id={errorId} className="mt-1 text-sm text-status-habis-text">
+        <p id={errorId} className="mt-1 text-sm text-destructive">
           {error}
         </p>
       )}

@@ -1,4 +1,5 @@
 import type { ExportFormat } from '../report-tables';
+import { Alert } from '@/components/ui/alert';
 
 type ReportActionsProps = {
   onExport: (format: ExportFormat) => void;
@@ -36,9 +37,9 @@ export function ReportActions({ onExport, pendingFormat, error }: ReportActionsP
         </button>
       </div>
       {error && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           File laporan gagal dibuat: {error.message}. Coba lagi; jika masih gagal, muat ulang halaman.
-        </p>
+        </Alert>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import { formatNumber } from '../../../utils/format-number';
 import type { ImportValidation } from '../import/validate-import-rows';
 import { ImportFailedRowsTable } from './ImportFailedRowsTable';
+import { Alert } from '@/components/ui/alert';
 
 type ImportPreviewProps = {
   validation: ImportValidation;
@@ -48,9 +49,9 @@ export function ImportPreview({ validation, isPending, hasError, onImport, onCho
         </div>
       )}
       {hasError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal dan tidak ada barang yang tersimpan. Coba impor lagi.
-        </p>
+        </Alert>
       )}
       <div className="flex flex-wrap gap-3">
         <button

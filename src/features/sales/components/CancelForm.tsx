@@ -6,6 +6,7 @@ import { FormField } from '../../../components/ui/FormField';
 import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import { useCancelSale } from '../api/use-cancel-sale';
 import { cancelSaleInputSchema } from '../schema';
+import { Alert } from '@/components/ui/alert';
 
 type CancelFormProps = {
   saleId: string;
@@ -47,9 +48,9 @@ export function CancelForm({ saleId, saleNumber }: CancelFormProps) {
         )}
       </FormField>
       {mutation.isError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           {mutation.error.message} Isian Anda masih ada; coba lagi.
-        </p>
+        </Alert>
       )}
       <button
         type="submit"

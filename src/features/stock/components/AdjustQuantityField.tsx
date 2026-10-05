@@ -30,7 +30,7 @@ export function AdjustQuantityField({ register, label, unit, error }: AdjustQuan
         <span className="mt-1 shrink-0 text-muted-foreground">{unit}</span>
       </div>
       {error && (
-        <p id="adjust-quantity-error" className="mt-1 text-sm text-status-habis-text">
+        <p id="adjust-quantity-error" className="mt-1 text-sm text-destructive">
           {error}
         </p>
       )}

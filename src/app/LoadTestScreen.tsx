@@ -1,4 +1,5 @@
 import { formatNumber } from '../utils/format-number';
+import { Alert } from '@/components/ui/alert';
 
 export type LoadTestState =
   | { phase: 'running'; done: number; total: number }
@@ -33,10 +34,10 @@ export function LoadTestScreen({ state, notice, onContinue }: LoadTestScreenProp
         </p>
       )}
       {state.phase === 'failed' && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Seed uji beban gagal: {state.message}. Hapus database "manajemen-stok-uji-beban" di DevTools (Application,
           IndexedDB), lalu muat ulang halaman.
-        </p>
+        </Alert>
       )}
       {state.phase !== 'running' && (
         <button type="button" onClick={onContinue} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">

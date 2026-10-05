@@ -4,6 +4,7 @@ import { downloadTextFile } from '../../../utils/download-text-file';
 import { formatNumber } from '../../../utils/format-number';
 import { buildFailedRowsCsv } from '../import/import-reports';
 import type { FailedImportRow } from '../import/validate-import-rows';
+import { Alert } from '@/components/ui/alert';
 
 type ImportResultProps = {
   imported: number;
@@ -19,11 +20,11 @@ export function ImportResult({ imported, skippedCount, failed, onImportAnother }
 
   return (
     <div className="space-y-4">
-      <div role="status" className="space-y-1 rounded-md bg-status-aman-bg p-4 text-status-aman-text">
+      <Alert variant="success" role="status" className="space-y-1 p-4">
         <p className="font-medium">{formatNumber(imported)} barang berhasil diimpor.</p>
         <p>Dilewati {formatNumber(skippedCount)}</p>
         <p>Gagal {formatNumber(failed.length)}</p>
-      </div>
+      </Alert>
       <div className="flex flex-wrap gap-3">
         {failed.length > 0 && (
           <button

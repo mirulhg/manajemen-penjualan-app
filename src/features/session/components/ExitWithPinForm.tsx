@@ -7,6 +7,7 @@ import { SessionError } from '../api/session-error';
 import { useExitCashierMode } from '../api/use-session-mutations';
 import { describeSessionError } from '../describe-session-error';
 import { PinField } from './PinField';
+import { Alert } from '@/components/ui/alert';
 
 const exitSchema = z.object({ pin: z.string().min(1, 'Isi PIN.') });
 
@@ -37,9 +38,9 @@ export function ExitWithPinForm() {
     <form onSubmit={handleFormSubmit} noValidate className="space-y-3">
       <PinField id="exit-pin" label="PIN pemilik" error={formState.errors.pin?.message} registration={register('pin')} />
       {hasUnexpectedError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Coba lagi.
-        </p>
+        </Alert>
       )}
       <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
         {isSaving ? 'Memeriksa…' : 'Keluar Mode Kasir'}

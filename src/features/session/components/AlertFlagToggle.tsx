@@ -2,6 +2,7 @@ import type { ChangeEvent } from 'react';
 
 import { useSetAlertFlag } from '../api/use-session-mutations';
 import type { AlertFlagKey } from '../api/set-alert-preference';
+import { Alert } from '@/components/ui/alert';
 
 type AlertFlagToggleProps = {
   flag: AlertFlagKey;
@@ -25,9 +26,9 @@ export function AlertFlagToggle({ flag, checked, label, description }: AlertFlag
       </label>
       <p className="text-sm text-muted-foreground">{description}</p>
       {mutation.isError && (
-        <p role="alert" className="mt-1 rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="mt-1 p-3">
           Pengaturan gagal disimpan. Coba lagi.
-        </p>
+        </Alert>
       )}
     </div>
   );

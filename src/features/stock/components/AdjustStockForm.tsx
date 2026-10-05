@@ -12,6 +12,7 @@ import { AdjustQuantityField } from './AdjustQuantityField';
 import { AdjustReasonField } from './AdjustReasonField';
 import { AdjustStockPreview } from './AdjustStockPreview';
 import { AdjustTypeFieldset } from './AdjustTypeFieldset';
+import { Alert } from '@/components/ui/alert';
 
 type AdjustStockFormProps = {
   product: Product;
@@ -67,15 +68,15 @@ export function AdjustStockForm({ product }: AdjustStockFormProps) {
       </div>
       <AdjustReasonField register={register} error={formState.errors.reason?.message} />
       {hasSaved && (
-        <p role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
+        <Alert variant="success" role="status" className="p-3">
           Tersimpan. Stok {mutation.data.name} sekarang {formatNumber(mutation.data.stockQuantity)}{' '}
           {mutation.data.unit}.
-        </p>
+        </Alert>
       )}
       {hasUnexpectedError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Isian Anda masih ada; coba simpan lagi.
-        </p>
+        </Alert>
       )}
       <button
         type="submit"

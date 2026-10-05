@@ -7,6 +7,7 @@ import { buildTemplateCsv } from '../import/import-reports';
 import { readImportFile } from '../import/read-import-file';
 import { toImportRows } from '../import/to-import-rows';
 import type { ImportRow } from '../import/to-import-rows';
+import { Alert } from '@/components/ui/alert';
 
 type ImportFilePickerProps = {
   onRowsRead: (rows: ImportRow[]) => void;
@@ -73,9 +74,9 @@ export function ImportFilePicker({ onRowsRead }: ImportFilePickerProps) {
       </div>
       {isReading && <p role="status">Membaca file…</p>}
       {error && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           {error.message}
-        </p>
+        </Alert>
       )}
     </div>
   );

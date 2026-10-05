@@ -7,6 +7,7 @@ import { SessionError } from '../api/session-error';
 import { useSetupPin } from '../api/use-session-mutations';
 import { newPinSchema } from '../schema';
 import { PinField } from './PinField';
+import { Alert } from '@/components/ui/alert';
 
 type PinSetupFormProps = {
   onCreated: (recoveryCode: string) => void;
@@ -53,9 +54,9 @@ export function PinSetupForm({ onCreated }: PinSetupFormProps) {
         registration={register('confirmPin')}
       />
       {hasUnexpectedError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Coba simpan lagi.
-        </p>
+        </Alert>
       )}
       <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
         {isSaving ? 'Menyimpan…' : 'Buat PIN'}

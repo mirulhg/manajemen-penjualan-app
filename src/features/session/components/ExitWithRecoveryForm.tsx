@@ -10,6 +10,7 @@ import { useExitCashierMode, useResetPin } from '../api/use-session-mutations';
 import { describeSessionError } from '../describe-session-error';
 import { newPinSchema } from '../schema';
 import { PinField } from './PinField';
+import { Alert } from '@/components/ui/alert';
 
 type ExitWithRecoveryFormProps = {
   onRecovered: (newRecoveryCode: string) => void;
@@ -56,9 +57,9 @@ export function ExitWithRecoveryForm({ onRecovered }: ExitWithRecoveryFormProps)
       <PinField id="new-pin" label="PIN baru" hint="4–6 angka." error={formState.errors.newPin?.message} registration={register('newPin')} />
       <PinField id="confirm-pin" label="Isi ulang PIN baru" error={formState.errors.confirmPin?.message} registration={register('confirmPin')} />
       {hasUnexpectedError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Coba lagi.
-        </p>
+        </Alert>
       )}
       <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
         {isSaving ? 'Memeriksa…' : 'Pulihkan dan keluar'}

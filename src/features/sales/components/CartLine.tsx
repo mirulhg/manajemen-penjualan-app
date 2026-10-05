@@ -5,6 +5,7 @@ import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
 import type { CartAction } from '../cart-reducer';
 import type { CartViewLine } from '../cart-view';
+import { Alert } from '@/components/ui/alert';
 
 type CartLineProps = {
   line: CartViewLine;
@@ -75,12 +76,12 @@ export function CartLine({ line, dispatch }: CartLineProps) {
         </p>
       )}
       {line.isArchived && (
-        <p className="rounded-md bg-status-habis-bg p-2 text-sm text-status-habis-text">
+        <Alert variant="destructive" className="p-2 text-sm">
           Barang ini sudah diarsipkan dan tidak bisa dijual. Hapus dari keranjang untuk melanjutkan.
-        </p>
+        </Alert>
       )}
       {line.exceedsStock && (
-        <p className="text-sm text-status-habis-text">
+        <p className="text-sm text-destructive">
           Stok tidak cukup (tersedia {formatNumber(line.available)})
         </p>
       )}
@@ -105,7 +106,7 @@ export function CartLine({ line, dispatch }: CartLineProps) {
           className={FIELD_CLASS}
         />
         {discountError && (
-          <p id={`discount-error-${product.id}`} className="mt-1 text-sm text-status-habis-text">
+          <p id={`discount-error-${product.id}`} className="mt-1 text-sm text-destructive">
             {discountError}
           </p>
         )}

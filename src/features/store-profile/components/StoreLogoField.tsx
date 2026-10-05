@@ -69,7 +69,7 @@ export function StoreLogoField({ storedLogo, draft, onChange }: StoreLogoFieldPr
       />
       {isProcessing && <p className="mt-1 text-sm text-muted-foreground">Memproses logo…</p>}
       {message && (
-        <p id="store-logo-error" role="alert" className="mt-1 text-sm text-status-habis-text">
+        <p id="store-logo-error" role="alert" className="mt-1 text-sm text-destructive">
           {message}
         </p>
       )}

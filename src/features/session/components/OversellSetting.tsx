@@ -2,6 +2,7 @@ import type { ChangeEvent } from 'react';
 
 import { useAllowOversell } from '../api/use-allow-oversell';
 import { useSetAllowOversell } from '../api/use-session-mutations';
+import { Alert } from '@/components/ui/alert';
 
 export function OversellSetting() {
   const allowOversell = useAllowOversell();
@@ -21,12 +22,12 @@ export function OversellSetting() {
         Penjualan
       </h2>
       {allowOversell.isError ? (
-        <div role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           <p>Pengaturan tidak bisa dibaca dari penyimpanan di perangkat ini.</p>
           <button type="button" onClick={handleRetry} className="min-h-11 font-medium underline">
             Coba lagi
           </button>
-        </div>
+        </Alert>
       ) : (
         <>
           <label className="flex min-h-11 items-center gap-3">
@@ -42,9 +43,9 @@ export function OversellSetting() {
         </>
       )}
       {mutation.isError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Pengaturan gagal disimpan. Coba lagi.
-        </p>
+        </Alert>
       )}
     </section>
   );

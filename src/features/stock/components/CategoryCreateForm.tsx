@@ -8,6 +8,7 @@ import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import { CategoryError } from '../api/category-error';
 import { useCreateCategory } from '../api/use-category-mutations';
 import { categoryNameSchema } from '../schema';
+import { Alert } from '@/components/ui/alert';
 
 const createCategoryFormSchema = z.object({ name: categoryNameSchema });
 type CreateCategoryFormInput = z.input<typeof createCategoryFormSchema>;
@@ -49,14 +50,14 @@ export function CategoryCreateForm() {
         )}
       </FormField>
       {hasSaved && (
-        <p role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
+        <Alert variant="success" role="status" className="p-3">
           Kategori {mutation.data.name} ditambahkan.
-        </p>
+        </Alert>
       )}
       {hasUnexpectedError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Isian Anda masih ada; coba simpan lagi.
-        </p>
+        </Alert>
       )}
       <button
         type="submit"

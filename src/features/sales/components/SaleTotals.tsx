@@ -41,7 +41,7 @@ export function SaleTotals({ view, transactionDiscountText, dispatch }: SaleTota
           className={FIELD_CLASS}
         />
         {discountError && (
-          <p id="transaction-discount-error" className="mt-1 text-sm text-status-habis-text">
+          <p id="transaction-discount-error" className="mt-1 text-sm text-destructive">
             {discountError}
           </p>
         )}

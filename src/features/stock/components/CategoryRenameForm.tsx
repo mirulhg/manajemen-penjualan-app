@@ -9,6 +9,7 @@ import { CategoryError } from '../api/category-error';
 import type { CategoryWithCounts } from '../api/get-categories';
 import { useRenameCategory } from '../api/use-category-mutations';
 import { categoryNameSchema } from '../schema';
+import { Alert } from '@/components/ui/alert';
 
 type CategoryRenameFormProps = {
   category: CategoryWithCounts;
@@ -62,11 +63,11 @@ export function CategoryRenameForm({ category, onDone, onCancel }: CategoryRenam
         )}
       </FormField>
       {hasUnexpectedError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           {mutation.error instanceof CategoryError
             ? mutation.error.message
             : 'Penyimpanan di perangkat ini gagal. Coba simpan lagi.'}
-        </p>
+        </Alert>
       )}
       <div className="flex flex-wrap gap-3">
         <button

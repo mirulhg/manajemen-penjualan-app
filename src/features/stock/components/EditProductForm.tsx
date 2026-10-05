@@ -16,6 +16,7 @@ import { IdentityFields } from './IdentityFields';
 import { PriceAndLimitFields } from './PriceAndLimitFields';
 import { ProductPhotoField } from './ProductPhotoField';
 import { SoldAtLossWarning } from './SoldAtLossWarning';
+import { Alert } from '@/components/ui/alert';
 
 type EditProductFormProps = {
   product: Product;
@@ -103,12 +104,12 @@ export function EditProductForm({ product, categories, units }: EditProductFormP
         onChange={setPhotoDraft}
       />
       {hasSaved && (
-        <div role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
+        <Alert variant="success" role="status" className="p-3">
           <p>Tersimpan. Perubahan {savedName} dicatat.</p>
           <Link to={`/stok/${product.id}`} className="inline-flex min-h-11 items-center font-medium underline">
             Lihat detail barang
           </Link>
-        </div>
+        </Alert>
       )}
       {hasNoChange && (
         <p role="alert" className="rounded-md bg-status-menipis-bg p-3 text-status-menipis-text">
@@ -116,9 +117,9 @@ export function EditProductForm({ product, categories, units }: EditProductFormP
         </p>
       )}
       {hasUnexpectedError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Perubahan tidak tersimpan. Isian Anda masih ada; periksa lalu coba simpan lagi.
-        </p>
+        </Alert>
       )}
       <button
         type="submit"

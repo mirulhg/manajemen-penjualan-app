@@ -8,6 +8,7 @@ import { useSetDefaultMinStock } from '../api/use-session-mutations';
 import { defaultMinStockSchema } from '../schema';
 import type { DefaultMinStockInput } from '../schema';
 import { useSession } from '../session-context';
+import { Alert } from '@/components/ui/alert';
 
 export function DefaultMinStockForm() {
   const { defaultMinStock } = useSession();
@@ -42,14 +43,14 @@ export function DefaultMinStockForm() {
         )}
       </FormField>
       {hasSaved && (
-        <p role="status" className="rounded-md bg-status-aman-bg p-3 text-status-aman-text">
+        <Alert variant="success" role="status" className="p-3">
           Tersimpan. Status stok dan peringatan sudah diperbarui.
-        </p>
+        </Alert>
       )}
       {mutation.isError && (
-        <p role="alert" className="rounded-md bg-status-habis-bg p-3 text-status-habis-text">
+        <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Isian tidak hilang; coba simpan lagi.
-        </p>
+        </Alert>
       )}
       <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
         {isSaving ? 'Menyimpan…' : 'Simpan batas'}
