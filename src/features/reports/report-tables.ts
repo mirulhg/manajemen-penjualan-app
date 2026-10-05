@@ -10,10 +10,15 @@ function toCell<Row extends TableRow>(row: Row, column: ReportColumn<Row>): stri
   return row[column.key] ?? '';
 }
 
+// Pemisah kolom ';' mengikuti Excel berbahasa Indonesia, jadi desimal juga ditulis dengan koma ("13,6"); titik akan terbaca sebagai teks.
+function toCsvCell(value: string | number): string {
+  return typeof value === 'number' ? String(value).replace('.', ',') : value;
+}
+
 export function toCsvTable<Row extends TableRow>(rows: Row[], columns: ReportColumn<Row>[]): string {
   return formatCsv([
     columns.map((column) => column.title),
-    ...rows.map((row) => columns.map((column) => String(toCell(row, column)))),
+    ...rows.map((row) => columns.map((column) => toCsvCell(toCell(row, column)))),
   ]);
 }
 
