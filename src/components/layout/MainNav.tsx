@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router';
 
+import { cn } from '@/lib/utils';
 import type { NavItem } from './nav-items';
 
 type MainNavProps = {
@@ -16,11 +17,13 @@ export function MainNav({ items }: MainNavProps) {
             <NavLink
               to={item.to}
               className={({ isActive }) =>
-                `inline-flex min-h-11 items-center rounded-md px-3 ${
-                  isActive ? 'font-semibold text-primary underline' : 'text-foreground'
-                }`
+                cn(
+                  'inline-flex min-h-11 items-center gap-2 rounded-md px-3 transition-colors duration-(--duration-fast) ease-out',
+                  isActive ? 'bg-secondary font-semibold' : 'hover:bg-secondary/60',
+                )
               }
             >
+              <item.icon aria-hidden="true" className="size-4" />
               {item.label}
             </NavLink>
           </li>

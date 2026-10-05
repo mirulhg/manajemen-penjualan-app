@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router';
 
+import { cn } from '@/lib/utils';
 import type { NavItem } from './nav-items';
 
 type TabBarProps = {
@@ -15,15 +16,20 @@ export function TabBar({ items }: TabBarProps) {
       <ul className="flex">
         {items.map((item) => (
           <li key={item.to} className="flex-1">
-            <NavLink
-              to={item.to}
-              className={({ isActive }) =>
-                `flex min-h-12 items-center justify-center px-2 ${
-                  isActive ? 'font-semibold text-primary underline' : 'text-foreground'
-                }`
-              }
-            >
-              {item.label}
+            <NavLink to={item.to} className="flex min-h-14 flex-col items-center justify-center gap-0.5 px-1 text-xs">
+              {({ isActive }) => (
+                <>
+                  <span
+                    className={cn(
+                      'flex h-7 w-14 items-center justify-center rounded-full transition-colors duration-(--duration-fast) ease-out',
+                      isActive && 'bg-accent text-accent-foreground',
+                    )}
+                  >
+                    <item.icon aria-hidden="true" className="size-5" />
+                  </span>
+                  <span className={isActive ? 'font-semibold' : 'text-muted-foreground'}>{item.label}</span>
+                </>
+              )}
             </NavLink>
           </li>
         ))}
