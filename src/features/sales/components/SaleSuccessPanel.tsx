@@ -4,6 +4,7 @@ import { formatRupiah } from '../../../utils/format-rupiah';
 import type { Sale } from '../../../lib/db/records';
 import { useSession } from '../../session';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type SaleSuccessPanelProps = {
   sale: Sale;
@@ -24,18 +25,13 @@ export function SaleSuccessPanel({ sale, onNewSale }: SaleSuccessPanelProps) {
       <p>Total {formatRupiah(sale.total)}</p>
       <p className="text-2xl font-semibold">Kembalian {formatRupiah(sale.change)}</p>
       {!isCashierMode && (
-        <Link to={`/penjualan/${sale.id}`} className="inline-flex min-h-11 items-center font-medium underline">
+        <Button asChild variant="outline"><Link to={`/penjualan/${sale.id}`}>
           Lihat transaksi
-        </Link>
+        </Link></Button>
       )}
-      <button
-        type="button"
-        ref={focusOnMount}
-        onClick={onNewSale}
-        className="min-h-12 w-full rounded-md bg-primary px-4 text-lg font-medium text-primary-foreground"
-      >
+      <Button size="lg" className="w-full text-lg" type="button" ref={focusOnMount} onClick={onNewSale}>
         Transaksi baru
-      </button>
+      </Button>
     </Alert>
   );
 }

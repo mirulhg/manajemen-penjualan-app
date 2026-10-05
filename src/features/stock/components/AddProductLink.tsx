@@ -1,15 +1,12 @@
 import { Link, useLocation } from 'react-router';
+import { Button } from '@/components/ui/button';
 
 export function AddProductLink() {
   const location = useLocation();
 
   return (
-    <Link
-      to="/stok/baru"
-      state={{ search: location.search }}
-      className="inline-flex min-h-11 items-center rounded-md bg-primary px-4 font-medium text-primary-foreground"
-    >
+    <Button asChild size="lg"><Link to="/stok/baru" state={{ search: location.search }}>
       Tambah barang
-    </Link>
+    </Link></Button>
   );
 }

@@ -9,6 +9,7 @@ import { useChangePin } from '../api/use-session-mutations';
 import { newPinSchema } from '../schema';
 import { PinField } from './PinField';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 const changePinSchema = z
   .object({ oldPin: z.string().min(1, 'Isi PIN lama.') })
@@ -70,9 +71,9 @@ export function PinChangeForm() {
           Penyimpanan di perangkat ini gagal. Coba simpan lagi.
         </Alert>
       )}
-      <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
+      <Button size="lg" type="submit" disabled={isSaving}>
         {isSaving ? 'Menyimpan…' : 'Ubah PIN'}
-      </button>
+      </Button>
     </form>
   );
 }

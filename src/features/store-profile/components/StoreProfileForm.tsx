@@ -12,6 +12,7 @@ import type { LogoDraft, StoreProfileFormInput, StoreProfileFormValues } from '.
 import { StoreLogoField } from './StoreLogoField';
 import { Alert } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 type StoreProfileFormProps = {
   profile: StoreProfile | null;
@@ -68,9 +69,9 @@ export function StoreProfileForm({ profile }: StoreProfileFormProps) {
           Penyimpanan di perangkat ini gagal. Isian tidak hilang; coba simpan lagi.
         </Alert>
       )}
-      <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
+      <Button size="lg" type="submit" disabled={isSaving}>
         {isSaving ? 'Menyimpan…' : hasSaved ? 'Tersimpan' : 'Simpan profil'}
-      </button>
+      </Button>
     </form>
   );
 }

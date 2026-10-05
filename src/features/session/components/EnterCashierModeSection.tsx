@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useEnterCashierMode } from '../api/use-session-mutations';
 import { useSession } from '../session-context';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 export function EnterCashierModeSection() {
   const { hasPin } = useSession();
@@ -37,15 +38,9 @@ export function EnterCashierModeSection() {
           {mutation.error.message}
         </Alert>
       )}
-      <button
-        type="button"
-        onClick={handleEnter}
-        disabled={!hasPin || mutation.isPending}
-        aria-describedby={hasPin ? undefined : 'cashier-mode-hint'}
-        className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
-      >
+      <Button size="lg" type="button" onClick={handleEnter} disabled={!hasPin || mutation.isPending} aria-describedby={hasPin ? undefined : 'cashier-mode-hint'}>
         Masuk Mode Kasir
-      </button>
+      </Button>
     </section>
   );
 }

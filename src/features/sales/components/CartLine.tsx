@@ -6,13 +6,13 @@ import type { CartAction } from '../cart-reducer';
 import type { CartViewLine } from '../cart-view';
 import { Alert } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 type CartLineProps = {
   line: CartViewLine;
   dispatch: Dispatch<CartAction>;
 };
 
-const STEP_BUTTON_CLASS = 'min-h-11 min-w-11 rounded-md border border-border bg-card font-medium';
 
 export function CartLine({ line, dispatch }: CartLineProps) {
   const { product } = line;
@@ -38,14 +38,15 @@ export function CartLine({ line, dispatch }: CartLineProps) {
         {formatRupiah(product.sellingPrice)} per {product.unit}
       </p>
       <div className="flex items-center gap-2">
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="icon"
           aria-label={`Kurangi ${product.name}`}
           onClick={() => dispatch({ type: 'decrease', productId: product.id, price: product.sellingPrice })}
-          className={STEP_BUTTON_CLASS}
         >
           −
-        </button>
+        </Button>
         <Input
           type="text"
           inputMode="numeric"
@@ -54,21 +55,18 @@ export function CartLine({ line, dispatch }: CartLineProps) {
           onChange={(event) => handleQuantityChange(event.target.value)}
           className="w-20 text-center"
         />
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="icon"
           aria-label={`Tambah ${product.name}`}
           onClick={() => dispatch({ type: 'increase', productId: product.id, price: product.sellingPrice })}
-          className={STEP_BUTTON_CLASS}
         >
           +
-        </button>
-        <button
-          type="button"
-          onClick={() => dispatch({ type: 'remove', productId: product.id })}
-          className="ml-auto min-h-11 rounded-md border border-border bg-card px-3 font-medium"
-        >
+        </Button>
+        <Button variant="outline" className="ml-auto" type="button" onClick={() => dispatch({ type: 'remove', productId: product.id })}>
           Hapus
-        </button>
+        </Button>
       </div>
       {line.priceChangedFrom !== null && (
         <p aria-live="polite" className="rounded-md bg-status-menipis-bg p-2 text-sm text-status-menipis-text">
@@ -86,7 +84,7 @@ export function CartLine({ line, dispatch }: CartLineProps) {
         </p>
       )}
       <details>
-        <summary className="inline-flex min-h-11 cursor-pointer items-center font-medium text-primary">
+        <summary className={buttonVariants({ variant: 'outline', className: 'cursor-pointer' })}>
           Diskon
         </summary>
         <label className="text-sm font-medium" htmlFor={`discount-${product.id}`}>

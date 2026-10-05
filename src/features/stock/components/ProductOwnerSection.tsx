@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import type { Product } from '../schema';
 import { PriceHistory } from './PriceHistory';
 import { ProductArchiveSection } from './ProductArchiveSection';
+import { Button } from '@/components/ui/button';
 
 type ProductOwnerSectionProps = {
   product: Product;
@@ -13,20 +14,12 @@ type ProductOwnerSectionProps = {
 export function ProductOwnerSection({ product, locationState }: ProductOwnerSectionProps) {
   return (
     <>
-      <Link
-        to={`/stok/${product.id}/sesuaikan`}
-        state={locationState}
-        className="mt-4 inline-flex min-h-11 items-center rounded-md bg-primary px-4 font-medium text-primary-foreground"
-      >
+      <Button asChild size="lg" className="mt-4"><Link to={`/stok/${product.id}/sesuaikan`} state={locationState}>
         Sesuaikan stok
-      </Link>
-      <Link
-        to={`/stok/${product.id}/ubah`}
-        state={locationState}
-        className="ml-2 mt-4 inline-flex min-h-11 items-center rounded-md border border-border bg-card px-4 font-medium"
-      >
+      </Link></Button>
+      <Button asChild variant="outline" className="ml-2 mt-4"><Link to={`/stok/${product.id}/ubah`} state={locationState}>
         Ubah barang
-      </Link>
+      </Link></Button>
       <ProductArchiveSection product={product} />
       <PriceHistory productId={product.id} />
     </>

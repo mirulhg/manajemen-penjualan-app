@@ -1,5 +1,6 @@
 import type { ExportFormat } from '../report-tables';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type ReportActionsProps = {
   onExport: (format: ExportFormat) => void;
@@ -7,8 +8,6 @@ type ReportActionsProps = {
   pendingFormat: ExportFormat | null;
   error: Error | null;
 };
-
-const BUTTON_CLASS = 'min-h-11 rounded-md border border-border bg-card px-4 font-medium disabled:opacity-60';
 
 export function ReportActions({ onExport, pendingFormat, error }: ReportActionsProps) {
   function handlePrint() {
@@ -25,16 +24,16 @@ export function ReportActions({ onExport, pendingFormat, error }: ReportActionsP
 
   return (
     <div className="space-y-2 print:hidden">
-      <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={handlePrint} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
+      <div className="flex flex-wrap items-center gap-2">
+        <Button size="lg" type="button" onClick={handlePrint}>
           Cetak / Simpan PDF
-        </button>
-        <button type="button" onClick={handleExportCsv} disabled={pendingFormat !== null} className={BUTTON_CLASS}>
+        </Button>
+        <Button type="button" variant="outline" onClick={handleExportCsv} disabled={pendingFormat !== null}>
           {pendingFormat === 'csv' ? 'Menyiapkan…' : 'Unduh CSV'}
-        </button>
-        <button type="button" onClick={handleExportXlsx} disabled={pendingFormat !== null} className={BUTTON_CLASS}>
+        </Button>
+        <Button type="button" variant="outline" onClick={handleExportXlsx} disabled={pendingFormat !== null}>
           {pendingFormat === 'xlsx' ? 'Menyiapkan…' : 'Unduh Excel'}
-        </button>
+        </Button>
       </div>
       {error && (
         <Alert variant="destructive" className="p-3">

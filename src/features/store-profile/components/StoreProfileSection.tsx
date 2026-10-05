@@ -1,6 +1,7 @@
 import { useStoreProfile } from '../api/use-store-profile';
 import { StoreProfileForm } from './StoreProfileForm';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 export function StoreProfileSection() {
   const { data: profile, isPending, isError, refetch } = useStoreProfile();
@@ -24,9 +25,9 @@ export function StoreProfileSection() {
       {isError && (
         <Alert variant="destructive" className="p-3">
           <p>Profil toko tidak bisa dibaca dari penyimpanan di perangkat ini.</p>
-          <button type="button" onClick={handleRetry} className="min-h-11 font-medium underline">
+          <Button size="lg" type="button" onClick={handleRetry}>
             Coba lagi
-          </button>
+          </Button>
         </Alert>
       )}
       {!isPending && !isError && <StoreProfileForm profile={profile} />}

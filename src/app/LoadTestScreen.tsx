@@ -1,5 +1,6 @@
 import { formatNumber } from '../utils/format-number';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 export type LoadTestState =
   | { phase: 'running'; done: number; total: number }
@@ -40,9 +41,9 @@ export function LoadTestScreen({ state, notice, onContinue }: LoadTestScreenProp
         </Alert>
       )}
       {state.phase !== 'running' && (
-        <button type="button" onClick={onContinue} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
+        <Button size="lg" type="button" onClick={onContinue}>
           Buka aplikasi
-        </button>
+        </Button>
       )}
     </main>
   );

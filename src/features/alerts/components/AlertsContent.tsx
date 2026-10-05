@@ -3,6 +3,7 @@ import { useOpenAlerts } from '../api/use-alerts';
 import { AlertList } from './AlertList';
 import { AlertsSkeleton } from './AlertsSkeleton';
 import { RestockSection } from './RestockSection';
+import { Button } from '@/components/ui/button';
 
 export function AlertsContent() {
   const { isCashierMode } = useSession();
@@ -20,9 +21,9 @@ export function AlertsContent() {
           Peringatan stok gagal dibaca dari penyimpanan di perangkat ini. Coba lagi; jika masih gagal, muat ulang halaman.
         </p>
         <p className="mt-2 rounded-md border border-border bg-card p-3 text-sm">{error.message}</p>
-        <button type="button" onClick={handleRetry} className="mt-3 min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
+        <Button size="lg" className="mt-3" type="button" onClick={handleRetry}>
           Coba lagi
-        </button>
+        </Button>
       </div>
     );
   }

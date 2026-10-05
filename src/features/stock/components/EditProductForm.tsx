@@ -17,6 +17,7 @@ import { PriceAndLimitFields } from './PriceAndLimitFields';
 import { ProductPhotoField } from './ProductPhotoField';
 import { SoldAtLossWarning } from './SoldAtLossWarning';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type EditProductFormProps = {
   product: Product;
@@ -106,9 +107,9 @@ export function EditProductForm({ product, categories, units }: EditProductFormP
       {hasSaved && (
         <Alert variant="success" role="status" className="p-3">
           <p>Tersimpan. Perubahan {savedName} dicatat.</p>
-          <Link to={`/stok/${product.id}`} className="inline-flex min-h-11 items-center font-medium underline">
+          <Button asChild variant="outline"><Link to={`/stok/${product.id}`}>
             Lihat detail barang
-          </Link>
+          </Link></Button>
         </Alert>
       )}
       {hasNoChange && (
@@ -121,13 +122,9 @@ export function EditProductForm({ product, categories, units }: EditProductFormP
           Perubahan tidak tersimpan. Isian Anda masih ada; periksa lalu coba simpan lagi.
         </Alert>
       )}
-      <button
-        type="submit"
-        disabled={isSaving}
-        className="min-h-11 w-full rounded-md bg-primary px-4 font-medium text-primary-foreground sm:w-auto"
-      >
+      <Button size="lg" className="w-full sm:w-auto" type="submit" disabled={isSaving}>
         {buttonLabel}
-      </button>
+      </Button>
     </form>
   );
 }

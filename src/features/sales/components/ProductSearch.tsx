@@ -7,6 +7,7 @@ import { filterProducts, sortProducts, useStockThreshold } from '../../stock';
 import type { Product } from '../../stock';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 type ProductSearchProps = {
   products: Product[];
@@ -56,17 +57,13 @@ export function ProductSearch({ products, inputRef, onPick }: ProductSearchProps
       <ul className="mt-2 space-y-2">
         {results.map((product) => (
           <li key={product.id}>
-            <button
-              type="button"
-              onClick={() => handlePick(product)}
-              className="min-h-11 w-full rounded-md border border-border bg-card px-3 py-2 text-left"
-            >
+            <Button variant="outline" className="w-full py-2 text-left" type="button" onClick={() => handlePick(product)}>
               <span className="block font-medium">{product.name}</span>
               <span className="block text-sm text-muted-foreground">
                 {product.sku} · {formatRupiah(product.sellingPrice)} · Stok{' '}
                 {formatNumber(Math.max(0, product.stockQuantity))} {product.unit}
               </span>
-            </button>
+            </Button>
           </li>
         ))}
       </ul>

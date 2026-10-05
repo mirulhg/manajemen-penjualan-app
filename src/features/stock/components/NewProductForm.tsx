@@ -18,6 +18,7 @@ import { PriceAndLimitFields } from './PriceAndLimitFields';
 import { ProductPhotoField } from './ProductPhotoField';
 import { SoldAtLossWarning } from './SoldAtLossWarning';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type NewProductFormProps = {
   categories: string[];
@@ -96,12 +97,9 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
             Tersimpan. {mutation.data.name} ditambahkan dengan stok{' '}
             {formatNumber(mutation.data.stockQuantity)} {mutation.data.unit}.
           </p>
-          <Link
-            to={`/stok?q=${encodeURIComponent(mutation.data.sku)}`}
-            className="inline-flex min-h-11 items-center font-medium underline"
-          >
+          <Button asChild variant="outline"><Link to={`/stok?q=${encodeURIComponent(mutation.data.sku)}`}>
             Lihat di daftar stok
-          </Link>
+          </Link></Button>
         </Alert>
       )}
       {hasUnexpectedError && (
@@ -114,13 +112,9 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
           Barang tersimpan, tetapi foto gagal disimpan. Buka Ubah barang untuk mencoba lagi.
         </Alert>
       )}
-      <button
-        type="submit"
-        disabled={isSaving}
-        className="min-h-11 w-full rounded-md bg-primary px-4 font-medium text-primary-foreground sm:w-auto"
-      >
+      <Button size="lg" className="w-full sm:w-auto" type="submit" disabled={isSaving}>
         {buttonLabel}
-      </button>
+      </Button>
     </form>
   );
 }

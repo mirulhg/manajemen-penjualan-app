@@ -11,6 +11,7 @@ import { SlowMoversSection } from './SlowMoversSection';
 import { StockForecastSection } from './StockForecastSection';
 import { TopSellingSection } from './TopSellingSection';
 import { DashboardError } from './DashboardError';
+import { Button } from '@/components/ui/button';
 
 export function ProductAnalysisContent() {
   const params = useAnalysisParams();
@@ -30,9 +31,9 @@ export function ProductAnalysisContent() {
           Analisis butuh penjualan minimal 7 hari; saat ini baru {data.daysOfData} hari. Catat penjualan di Kasir,
           lalu buka halaman ini lagi.
         </p>
-        <Link to="/kasir" className="inline-flex min-h-11 items-center font-medium text-primary">
+        <Button asChild variant="outline"><Link to="/kasir">
           Buka Kasir
-        </Link>
+        </Link></Button>
       </div>
     );
   }

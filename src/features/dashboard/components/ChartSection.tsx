@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Button } from '@/components/ui/button';
 
 type ChartSectionProps = {
   title: string;
@@ -36,13 +37,9 @@ function ChartSectionBody({ isPending, error, isEmpty, onRetry, children }: Char
           Grafik gagal dibaca dari penyimpanan di perangkat ini. Coba lagi; jika masih gagal, muat ulang halaman.
         </p>
         <p className="mt-2 rounded-md border border-border bg-card p-3 text-sm">{error.message}</p>
-        <button
-          type="button"
-          onClick={onRetry}
-          className="mt-3 min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
-        >
+        <Button size="lg" className="mt-3" type="button" onClick={onRetry}>
           Coba lagi
-        </button>
+        </Button>
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { Button } from '@/components/ui/button';
 
 type ProductNameLinkProps = {
   productId: string;
@@ -8,9 +9,9 @@ type ProductNameLinkProps = {
 
 export function ProductNameLink({ productId, name, isArchived }: ProductNameLinkProps) {
   return (
-    <Link to={`/stok/${productId}`} className="inline-flex min-h-11 items-center font-medium text-primary underline">
+    <Button asChild variant="outline"><Link to={`/stok/${productId}`}>
       {name}
       {isArchived && <span className="ml-2 font-normal text-muted-foreground no-underline">(Diarsipkan)</span>}
-    </Link>
+    </Link></Button>
   );
 }

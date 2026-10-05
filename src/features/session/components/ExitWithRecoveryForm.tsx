@@ -11,6 +11,7 @@ import { newPinSchema } from '../schema';
 import { PinField } from './PinField';
 import { Alert } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 type ExitWithRecoveryFormProps = {
   onRecovered: (newRecoveryCode: string) => void;
@@ -61,9 +62,9 @@ export function ExitWithRecoveryForm({ onRecovered }: ExitWithRecoveryFormProps)
           Penyimpanan di perangkat ini gagal. Coba lagi.
         </Alert>
       )}
-      <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
+      <Button size="lg" type="submit" disabled={isSaving}>
         {isSaving ? 'Memeriksa…' : 'Pulihkan dan keluar'}
-      </button>
+      </Button>
     </form>
   );
 }

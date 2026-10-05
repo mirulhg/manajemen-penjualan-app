@@ -9,6 +9,7 @@ import { ReportError } from './ReportError';
 import { ReportSkeleton } from './ReportSkeleton';
 import { ReportSummary } from './ReportSummary';
 import { StockMovementTable } from './StockMovementTable';
+import { Button } from '@/components/ui/button';
 
 type StockMovementReportContentProps = {
   selection: PeriodSelection;
@@ -54,9 +55,9 @@ export function StockMovementReportContent({ selection }: StockMovementReportCon
       {(hiddenCount > 0 || showAll) && (
         <div className="flex flex-wrap items-center gap-3 print:hidden">
           {hiddenCount > 0 && <p className="text-sm text-muted-foreground">{formatNumber(hiddenCount)} barang tanpa pergerakan disembunyikan.</p>}
-          <button type="button" onClick={handleToggleAll} className="min-h-11 rounded-md border border-border bg-card px-4 font-medium">
+          <Button variant="outline" type="button" onClick={handleToggleAll}>
             {showAll ? 'Hanya yang bergerak' : 'Tampilkan semua'}
-          </button>
+          </Button>
         </div>
       )}
       {hiddenCount > 0 && (

@@ -9,6 +9,7 @@ import type { ImportRow } from '../import/to-import-rows';
 import { Alert } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 type ImportFilePickerProps = {
   onRowsRead: (rows: ImportRow[]) => void;
@@ -53,13 +54,9 @@ export function ImportFilePicker({ onRowsRead }: ImportFilePickerProps) {
         Siapkan file CSV atau Excel (.xlsx) dengan kolom SKU, Nama, Kategori, Satuan, Stok Awal, Batas Minimum
         (boleh kosong), Harga Beli, dan Harga Jual. Barang yang SKU-nya sudah ada di toko dilewati, tidak diubah.
       </p>
-      <button
-        type="button"
-        onClick={handleDownloadTemplate}
-        className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-      >
+      <Button variant="outline" type="button" onClick={handleDownloadTemplate}>
         Unduh template CSV
-      </button>
+      </Button>
       <div>
         <Label htmlFor="import-file">
           File barang

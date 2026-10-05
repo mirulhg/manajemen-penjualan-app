@@ -13,6 +13,7 @@ import { AdjustReasonField } from './AdjustReasonField';
 import { AdjustStockPreview } from './AdjustStockPreview';
 import { AdjustTypeFieldset } from './AdjustTypeFieldset';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type AdjustStockFormProps = {
   product: Product;
@@ -78,13 +79,9 @@ export function AdjustStockForm({ product }: AdjustStockFormProps) {
           Penyimpanan di perangkat ini gagal. Isian Anda masih ada; coba simpan lagi.
         </Alert>
       )}
-      <button
-        type="submit"
-        disabled={isSaving}
-        className="min-h-11 w-full rounded-md bg-primary px-4 font-medium text-primary-foreground sm:w-auto"
-      >
+      <Button size="lg" className="w-full sm:w-auto" type="submit" disabled={isSaving}>
         {buttonLabel}
-      </button>
+      </Button>
     </form>
   );
 }

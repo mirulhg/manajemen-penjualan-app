@@ -4,6 +4,7 @@ import type { StockSort } from '../sort-products';
 import type { StockStatus } from '../stock-status';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 type StockFiltersProps = {
   filters: StockFiltersValue;
@@ -121,13 +122,9 @@ export function StockFilters({
       </div>
       {hasActiveFilters && (
         <div className="sm:col-span-3">
-          <button
-            type="button"
-            onClick={onClear}
-            className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-          >
+          <Button variant="outline" type="button" onClick={onClear}>
             Hapus filter
-          </button>
+          </Button>
         </div>
       )}
     </div>

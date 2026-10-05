@@ -8,6 +8,7 @@ import { DASHBOARD_PERIODS } from '../hooks/use-dashboard-period';
 import { toHistorySelection } from '../dashboard-range';
 import { METRICS } from '../metric-definitions';
 import { PeriodFilter } from '../../../components/ui/PeriodFilter';
+import { Button } from '@/components/ui/button';
 
 type PeriodSectionProps = {
   selection: PeriodSelection;
@@ -34,12 +35,9 @@ export function PeriodSection({ selection, metrics, previous, onChange }: Period
           </div>
         ))}
       </dl>
-      <Link
-        to={query ? `/penjualan?${query}` : '/penjualan'}
-        className="inline-flex min-h-11 items-center font-medium text-primary"
-      >
+      <Button asChild variant="outline"><Link to={query ? `/penjualan?${query}` : '/penjualan'}>
         Lihat transaksi
-      </Link>
+      </Link></Button>
     </section>
   );
 }

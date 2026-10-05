@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 type StockNoResultsProps = {
   query: string | null;
   onClear: () => void;
@@ -12,13 +13,9 @@ export function StockNoResults({ query, onClear }: StockNoResultsProps) {
           ? `Tidak ada barang untuk kata kunci “${query.trim()}” dengan filter yang dipilih.`
           : 'Tidak ada barang dengan filter yang dipilih.'}
       </p>
-      <button
-        type="button"
-        onClick={onClear}
-        className="mt-4 min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-      >
+      <Button variant="outline" className="mt-4" type="button" onClick={onClear}>
         Hapus filter
-      </button>
+      </Button>
     </div>
   );
 }

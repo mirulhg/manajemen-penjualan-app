@@ -5,6 +5,7 @@ import { AlertSettingsSection } from './AlertSettingsSection';
 import { EnterCashierModeSection } from './EnterCashierModeSection';
 import { OversellSetting } from './OversellSetting';
 import { PinSection } from './PinSection';
+import { Button } from '@/components/ui/button';
 
 export function SettingsPage() {
   return (
@@ -16,9 +17,9 @@ export function SettingsPage() {
       <AlertSettingsSection />
       <PinSection />
       <EnterCashierModeSection />
-      <Link to="/kategori" className="inline-flex min-h-11 items-center font-medium text-primary">
+      <Button asChild variant="outline"><Link to="/kategori">
         Kelola kategori
-      </Link>
+      </Link></Button>
     </section>
   );
 }

@@ -5,6 +5,7 @@ import type { CartAction } from '../cart-reducer';
 import type { CartView } from '../cart-view';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { buttonVariants } from '@/components/ui/button';
 
 type SaleTotalsProps = {
   view: CartView;
@@ -24,7 +25,7 @@ export function SaleTotals({ view, transactionDiscountText, dispatch }: SaleTota
   return (
     <div className="space-y-2 rounded-md border border-border bg-card p-4">
       <details>
-        <summary className="inline-flex min-h-11 cursor-pointer items-center font-medium text-primary">
+        <summary className={buttonVariants({ variant: 'outline', className: 'cursor-pointer' })}>
           Diskon transaksi
         </summary>
         <Label htmlFor="transaction-discount">

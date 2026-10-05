@@ -7,6 +7,7 @@ import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import { useCancelSale } from '../api/use-cancel-sale';
 import { cancelSaleInputSchema } from '../schema';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type CancelFormProps = {
   saleId: string;
@@ -52,13 +53,9 @@ export function CancelForm({ saleId, saleNumber }: CancelFormProps) {
           {mutation.error.message} Isian Anda masih ada; coba lagi.
         </Alert>
       )}
-      <button
-        type="submit"
-        disabled={isSaving}
-        className="min-h-11 w-full rounded-md bg-status-habis-text px-4 font-medium text-primary-foreground sm:w-auto"
-      >
+      <Button variant="destructive" size="lg" className="w-full sm:w-auto" type="submit" disabled={isSaving}>
         {isSaving ? 'Membatalkan…' : 'Ya, batalkan'}
-      </button>
+      </Button>
     </form>
   );
 }

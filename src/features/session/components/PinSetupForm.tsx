@@ -8,6 +8,7 @@ import { useSetupPin } from '../api/use-session-mutations';
 import { newPinSchema } from '../schema';
 import { PinField } from './PinField';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type PinSetupFormProps = {
   onCreated: (recoveryCode: string) => void;
@@ -58,9 +59,9 @@ export function PinSetupForm({ onCreated }: PinSetupFormProps) {
           Penyimpanan di perangkat ini gagal. Coba simpan lagi.
         </Alert>
       )}
-      <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
+      <Button size="lg" type="submit" disabled={isSaving}>
         {isSaving ? 'Menyimpan…' : 'Buat PIN'}
-      </button>
+      </Button>
     </form>
   );
 }

@@ -2,12 +2,13 @@ import { categoryUsageMessage } from '../api/category-error';
 import type { CategoryWithCounts } from '../api/get-categories';
 import { useDeleteCategory } from '../api/use-category-mutations';
 import { Alert } from '@/components/ui/alert';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 type CategoryDeleteSectionProps = {
   category: CategoryWithCounts;
 };
 
-const SUMMARY_CLASS = 'inline-flex min-h-11 cursor-pointer items-center font-medium text-primary';
+const SUMMARY_CLASS = buttonVariants({ variant: 'outline', className: 'cursor-pointer' });
 
 // Konfirmasi lewat <details> bawaan browser (tanpa state), seperti arsip barang.
 export function CategoryDeleteSection({ category }: CategoryDeleteSectionProps) {
@@ -22,14 +23,9 @@ export function CategoryDeleteSection({ category }: CategoryDeleteSectionProps) 
   if (usageCount > 0) {
     return (
       <div>
-        <button
-          type="button"
-          disabled
-          aria-describedby={reasonId}
-          className="min-h-11 rounded-md border border-border px-4 font-medium text-muted-foreground"
-        >
+        <Button variant="outline" className="text-muted-foreground" type="button" disabled aria-describedby={reasonId}>
           Hapus
-        </button>
+        </Button>
         <p id={reasonId} className="text-sm text-muted-foreground">
           {categoryUsageMessage(usageCount)}
         </p>
@@ -47,14 +43,9 @@ export function CategoryDeleteSection({ category }: CategoryDeleteSectionProps) 
             {mutation.error.message}
           </Alert>
         )}
-        <button
-          type="button"
-          onClick={handleConfirm}
-          disabled={mutation.isPending}
-          className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
-        >
+        <Button size="lg" type="button" onClick={handleConfirm} disabled={mutation.isPending}>
           {mutation.isPending ? 'Menghapus…' : 'Ya, hapus'}
-        </button>
+        </Button>
       </div>
     </details>
   );

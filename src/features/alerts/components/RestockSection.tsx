@@ -3,6 +3,7 @@ import { formatNumber } from '../../../utils/format-number';
 import { useRestockList } from '../api/use-alerts';
 import { ShareRestockButton } from './ShareRestockButton';
 import { AlertsSkeleton } from './AlertsSkeleton';
+import { Button } from '@/components/ui/button';
 
 // Khusus pemilik: isinya informasi belanja. Pemanggil tidak merender komponen ini di Mode Kasir.
 export function RestockSection() {
@@ -21,9 +22,9 @@ export function RestockSection() {
       {error && (
         <div role="alert">
           <p className="text-muted-foreground">Daftar belanja gagal dibaca dari penyimpanan di perangkat ini.</p>
-          <button type="button" onClick={handleRetry} className="mt-2 min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
+          <Button size="lg" className="mt-2" type="button" onClick={handleRetry}>
             Coba lagi
-          </button>
+          </Button>
         </div>
       )}
       {data && data.length === 0 && <p className="text-muted-foreground">Tidak ada barang yang perlu dibeli.</p>}

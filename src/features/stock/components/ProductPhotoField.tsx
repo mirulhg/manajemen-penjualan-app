@@ -7,6 +7,7 @@ import { UNCHANGED_PHOTO } from '../photo/photo-draft';
 import { useProductPhoto } from '../photo/use-product-photo';
 import { BlobImage } from './BlobImage';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 type ProductPhotoFieldProps = {
   // Kosong untuk barang yang belum dibuat (form tambah barang).
@@ -82,13 +83,9 @@ export function ProductPhotoField({ productId, productName, draft, onChange }: P
         </p>
       )}
       {shown && (
-        <button
-          type="button"
-          onClick={handleRemove}
-          className="mt-2 min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-        >
+        <Button variant="outline" className="mt-2" type="button" onClick={handleRemove}>
           Hapus foto
-        </button>
+        </Button>
       )}
     </div>
   );

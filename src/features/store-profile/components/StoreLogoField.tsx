@@ -5,6 +5,7 @@ import { BlobImage, compressPhoto, PhotoError } from '../../stock';
 import { LOGO_MAX_SIDE } from '../schema';
 import type { LogoDraft, StoreLogo } from '../schema';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 type StoreLogoFieldProps = {
   storedLogo: StoreLogo | null;
@@ -74,13 +75,9 @@ export function StoreLogoField({ storedLogo, draft, onChange }: StoreLogoFieldPr
         </p>
       )}
       {shown && (
-        <button
-          type="button"
-          onClick={handleRemove}
-          className="mt-2 min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-        >
+        <Button variant="outline" className="mt-2" type="button" onClick={handleRemove}>
           Hapus logo
-        </button>
+        </Button>
       )}
     </div>
   );

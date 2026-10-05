@@ -4,6 +4,7 @@ import { useSession } from '../session-context';
 import { PinChangeForm } from './PinChangeForm';
 import { PinSetupForm } from './PinSetupForm';
 import { RecoveryCodeNotice } from './RecoveryCodeNotice';
+import { Button } from '@/components/ui/button';
 
 export function PinSection() {
   const { hasPin } = useSession();
@@ -21,13 +22,9 @@ export function PinSection() {
       </h2>
       {recoveryCode ? (
         <RecoveryCodeNotice code={recoveryCode}>
-          <button
-            type="button"
-            onClick={handleDismiss}
-            className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
-          >
+          <Button size="lg" type="button" onClick={handleDismiss}>
             Sudah saya catat
-          </button>
+          </Button>
         </RecoveryCodeNotice>
       ) : hasPin ? (
         <PinChangeForm />

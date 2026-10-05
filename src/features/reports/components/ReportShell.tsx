@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 
 import { StoreLetterhead } from './StoreLetterhead';
+import { Button } from '@/components/ui/button';
 
 type ReportShellProps = {
   title: string;
@@ -16,9 +17,9 @@ export function ReportShell({ title, filters, actions, children }: ReportShellPr
     <section className="space-y-6">
       <title>{`${title} · Manajemen Stok`}</title>
       <div className="space-y-4 print:hidden">
-        <Link to="/laporan" className="inline-flex min-h-11 items-center font-medium text-primary">
+        <Button asChild variant="ghost"><Link to="/laporan">
           Kembali ke daftar laporan
-        </Link>
+        </Link></Button>
         {filters}
         {actions}
       </div>

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import { useSessionQuery } from '../api/use-session';
 import { SessionContext } from '../session-context';
+import { Button } from '@/components/ui/button';
 
 type SessionProviderProps = {
   children: ReactNode;
@@ -23,13 +24,9 @@ export function SessionProvider({ children }: SessionProviderProps) {
           Aplikasi gagal membaca pengaturan dari penyimpanan di perangkat ini. Coba lagi; jika masih gagal, muat
           ulang halaman.
         </p>
-        <button
-          type="button"
-          onClick={handleRetry}
-          className="mt-4 min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
-        >
+        <Button size="lg" className="mt-4" type="button" onClick={handleRetry}>
           Coba lagi
-        </button>
+        </Button>
       </div>
     );
   }

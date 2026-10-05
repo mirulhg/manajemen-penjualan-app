@@ -1,5 +1,6 @@
 import { CreateSaleError } from '../api/create-sale';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type SubmitSectionProps = {
   blockReason: string | null;
@@ -48,13 +49,9 @@ export function SubmitSection({ blockReason, isPending, error }: SubmitSectionPr
     <div className="space-y-3">
       {error && <SaleErrorMessage error={error} />}
       {blockReason && !isPending && <p className="text-muted-foreground">{blockReason}</p>}
-      <button
-        type="submit"
-        disabled={blockReason !== null || isPending}
-        className="min-h-12 w-full rounded-md bg-primary px-4 text-lg font-medium text-primary-foreground"
-      >
+      <Button size="lg" className="w-full text-lg" type="submit" disabled={blockReason !== null || isPending}>
         {isPending ? 'Menyimpan…' : 'Simpan transaksi'}
-      </button>
+      </Button>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useId, useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 type ChartTableProps = {
   caption: string;
@@ -17,15 +18,9 @@ export function ChartTable({ caption, headers, rows }: ChartTableProps) {
 
   return (
     <div className="mt-2">
-      <button
-        type="button"
-        onClick={handleToggle}
-        aria-expanded={isOpen}
-        aria-controls={tableId}
-        className="min-h-11 rounded-md px-1 font-medium text-primary"
-      >
+      <Button type="button" variant="link" onClick={handleToggle} aria-expanded={isOpen} aria-controls={tableId}>
         {isOpen ? 'Sembunyikan tabel' : 'Tampilkan tabel'}
-      </button>
+      </Button>
       <div id={tableId} hidden={!isOpen} className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <caption className="sr-only">{caption}</caption>

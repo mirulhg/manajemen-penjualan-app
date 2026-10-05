@@ -5,6 +5,7 @@ import { formatNumber } from '../../../utils/format-number';
 import { buildFailedRowsCsv } from '../import/import-reports';
 import type { FailedImportRow } from '../import/validate-import-rows';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type ImportResultProps = {
   imported: number;
@@ -27,24 +28,16 @@ export function ImportResult({ imported, skippedCount, failed, onImportAnother }
       </Alert>
       <div className="flex flex-wrap gap-3">
         {failed.length > 0 && (
-          <button
-            type="button"
-            onClick={handleDownloadFailed}
-            className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-          >
+          <Button variant="outline" type="button" onClick={handleDownloadFailed}>
             Unduh laporan baris gagal
-          </button>
+          </Button>
         )}
-        <Link to="/stok" className="inline-flex min-h-11 items-center rounded-md bg-primary px-4 font-medium text-primary-foreground">
+        <Button asChild size="lg"><Link to="/stok">
           Lihat daftar stok
-        </Link>
-        <button
-          type="button"
-          onClick={onImportAnother}
-          className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-        >
+        </Link></Button>
+        <Button variant="outline" type="button" onClick={onImportAnother}>
           Impor file lain
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import { buildReturnFormSchema } from '../schema';
 import type { ReturnFormInput, ReturnFormValues } from '../schema';
 import { Alert } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 type ReturnFormProps = {
   saleId: string;
@@ -107,13 +108,9 @@ export function ReturnForm({ saleId, progress }: ReturnFormProps) {
           Retur tidak tersimpan. Isian Anda masih ada; periksa lalu coba simpan lagi.
         </Alert>
       )}
-      <button
-        type="submit"
-        disabled={isSaving}
-        className="min-h-11 w-full rounded-md bg-primary px-4 font-medium text-primary-foreground sm:w-auto"
-      >
+      <Button size="lg" className="w-full sm:w-auto" type="submit" disabled={isSaving}>
         {buttonLabel}
-      </button>
+      </Button>
     </form>
   );
 }

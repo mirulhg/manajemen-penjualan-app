@@ -5,6 +5,7 @@ import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
 import { useDismissDailySummary, useSession } from '../../session';
 import { useDailySummary } from '../api/use-daily-summary';
+import { Button } from '@/components/ui/button';
 
 // Pengganti "satu notifikasi rangkuman setiap pagi" sampai ada push: muncul sekali per hari sampai ditutup.
 export function DailySummaryCard() {
@@ -27,9 +28,9 @@ export function DailySummaryCard() {
     return (
       <div role="alert" className="mb-6 rounded-md border border-border bg-card p-4">
         <p>Ringkasan harian gagal dibaca. </p>
-        <button type="button" onClick={handleRetry} className="min-h-11 font-medium text-primary underline">
+        <Button size="lg" type="button" onClick={handleRetry}>
           Coba lagi
-        </button>
+        </Button>
       </div>
     );
   }
@@ -46,17 +47,12 @@ export function DailySummaryCard() {
         Kemarin: omzet {formatRupiah(data.yesterday.revenue)} dari {formatNumber(data.yesterday.transactionCount)} transaksi
       </p>
       <div className="flex flex-wrap items-center gap-x-4">
-        <Link to="/peringatan" className="inline-flex min-h-11 items-center font-medium text-primary underline">
+        <Button asChild variant="outline"><Link to="/peringatan">
           Lihat daftar perlu restock
-        </Link>
-        <button
-          type="button"
-          onClick={handleDismiss}
-          disabled={dismiss.isPending}
-          className="min-h-11 font-medium text-primary underline"
-        >
+        </Link></Button>
+        <Button variant="ghost" type="button" onClick={handleDismiss} disabled={dismiss.isPending}>
           Tutup untuk hari ini
-        </button>
+        </Button>
       </div>
     </section>
   );

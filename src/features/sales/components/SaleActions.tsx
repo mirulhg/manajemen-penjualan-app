@@ -1,12 +1,13 @@
 import type { SaleDetail } from '../api/get-sale-detail';
 import { CancelForm } from './CancelForm';
 import { ReturnForm } from './ReturnForm';
+import { buttonVariants } from '@/components/ui/button';
 
 type SaleActionsProps = {
   detail: SaleDetail;
 };
 
-const SUMMARY_CLASS = 'inline-flex min-h-11 cursor-pointer items-center font-medium text-primary';
+const SUMMARY_CLASS = buttonVariants({ variant: 'outline', className: 'cursor-pointer' });
 
 // Retur dan batal dibuka lewat <details> bawaan browser (tanpa state); tidak ada tombol hapus transaksi.
 export function SaleActions({ detail }: SaleActionsProps) {

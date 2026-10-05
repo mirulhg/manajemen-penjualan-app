@@ -2,6 +2,7 @@ import { formatNumber } from '../../../utils/format-number';
 import type { ImportValidation } from '../import/validate-import-rows';
 import { ImportFailedRowsTable } from './ImportFailedRowsTable';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type ImportPreviewProps = {
   validation: ImportValidation;
@@ -54,22 +55,12 @@ export function ImportPreview({ validation, isPending, hasError, onImport, onCho
         </Alert>
       )}
       <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={onImport}
-          disabled={ready.length === 0 || isPending}
-          className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
-        >
+        <Button size="lg" type="button" onClick={onImport} disabled={ready.length === 0 || isPending}>
           {isPending ? 'Mengimpor…' : `Impor ${readyCount} barang`}
-        </button>
-        <button
-          type="button"
-          onClick={onChooseOther}
-          disabled={isPending}
-          className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-        >
+        </Button>
+        <Button variant="outline" type="button" onClick={onChooseOther} disabled={isPending}>
           Pilih file lain
-        </button>
+        </Button>
       </div>
     </div>
   );

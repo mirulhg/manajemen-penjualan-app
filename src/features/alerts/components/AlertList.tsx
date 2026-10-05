@@ -7,6 +7,7 @@ import { formatNumber } from '../../../utils/format-number';
 import { StockStatusBadge } from '../../stock';
 import { useStockThreshold } from '../../stock';
 import { useMarkAlertsRead } from '../api/use-alerts';
+import { Button } from '@/components/ui/button';
 
 type AlertListProps = {
   alerts: OpenAlert[];
@@ -33,9 +34,9 @@ export function AlertList({ alerts }: AlertListProps) {
           className="flex items-center justify-between gap-4 border-b border-border px-4 py-3 last:border-b-0"
         >
           <div className="min-w-0">
-            <Link to={`/stok/${product.id}`} className="inline-flex min-h-11 items-center font-medium text-primary underline">
+            <Button asChild variant="outline"><Link to={`/stok/${product.id}`}>
               {product.name}
-            </Link>
+            </Link></Button>
             <p className="text-sm text-muted-foreground">
               Stok {formatNumber(product.stockQuantity)} {product.unit} · Batas {formatNumber(product.minStock ?? defaultMinStock)}
             </p>

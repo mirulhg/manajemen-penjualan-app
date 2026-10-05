@@ -4,6 +4,7 @@ import { formatNumber } from '../../../utils/format-number';
 import type { CategoryWithCounts } from '../api/get-categories';
 import { CategoryDeleteSection } from './CategoryDeleteSection';
 import { CategoryRenameForm } from './CategoryRenameForm';
+import { Button } from '@/components/ui/button';
 
 type CategoryRowProps = {
   category: CategoryWithCounts;
@@ -31,15 +32,9 @@ export function CategoryRow({ category }: CategoryRowProps) {
         {category.archivedCount > 0 && ` · ${formatNumber(category.archivedCount)} diarsipkan`}
       </p>
       <div className="mt-2 flex flex-wrap items-start gap-3">
-        <button
-          ref={renameButtonRef}
-          type="button"
-          aria-expanded={isRenaming}
-          onClick={handleOpenRename}
-          className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-        >
+        <Button variant="outline" ref={renameButtonRef} type="button" aria-expanded={isRenaming} onClick={handleOpenRename}>
           Ubah nama
-        </button>
+        </Button>
         <CategoryDeleteSection category={category} />
       </div>
       {isRenaming && (

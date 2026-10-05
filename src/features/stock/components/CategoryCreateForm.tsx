@@ -9,6 +9,7 @@ import { useCreateCategory } from '../api/use-category-mutations';
 import { categoryNameSchema } from '../schema';
 import { Alert } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 const createCategoryFormSchema = z.object({ name: categoryNameSchema });
 type CreateCategoryFormInput = z.input<typeof createCategoryFormSchema>;
@@ -59,13 +60,9 @@ export function CategoryCreateForm() {
           Penyimpanan di perangkat ini gagal. Isian Anda masih ada; coba simpan lagi.
         </Alert>
       )}
-      <button
-        type="submit"
-        disabled={isSaving}
-        className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
-      >
+      <Button size="lg" type="submit" disabled={isSaving}>
         {isSaving ? 'Menyimpan…' : 'Tambah kategori'}
-      </button>
+      </Button>
     </form>
   );
 }

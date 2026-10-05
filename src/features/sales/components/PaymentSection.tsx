@@ -8,6 +8,7 @@ import type { CartAction } from '../cart-reducer';
 import type { CartView } from '../cart-view';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 type PaymentSectionProps = {
   paymentMethod: PaymentMethod;
@@ -62,14 +63,9 @@ export function PaymentSection({ paymentMethod, cashText, view, dispatch }: Paym
           />
           <div className="mt-2 flex flex-wrap gap-2">
             {suggestions.map((amount) => (
-              <button
-                key={amount}
-                type="button"
-                onClick={() => dispatch({ type: 'setCash', text: String(amount) })}
-                className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-              >
+              <Button variant="outline" key={amount} type="button" onClick={() => dispatch({ type: 'setCash', text: String(amount) })}>
                 {amount === total ? 'Uang pas' : formatNumber(amount)}
-              </button>
+              </Button>
             ))}
           </div>
           {view.cash.shortfall > 0 ? (

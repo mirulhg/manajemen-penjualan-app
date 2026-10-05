@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 type ReportErrorProps = {
   error: Error;
   onRetry: () => void;
@@ -11,9 +12,9 @@ export function ReportError({ error, onRetry }: ReportErrorProps) {
         Aplikasi gagal membaca data dari penyimpanan di perangkat ini: {error.message}. Coba lagi; jika masih gagal,
         muat ulang halaman.
       </p>
-      <button type="button" onClick={onRetry} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
+      <Button size="lg" type="button" onClick={onRetry}>
         Coba lagi
-      </button>
+      </Button>
     </div>
   );
 }

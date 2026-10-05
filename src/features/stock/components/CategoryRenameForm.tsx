@@ -10,6 +10,7 @@ import { useRenameCategory } from '../api/use-category-mutations';
 import { categoryNameSchema } from '../schema';
 import { Alert } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 type CategoryRenameFormProps = {
   category: CategoryWithCounts;
@@ -70,20 +71,12 @@ export function CategoryRenameForm({ category, onDone, onCancel }: CategoryRenam
         </Alert>
       )}
       <div className="flex flex-wrap gap-3">
-        <button
-          type="submit"
-          disabled={isSaving}
-          className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
-        >
+        <Button size="lg" type="submit" disabled={isSaving}>
           {isSaving ? 'Menyimpan…' : 'Simpan'}
-        </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="min-h-11 rounded-md border border-border bg-card px-4 font-medium"
-        >
+        </Button>
+        <Button variant="outline" type="button" onClick={onCancel}>
           Batal
-        </button>
+        </Button>
       </div>
     </form>
   );

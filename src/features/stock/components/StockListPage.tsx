@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 
 import { useSession } from '../../session';
 import { StockListContent } from './StockListContent';
+import { Button } from '@/components/ui/button';
 
 export function StockListPage() {
   const { isCashierMode } = useSession();
@@ -13,12 +14,12 @@ export function StockListPage() {
         <h1 className="text-xl font-semibold">Stok Barang</h1>
         {!isCashierMode && (
           <div className="flex gap-4">
-            <Link to="/stok/impor" className="inline-flex min-h-11 items-center font-medium text-primary">
+            <Button asChild variant="outline"><Link to="/stok/impor">
               Impor dari file
-            </Link>
-            <Link to="/kategori" className="inline-flex min-h-11 items-center font-medium text-primary">
+            </Link></Button>
+            <Button asChild variant="outline"><Link to="/kategori">
               Kelola kategori
-            </Link>
+            </Link></Button>
           </div>
         )}
       </div>

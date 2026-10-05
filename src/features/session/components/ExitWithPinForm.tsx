@@ -8,6 +8,7 @@ import { useExitCashierMode } from '../api/use-session-mutations';
 import { describeSessionError } from '../describe-session-error';
 import { PinField } from './PinField';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 const exitSchema = z.object({ pin: z.string().min(1, 'Isi PIN.') });
 
@@ -42,9 +43,9 @@ export function ExitWithPinForm() {
           Penyimpanan di perangkat ini gagal. Coba lagi.
         </Alert>
       )}
-      <button type="submit" disabled={isSaving} className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground">
+      <Button size="lg" type="submit" disabled={isSaving}>
         {isSaving ? 'Memeriksa…' : 'Keluar Mode Kasir'}
-      </button>
+      </Button>
     </form>
   );
 }

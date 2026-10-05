@@ -4,6 +4,7 @@ import { buildRestockShareText } from '../../../lib/db/restock';
 import type { RestockShareItem } from '../../../lib/db/restock';
 import { useStoreProfile } from '../../store-profile';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 
 type ShareRestockButtonProps = {
   items: RestockShareItem[];
@@ -42,13 +43,9 @@ export function ShareRestockButton({ items }: ShareRestockButtonProps) {
 
   return (
     <div className="space-y-2">
-      <button
-        type="button"
-        onClick={() => void handleShare()}
-        className="min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
-      >
+      <Button size="lg" type="button" onClick={() => void handleShare()}>
         Bagikan daftar
-      </button>
+      </Button>
       {status === 'shared' && <p role="status">Daftar dibagikan.</p>}
       {status === 'copied' && <p role="status">Daftar disalin. Tempel di WhatsApp atau catatan.</p>}
       {status === 'failed' && (
@@ -57,14 +54,9 @@ export function ShareRestockButton({ items }: ShareRestockButtonProps) {
         </Alert>
       )}
       {(status === 'copied' || status === 'failed') && (
-        <a
-          href={`https://wa.me/?text=${encodeURIComponent(shareText)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex min-h-11 items-center font-medium text-primary underline"
-        >
+        <Button asChild variant="outline"><a href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener noreferrer">
           Buka WhatsApp
-        </a>
+        </a></Button>
       )}
     </div>
   );

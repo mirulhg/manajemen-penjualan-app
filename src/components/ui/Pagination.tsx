@@ -4,7 +4,8 @@ type PaginationProps = {
   onPageChange: (page: number) => void;
 };
 
-const BUTTON_CLASS = 'min-h-11 rounded-md border border-border bg-card px-4 font-medium';
+
+import { Button } from '@/components/ui/button';
 
 export function Pagination({
   page,
@@ -13,25 +14,15 @@ export function Pagination({
 }: PaginationProps) {
   return (
     <nav aria-label="Halaman riwayat" className="flex items-center justify-between gap-4">
-      <button
-        type="button"
-        disabled={page <= 1}
-        onClick={() => onPageChange(page - 1)}
-        className={BUTTON_CLASS}
-      >
+      <Button type="button" variant="outline" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
         Sebelumnya
-      </button>
+      </Button>
       <p className="text-sm text-muted-foreground">
         Halaman {page} dari {pageCount}
       </p>
-      <button
-        type="button"
-        disabled={page >= pageCount}
-        onClick={() => onPageChange(page + 1)}
-        className={BUTTON_CLASS}
-      >
+      <Button type="button" variant="outline" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)}>
         Berikutnya
-      </button>
+      </Button>
     </nav>
   );
 }

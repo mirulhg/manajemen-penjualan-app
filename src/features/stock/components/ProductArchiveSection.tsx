@@ -2,13 +2,13 @@ import { formatNumber } from '../../../utils/format-number';
 import { useArchiveProduct, useUnarchiveProduct } from '../api/use-archive-product';
 import type { Product } from '../schema';
 import { Alert } from '@/components/ui/alert';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 type ProductArchiveSectionProps = {
   product: Product;
 };
 
-const SUMMARY_CLASS = 'inline-flex min-h-11 cursor-pointer items-center font-medium text-primary';
-const BUTTON_CLASS = 'min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground';
+const SUMMARY_CLASS = buttonVariants({ variant: 'outline', className: 'cursor-pointer' });
 
 // Arsip dan pulihkan dibuka lewat <details> bawaan browser (tanpa state), dengan konfirmasi di halaman.
 export function ProductArchiveSection({ product }: ProductArchiveSectionProps) {
@@ -45,13 +45,13 @@ export function ProductArchiveSection({ product }: ProductArchiveSectionProps) {
             {mutation.error.message}
           </Alert>
         )}
-        <button type="button" onClick={handleConfirm} disabled={mutation.isPending} className={BUTTON_CLASS}>
+        <Button type="button" size="lg" onClick={handleConfirm} disabled={mutation.isPending}>
           {mutation.isPending
             ? 'Menyimpan…'
             : isArchived
               ? 'Ya, pulihkan'
               : 'Ya, arsipkan'}
-        </button>
+        </Button>
       </div>
     </details>
   );

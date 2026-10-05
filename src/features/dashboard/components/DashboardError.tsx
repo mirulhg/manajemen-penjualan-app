@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 type DashboardErrorProps = {
   error: Error;
   onRetry: () => void;
@@ -12,13 +13,9 @@ export function DashboardError({ error, onRetry }: DashboardErrorProps) {
         muat ulang halaman.
       </p>
       <p className="mt-4 rounded-md border border-border bg-card p-4 text-sm">{error.message}</p>
-      <button
-        type="button"
-        onClick={onRetry}
-        className="mt-4 min-h-11 rounded-md bg-primary px-4 font-medium text-primary-foreground"
-      >
+      <Button size="lg" className="mt-4" type="button" onClick={onRetry}>
         Coba lagi
-      </button>
+      </Button>
     </div>
   );
 }
