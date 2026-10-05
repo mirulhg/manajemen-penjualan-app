@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Outlet, Route, Routes } from 'react-router';
 import { beforeEach, describe, expect, it } from 'vitest';
 
@@ -98,5 +99,28 @@ describe('halaman laporan', () => {
     expect(screen.getByText('406')).toBeTruthy();
     expect(screen.getByText('Rp 4.025.100')).toBeTruthy();
     expect(screen.getByText('Air Mineral 600 ml')).toBeTruthy();
+  });
+
+  it('pergerakan stok: bawaan hanya barang yang bergerak, ?semua=1 menampilkan semua', async () => {
+    const user = userEvent.setup();
+    renderRoutes('/laporan/pergerakan-stok?periode=hari-ini');
+
+    // Data contoh baru dibuat hari ini: 4 barang bersetok 0 tidak punya perubahan stok fisik.
+    expect(await screen.findByText('4 barang tanpa pergerakan disembunyikan.')).toBeTruthy();
+    expect(screen.getByText('26 dari 30')).toBeTruthy();
+    expect(screen.getAllByRole('row')).toHaveLength(1 + 26);
+
+    await user.click(screen.getByRole('button', { name: 'Tampilkan semua' }));
+
+    expect(await screen.findByRole('button', { name: 'Hanya yang bergerak' })).toBeTruthy();
+    expect(screen.getAllByRole('row')).toHaveLength(1 + 30);
+    expect(screen.queryByText(/barang tanpa pergerakan disembunyikan/)).toBeNull();
+  });
+
+  it('pergerakan stok dengan ?semua=1 di URL langsung menampilkan semua baris', async () => {
+    renderRoutes('/laporan/pergerakan-stok?periode=hari-ini&semua=1');
+
+    expect(await screen.findByRole('button', { name: 'Hanya yang bergerak' })).toBeTruthy();
+    expect(screen.getAllByRole('row')).toHaveLength(1 + 30);
   });
 });
