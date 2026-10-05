@@ -50,6 +50,12 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* Kertas cetak laporan; tanpa ini margin dan ukuran hasil cetak bergantung pada bawaan tiap browser. */
+@page {
+  size: A4;
+  margin: 15mm;
+}
+
 @layer base {
   body {
     @apply bg-background text-text;

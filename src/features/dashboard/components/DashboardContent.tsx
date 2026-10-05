@@ -27,9 +27,14 @@ export function DashboardContent() {
 
   return (
     <div className="space-y-8">
-      <Link to="/dasbor/produk" className="inline-flex min-h-11 items-center font-medium text-primary">
-        Analisis produk
-      </Link>
+      <div className="flex flex-wrap gap-x-6">
+        <Link to="/dasbor/produk" className="inline-flex min-h-11 items-center font-medium text-primary">
+          Analisis produk
+        </Link>
+        <Link to="/laporan" className="inline-flex min-h-11 items-center font-medium text-primary">
+          Laporan
+        </Link>
+      </div>
       <ComparisonSection today={data.today} yesterday={data.yesterday} />
       <PeriodSection selection={selection} metrics={data.period} previous={data.previous} onChange={setSelection} />
       <Suspense fallback={<ChartSkeleton />}>
