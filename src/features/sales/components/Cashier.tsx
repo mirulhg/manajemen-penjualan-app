@@ -9,10 +9,11 @@ import { getCartView, toCreateSaleInput } from '../cart-view';
 import type { Product } from '../../stock';
 import { CartList } from './CartList';
 import { PayBar } from './PayBar';
-import { PayDrawer } from './PayDrawer';
+import { PayDrawerContent } from './PayDrawerContent';
 import { PaymentPanel } from './PaymentPanel';
 import { ProductSearch } from './ProductSearch';
 import { SaleSuccessPanel } from './SaleSuccessPanel';
+import { Drawer } from '@/components/ui/drawer';
 
 type CashierProps = {
   products: Product[];
@@ -64,10 +65,6 @@ export function Cashier({ products, allowOversell }: CashierProps) {
     void handleSubmit(event);
   }
 
-  function handlePay() {
-    setIsPayOpen(true);
-  }
-
   const panel = {
     cart,
     view,
@@ -91,10 +88,10 @@ export function Cashier({ products, allowOversell }: CashierProps) {
         )}
       </div>
       {!isDesktop && (
-        <>
-          <PayBar itemCount={itemCount} total={view.totals.total} isVisible={hasItems} onPay={handlePay} />
-          <PayDrawer isOpen={isPayOpen} onOpenChange={setIsPayOpen} isSaved={mutation.isSuccess} panel={panel} />
-        </>
+        <Drawer open={isPayOpen} onOpenChange={setIsPayOpen}>
+          <PayBar itemCount={itemCount} total={view.totals.total} isVisible={hasItems} />
+          <PayDrawerContent isSaved={mutation.isSuccess} panel={panel} />
+        </Drawer>
       )}
     </div>
   );
