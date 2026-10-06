@@ -11,10 +11,14 @@ export function SaleHistoryContent() {
     setFilters({ page });
   }
 
+  function handleClearFilters() {
+    setFilters({ method: null, actor: null });
+  }
+
   return (
     <div className="space-y-4">
       <SaleFilterBar filters={filters} actors={actors.data ?? []} onChange={setFilters} />
-      <SaleHistoryResults filters={filters} onPageChange={handlePageChange} />
+      <SaleHistoryResults filters={filters} onPageChange={handlePageChange} onClearFilters={handleClearFilters} />
     </div>
   );
 }
