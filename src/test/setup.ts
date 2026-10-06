@@ -14,4 +14,11 @@ if (typeof window !== 'undefined') {
   Element.prototype.setPointerCapture = () => undefined;
   Element.prototype.releasePointerCapture = () => undefined;
   Element.prototype.hasPointerCapture = () => false;
+  // cmdk (palette perintah) memakai keduanya; jsdom tidak mengimplementasikannya.
+  Element.prototype.scrollIntoView = () => undefined;
+  window.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
 }
