@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { AlertBell } from '../components/layout/AlertBell';
 import { MainNav } from '../components/layout/MainNav';
 import type { NavItem } from '../components/layout/nav-items';
+import { PageEnter } from '../components/layout/PageEnter';
 import { PageShell } from '../components/layout/PageShell';
 import { TabBar } from '../components/layout/TabBar';
 import { useUnreadAlertCount } from '../features/alerts';
@@ -55,7 +56,9 @@ export function AppLayout() {
         }
         tabBar={<TabBar items={items} />}
       >
-        <Outlet />
+        <PageEnter>
+          <Outlet />
+        </PageEnter>
       </PageShell>
     <Toaster offset={{ bottom: 'var(--toast-offset)' }} mobileOffset={{ bottom: 'var(--toast-offset)' }} />
     </>
