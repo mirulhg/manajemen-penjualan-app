@@ -140,6 +140,13 @@
 @page {
   size: A4;
   margin: 15mm;
+
+  /* Nomor halaman di pojok kanan bawah; browser yang belum mendukung margin box (mis. sebagian Chrome Android) mengabaikannya tanpa merusak cetakan. */
+  @bottom-right {
+    content: 'Halaman ' counter(page) ' dari ' counter(pages);
+    font-family: var(--font-sans);
+    font-size: 9pt;
+  }
 }
 
 /* Tombol ditekan mengecil sedikit; hanya transform dan warna, dan tidak bergerak bila pengguna meminta gerak dikurangi. */

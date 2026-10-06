@@ -1,6 +1,9 @@
+import { Download, Printer } from 'lucide-react';
+
 import type { ExportFormat } from '../report-tables';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 type ReportActionsProps = {
   onExport: (format: ExportFormat) => void;
@@ -26,14 +29,21 @@ export function ReportActions({ onExport, pendingFormat, error }: ReportActionsP
     <div className="space-y-2 print:hidden">
       <div className="flex flex-wrap items-center gap-2">
         <Button size="lg" type="button" onClick={handlePrint}>
+          <Printer aria-hidden="true" />
           Cetak / Simpan PDF
         </Button>
-        <Button type="button" variant="outline" onClick={handleExportCsv} disabled={pendingFormat !== null}>
-          {pendingFormat === 'csv' ? 'Menyiapkan…' : 'Unduh CSV'}
-        </Button>
-        <Button type="button" variant="outline" onClick={handleExportXlsx} disabled={pendingFormat !== null}>
-          {pendingFormat === 'xlsx' ? 'Menyiapkan…' : 'Unduh Excel'}
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button type="button" variant="outline" disabled={pendingFormat !== null}>
+              <Download aria-hidden="true" />
+              {pendingFormat !== null ? 'Menyiapkan…' : 'Unduh'}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onSelect={handleExportCsv}>CSV</DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleExportXlsx}>Excel (.xlsx)</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       {error && (
         <Alert variant="destructive" className="p-3">
