@@ -1,4 +1,8 @@
+import { SearchX } from 'lucide-react';
+
+import { EmptyState } from '../../../components/ui/EmptyState';
 import { Button } from '@/components/ui/button';
+
 type StockNoResultsProps = {
   query: string | null;
   onClear: () => void;
@@ -6,16 +10,18 @@ type StockNoResultsProps = {
 
 export function StockNoResults({ query, onClear }: StockNoResultsProps) {
   return (
-    <div>
-      <h2 className="text-lg font-semibold">Tidak ada barang yang cocok</h2>
-      <p className="mt-2 text-muted-foreground">
-        {query
+    <EmptyState
+      icon={SearchX}
+      title="Tidak ada barang yang cocok dengan filter"
+      description={
+        query
           ? `Tidak ada barang untuk kata kunci “${query.trim()}” dengan filter yang dipilih.`
-          : 'Tidak ada barang dengan filter yang dipilih.'}
-      </p>
-      <Button variant="outline" className="mt-4" type="button" onClick={onClear}>
+          : 'Ubah atau hapus filter untuk melihat barang lain.'
+      }
+    >
+      <Button variant="outline" type="button" onClick={onClear}>
         Hapus filter
       </Button>
-    </div>
+    </EmptyState>
   );
 }

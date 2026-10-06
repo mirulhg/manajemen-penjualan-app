@@ -1,3 +1,6 @@
+import { Tags } from 'lucide-react';
+
+import { EmptyState } from '../../../components/ui/EmptyState';
 import { SubpageLayout } from '../../../components/layout/SubpageLayout';
 import { useCategories } from '../api/use-categories';
 import { CategoriesSkeleton } from './CategoriesSkeleton';
@@ -15,7 +18,7 @@ function CategoriesContent() {
   if (isPending) return <CategoriesSkeleton />;
   if (error) return <StockListError error={error} onRetry={handleRetry} />;
   if (categories.length === 0) {
-    return <p className="text-muted-foreground">Belum ada kategori. Tambahkan kategori pertama di atas.</p>;
+    return <EmptyState icon={Tags} title="Belum ada kategori" description="Tambahkan kategori pertama di atas." />;
   }
 
   return <CategoryList categories={categories} />;

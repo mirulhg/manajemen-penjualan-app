@@ -1,3 +1,6 @@
+import { CircleCheck } from 'lucide-react';
+
+import { EmptyState } from '../../../components/ui/EmptyState';
 import { useSession } from '../../session';
 import { useOpenAlerts } from '../api/use-alerts';
 import { AlertList } from './AlertList';
@@ -27,7 +30,7 @@ export function AlertsContent() {
       </div>
     );
   }
-  if (data.length === 0) return <p className="text-muted-foreground">Tidak ada barang yang menipis atau habis.</p>;
+  if (data.length === 0) return <EmptyState icon={CircleCheck} title="Tidak ada barang yang menipis atau habis." />;
 
   return (
     <div className="space-y-8">
