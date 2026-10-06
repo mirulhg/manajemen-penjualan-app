@@ -60,7 +60,7 @@ describe('SaleHistoryPage', () => {
     await screen.findByText('2 transaksi · Omzet Rp 216.000');
     await user.selectOptions(screen.getByLabelText('Periode'), 'kemarin');
 
-    expect(await screen.findByText('Belum ada transaksi di periode ini.')).toBeTruthy();
+    expect(await screen.findByText('Belum ada transaksi di periode ini')).toBeTruthy();
   });
 
   it('status ditulis sebagai teks pada setiap transaksi', async () => {

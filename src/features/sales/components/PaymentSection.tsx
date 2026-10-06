@@ -3,6 +3,7 @@ import type { Dispatch } from 'react';
 import type { PaymentMethod } from '../../../lib/db/records';
 import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
+import { PAYMENT_METHOD_OPTIONS } from '../payment-method-options';
 import { getCashSuggestions } from '../cash-suggestions';
 import type { CartAction } from '../cart-reducer';
 import type { CartView } from '../cart-view';
@@ -17,12 +18,6 @@ type PaymentSectionProps = {
   dispatch: Dispatch<CartAction>;
 };
 
-const METHODS: { value: PaymentMethod; label: string }[] = [
-  { value: 'tunai', label: 'Tunai' },
-  { value: 'transfer', label: 'Transfer' },
-  { value: 'qris', label: 'QRIS' },
-];
-
 export function PaymentSection({ paymentMethod, cashText, view, dispatch }: PaymentSectionProps) {
   const { total } = view.totals;
   const suggestions = getCashSuggestions(total);
@@ -31,7 +26,7 @@ export function PaymentSection({ paymentMethod, cashText, view, dispatch }: Paym
     <fieldset className="space-y-3">
       <legend className="text-sm font-medium">Metode bayar</legend>
       <div className="flex gap-2">
-        {METHODS.map((method) => (
+        {PAYMENT_METHOD_OPTIONS.map((method) => (
           <label
             key={method.value}
             className="flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md border border-border bg-card px-3"
