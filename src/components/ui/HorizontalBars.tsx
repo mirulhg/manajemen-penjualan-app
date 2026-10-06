@@ -35,7 +35,7 @@ export function HorizontalBars({ data, maxValue, active, onActivate, formatValue
             <div className="mt-1 h-4 border-l border-border">
               <div
                 style={{ width: `${maxValue > 0 ? (datum.value / maxValue) * 100 : 0}%` }}
-                className="h-full rounded-r bg-primary"
+                className="h-full rounded-r bg-chart-1"
               />
             </div>
           </li>

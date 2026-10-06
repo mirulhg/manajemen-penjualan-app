@@ -29,7 +29,7 @@ export function VerticalBars({ data, maxValue, active, onActivate, formatValue }
               onPointerEnter={() => onActivate(index)}
               className={`relative h-full flex-1 ${active !== null && !isActive ? 'opacity-60' : ''}`}
             >
-              <div style={{ height: `${height}%` }} className="absolute inset-x-0 bottom-0 rounded-t bg-primary" />
+              <div style={{ height: `${height}%` }} className="absolute inset-x-0 bottom-0 rounded-t bg-chart-1" />
               {showValue && (
                 <span
                   style={{ bottom: `${height}%` }}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getYAxis, indexFromPointer, pointPercent, visibleLabelIndexes } from './chart-scale';
+import { getYAxis, indexFromPointer, pointPercent, separateLabels, visibleLabelIndexes, yPercent } from './chart-scale';
 
 describe('getYAxis', () => {
   it('mulai dari 0 dengan kisi di bilangan bulat yang rapi dan puncak ≥ nilai terbesar', () => {
@@ -36,5 +36,18 @@ describe('visibleLabelIndexes', () => {
   it('selang-seling sebanyak muat', () => {
     expect(visibleLabelIndexes(30, 4)).toEqual([0, 8, 16, 24]);
     expect(visibleLabelIndexes(3, 4)).toEqual([0, 1, 2]);
+  });
+});
+
+describe('yPercent dan separateLabels', () => {
+  it('nilai terbesar di atas (0%), nilai 0 di dasar (100%)', () => {
+    expect(yPercent(6_000_000, 6_000_000)).toBe(0);
+    expect(yPercent(0, 6_000_000)).toBe(100);
+  });
+
+  it('label yang rapat digeser ke bawah, yang sudah berjarak tetap', () => {
+    expect(separateLabels([40, 80], 12)).toEqual([40, 80]);
+    expect(separateLabels([100, 100], 12)).toEqual([100, 112]);
+    expect(separateLabels([50, 45], 12)).toEqual([57, 45]);
   });
 });

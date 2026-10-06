@@ -19,6 +19,24 @@ export function getYAxis(maxValue: number): { ticks: number[]; top: number } {
 }
 
 // Posisi titik pada sumbu X dalam persen lebar area plot; satu titik saja berada di tengah.
+// Posisi vertikal (persen dari atas) untuk nilai pada sumbu 0..top; dipakai garis dan label ujungnya.
+export function yPercent(value: number, top: number): number {
+  return 100 - (value / top) * 100;
+}
+
+// Menggeser label yang terlalu rapat ke bawah (urut dari atas) supaya tidak bertumpuk, mis. dua garis yang berakhir di nilai sama.
+export function separateLabels(positions: number[], minGap: number): number[] {
+  const order = positions.map((position, index) => ({ position, index })).sort((a, b) => a.position - b.position);
+  const result = [...positions];
+  let previous = Number.NEGATIVE_INFINITY;
+  for (const { position, index } of order) {
+    const next = Math.max(position, previous + minGap);
+    result[index] = next;
+    previous = next;
+  }
+  return result;
+}
+
 export function pointPercent(index: number, count: number): number {
   return count <= 1 ? 50 : (index / (count - 1)) * 100;
 }

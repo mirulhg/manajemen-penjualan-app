@@ -1,6 +1,7 @@
 import { useId } from 'react';
 
 import { getYAxis, pointPercent, visibleLabelIndexes } from './chart-scale';
+import { LineChartEndLabels } from './LineChartEndLabels';
 import { ChartTable } from './ChartTable';
 import { LineChartPlot, SERIES_STYLES } from './LineChartPlot';
 import type { ChartSeries } from './LineChartPlot';
@@ -99,6 +100,7 @@ export function LineChart({ title, series, formatValue, formatAxis, labelHeader 
           {renderLabels(MOBILE_MAX_LABELS, 'md:hidden')}
           {renderLabels(DESKTOP_MAX_LABELS, 'hidden md:block')}
         </div>
+        <LineChartEndLabels series={visibleSeries} count={count} top={top} />
       </div>
       <p id={hintId} className="sr-only">
         Gunakan panah kiri dan kanan untuk berpindah titik.

@@ -1,11 +1,12 @@
-import { pointPercent } from './chart-scale';
+import { pointPercent, yPercent } from './chart-scale';
 
 export type ChartPoint = { label: string; shortLabel?: string; value: number };
-export type ChartSeries = { name: string; points: ChartPoint[] };
+// shortName: label langsung di ujung garis; name tetap dipakai di legenda dan tabel.
+export type ChartSeries = { name: string; shortName?: string; points: ChartPoint[] };
 
-// Seri pertama = periode ini (utuh, warna primary); seri kedua = pembanding (putus-putus), jadi tidak bergantung pada warna saja.
+// Seri pertama = periode ini (utuh, oranye chart-1); seri kedua = pembanding (putus-putus), jadi tidak bergantung pada warna saja.
 export const SERIES_STYLES = [
-  { line: 'stroke-chart-1', dot: 'bg-primary', dash: undefined },
+  { line: 'stroke-chart-1', dot: 'bg-chart-1', dash: undefined },
   { line: 'stroke-muted-foreground', dot: 'bg-muted-foreground', dash: '6 4' },
 ] as const;
 
@@ -16,10 +17,6 @@ type LineChartPlotProps = {
   ticks: number[];
   active: number | null;
 };
-
-function yPercent(value: number, top: number): number {
-  return 100 - (value / top) * 100;
-}
 
 // Koordinat dalam persen (viewBox 0..100, peregangan bebas) supaya lebar mengikuti kontainer; ketebalan garis tidak ikut meregang.
 export function LineChartPlot({ series, count, top, ticks, active }: LineChartPlotProps) {

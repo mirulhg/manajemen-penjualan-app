@@ -73,8 +73,8 @@ export function TrendSection({ current, previous, granularity, onGranularityChan
         <LineChart
           title="Omzet per periode"
           series={[
-            { name: 'Periode ini', points: toPoints(currentBuckets) },
-            ...(previousBuckets.length > 0 ? [{ name: 'Periode sebelumnya', points: toPoints(previousBuckets) }] : []),
+            { name: 'Periode ini', shortName: 'Periode ini', points: toPoints(currentBuckets) },
+            ...(previousBuckets.length > 0 ? [{ name: 'Periode sebelumnya', shortName: 'Sebelumnya', points: toPoints(previousBuckets) }] : []),
           ]}
           formatValue={formatRupiah}
           formatAxis={formatCompactRupiah}
