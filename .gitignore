@@ -3,3 +3,7 @@ dist
 .DS_Store
 *.local
 Docs/
+.agents/
+.aider-desk/
+.claude/
+skills-lock.json
