@@ -18,9 +18,9 @@ export function StockSummary({ products }: StockSummaryProps) {
   return (
     <div className="rounded-md border border-border bg-card p-4">
       <p className="mb-2 text-sm text-muted-foreground">Barang aktif</p>
-      <dl className="grid grid-cols-3 gap-4">
+      <dl className="grid grid-cols-2 gap-4">
         {figures.map((figure) => (
-          <div key={figure.label}>
+          <div key={figure.label} className={figure.label === 'Nilai stok' ? 'col-span-2' : undefined}>
             <dt className="text-sm text-muted-foreground">{figure.label}</dt>
             <dd className="font-semibold">{figure.value}</dd>
           </div>

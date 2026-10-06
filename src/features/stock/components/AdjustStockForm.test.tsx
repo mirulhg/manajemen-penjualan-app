@@ -23,7 +23,7 @@ describe('AdjustStockForm', () => {
     vi.restoreAllMocks();
   });
 
-  it('sukses: pesan tersimpan, field kosong, tombol "Tersimpan"', async () => {
+  it('sukses: toast stok baru, field kosong, tombol "Tersimpan"', async () => {
     const user = userEvent.setup();
     renderWithProviders(<AdjustStockForm product={await findProductBySku('SBK-001')} />);
 
@@ -31,8 +31,7 @@ describe('AdjustStockForm', () => {
     await user.type(screen.getByLabelText('Alasan'), 'Kiriman supplier');
     await user.click(screen.getByRole('button', { name: 'Simpan penyesuaian' }));
 
-    const status = await screen.findByRole('status');
-    expect(status.textContent).toContain('Tersimpan. Stok Beras Premium 5 kg sekarang 25 sak.');
+    expect(await screen.findByText('Stok Beras Premium 5 kg sekarang 25 sak')).toBeTruthy();
     expect(screen.getByLabelText<HTMLInputElement>('Jumlah diterima').value).toBe('');
     expect(screen.getByLabelText<HTMLInputElement>('Alasan').value).toBe('');
     expect(screen.getByRole('button', { name: 'Tersimpan' })).toBeTruthy();

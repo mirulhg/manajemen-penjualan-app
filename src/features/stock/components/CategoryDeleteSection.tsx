@@ -1,3 +1,5 @@
+import { toast } from 'sonner';
+
 import { categoryUsageMessage } from '../api/category-error';
 import type { CategoryWithCounts } from '../api/get-categories';
 import { useDeleteCategory } from '../api/use-category-mutations';
@@ -16,8 +18,18 @@ export function CategoryDeleteSection({ category }: CategoryDeleteSectionProps) 
   const usageCount = category.activeCount + category.archivedCount;
   const reasonId = `category-delete-reason-${category.id}`;
 
+  // mutateAsync, bukan mutate: barisnya hilang dari daftar setelah sukses, dan callback mutate() tidak jalan bila komponen sudah dilepas.
+  async function deleteCategory() {
+    try {
+      await mutation.mutateAsync(category.id);
+      toast.success(`Kategori ${category.name} dihapus`);
+    } catch {
+      // Kegagalan ditampilkan lewat mutation.error di bawah.
+    }
+  }
+
   function handleConfirm() {
-    mutation.mutate(category.id);
+    void deleteCategory();
   }
 
   if (usageCount > 0) {

@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { FormField } from '../../../components/ui/FormField';
@@ -23,14 +24,14 @@ export function CategoryCreateForm() {
   const mutation = useCreateCategory();
 
   const isSaving = formState.isSubmitting || mutation.isPending;
-  const hasSaved = mutation.isSuccess && !formState.isDirty;
   const hasUnexpectedError = mutation.isError && !(mutation.error instanceof CategoryError);
 
   // Dipanggil hanya bila skema lolos; teks mentah dikirim ke API, yang memvalidasi ulang dengan skema yang sama.
   async function onSubmit() {
     try {
-      await mutation.mutateAsync(getValues().name);
+      const created = await mutation.mutateAsync(getValues().name);
       reset({ name: '' });
+      toast.success(`Kategori ${created.name} ditambahkan`);
       setFocus('name');
     } catch (error) {
       if (error instanceof CategoryError) {
@@ -50,11 +51,6 @@ export function CategoryCreateForm() {
           <Input type="text" autoComplete="off" className="mt-1" {...control} {...register('name')} />
         )}
       </FormField>
-      {hasSaved && (
-        <Alert variant="success" role="status" className="p-3">
-          Kategori {mutation.data.name} ditambahkan.
-        </Alert>
-      )}
       {hasUnexpectedError && (
         <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Isian Anda masih ada; coba simpan lagi.

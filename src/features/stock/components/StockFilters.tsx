@@ -1,9 +1,13 @@
-import { FIELD_CLASS } from '../../../components/ui/field-styles';
+import { SlidersHorizontal } from 'lucide-react';
+import { useState } from 'react';
+
+import { useMediaQuery } from '../../../hooks/use-media-query';
 import type { StockFilters as StockFiltersValue } from '../parse-filter-params';
-import type { StockSort } from '../sort-products';
-import type { StockStatus } from '../stock-status';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { StockFilterChips } from './StockFilterChips';
+import { StockFilterDrawer } from './StockFilterDrawer';
+import { StockFilterFields } from './StockFilterFields';
+import { StockSearchField } from './StockSearchField';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 type StockFiltersProps = {
@@ -14,118 +18,58 @@ type StockFiltersProps = {
   onClear: () => void;
 };
 
-const STATUS_OPTIONS: { value: StockStatus; label: string }[] = [
-  { value: 'aman', label: 'Aman' },
-  { value: 'menipis', label: 'Menipis' },
-  { value: 'habis', label: 'Habis' },
-];
+// Sama dengan breakpoint `md` Tailwind: di atasnya filter sebaris, di bawahnya lewat Drawer.
+const INLINE_QUERY = '(min-width: 48rem)';
 
-const SORT_OPTIONS: { value: StockSort; label: string }[] = [
-  { value: 'nama', label: 'Nama A–Z' },
-  { value: 'stok-sedikit', label: 'Stok paling sedikit' },
-  { value: 'stok-banyak', label: 'Stok paling banyak' },
-  { value: 'terbaru', label: 'Terakhir diperbarui' },
-];
+export function StockFilters({ filters, categories, hasActiveFilters, onChange, onClear }: StockFiltersProps) {
+  const isInline = useMediaQuery(INLINE_QUERY);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  // Kata kunci tampil di kolom cari dan urutan bukan filter, jadi keduanya tidak dihitung.
+  const activeCount = [filters.category !== null, filters.status !== null, filters.archived].filter(Boolean).length;
 
-function parseSort(value: string): StockSort {
-  return SORT_OPTIONS.find((option) => option.value === value)?.value ?? 'nama';
-}
+  function handleSearchChange(value: string) {
+    onChange({ query: value || null });
+  }
 
-function parseStatus(value: string): StockStatus | null {
-  return STATUS_OPTIONS.find((option) => option.value === value)?.value ?? null;
-}
+  function handleOpenDrawer() {
+    setIsDrawerOpen(true);
+  }
 
-export function StockFilters({
-  filters,
-  categories,
-  hasActiveFilters,
-  onChange,
-  onClear,
-}: StockFiltersProps) {
   return (
-    <div className="grid gap-4 sm:grid-cols-3">
-      <div className="sm:col-span-3">
-        <Label htmlFor="stock-search">
-          Cari barang
-        </Label>
-        <Input
-          id="stock-search"
-          type="search"
-          placeholder="Nama atau SKU"
-          value={filters.query ?? ''}
-          onChange={(event) => onChange({ query: event.target.value || null })}
-          className="mt-1"
-        />
-      </div>
-      <div>
-        <Label htmlFor="stock-category">
-          Kategori
-        </Label>
-        <select
-          id="stock-category"
-          value={filters.category ?? ''}
-          onChange={(event) => onChange({ category: event.target.value || null })}
-          className={FIELD_CLASS}
-        >
-          <option value="">Semua kategori</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <Label htmlFor="stock-status">
-          Status
-        </Label>
-        <select
-          id="stock-status"
-          value={filters.status ?? ''}
-          onChange={(event) => onChange({ status: parseStatus(event.target.value) })}
-          className={FIELD_CLASS}
-        >
-          <option value="">Semua status</option>
-          {STATUS_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <Label htmlFor="stock-sort">
-          Urutkan
-        </Label>
-        <select
-          id="stock-sort"
-          value={filters.sort}
-          onChange={(event) => onChange({ sort: parseSort(event.target.value) })}
-          className={FIELD_CLASS}
-        >
-          {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="sm:col-span-3">
-        <label className="flex min-h-11 items-center gap-3">
-          <input
-            type="checkbox"
-            checked={filters.archived}
-            onChange={(event) => onChange({ archived: event.target.checked })}
-          />
-          Tampilkan barang diarsipkan
-        </label>
-      </div>
-      {hasActiveFilters && (
-        <div className="sm:col-span-3">
-          <Button variant="outline" type="button" onClick={onClear}>
-            Hapus filter
-          </Button>
+    <div className="space-y-3">
+      <div className="flex items-start gap-2">
+        <div className="min-w-0 flex-1">
+          <StockSearchField value={filters.query ?? ''} onChange={handleSearchChange} />
         </div>
+        {!isInline && (
+          <Button type="button" variant="outline" onClick={handleOpenDrawer}>
+            <SlidersHorizontal aria-hidden="true" />
+            Filter
+            {activeCount > 0 && <Badge variant="accent">{activeCount}</Badge>}
+          </Button>
+        )}
+      </div>
+      {isInline ? (
+        <>
+          <StockFilterFields filters={filters} categories={categories} onChange={onChange} />
+          {hasActiveFilters && (
+            <Button variant="outline" type="button" onClick={onClear}>
+              Hapus filter
+            </Button>
+          )}
+        </>
+      ) : (
+        <>
+          <StockFilterChips filters={filters} onChange={onChange} />
+          <StockFilterDrawer
+            isOpen={isDrawerOpen}
+            onOpenChange={setIsDrawerOpen}
+            filters={filters}
+            categories={categories}
+            onChange={onChange}
+            onClear={hasActiveFilters ? onClear : null}
+          />
+        </>
       )}
     </div>
   );

@@ -6,7 +6,6 @@ import { filterProducts, normalizeFilters } from '../filter-products';
 import { useStockFilters } from '../hooks/use-stock-filters';
 import { useStockThreshold } from '../hooks/use-stock-threshold';
 import { sortProducts } from '../sort-products';
-import { AddProductLink } from './AddProductLink';
 import { StockEmptyState } from './StockEmptyState';
 import { StockFilters } from './StockFilters';
 import { StockList } from './StockList';
@@ -45,7 +44,6 @@ export function StockListContent() {
   return (
     <div className="space-y-4">
       {!isCashierMode && <StockSummary products={activeProducts} />}
-      {!isCashierMode && <AddProductLink />}
       <StockFilters
         filters={filters}
         categories={categories}

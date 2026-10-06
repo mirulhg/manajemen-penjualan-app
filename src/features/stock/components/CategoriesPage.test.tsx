@@ -11,7 +11,7 @@ import { CategoriesPage } from './CategoriesPage';
 
 async function renderPage() {
   renderWithProviders(<CategoriesPage />);
-  return screen.findByRole('list');
+  return screen.findByRole('list', { name: 'Daftar kategori' });
 }
 
 function rowOf(list: HTMLElement, name: string) {
@@ -48,7 +48,7 @@ describe('CategoriesPage', () => {
     await user.type(screen.getByLabelText('Kategori baru'), 'Alat Tulis');
     await user.click(screen.getByRole('button', { name: 'Tambah kategori' }));
 
-    expect(await screen.findByText('Kategori Alat Tulis ditambahkan.')).toBeTruthy();
+    expect((await screen.findAllByText('Kategori Alat Tulis ditambahkan')).length).toBeGreaterThan(0);
     expect(within(rowOf(list, 'Alat Tulis')).getByText('0 barang aktif')).toBeTruthy();
 
     await user.type(screen.getByLabelText('Kategori baru'), 'alat tulis');
@@ -70,7 +70,7 @@ describe('CategoriesPage', () => {
     const list = await renderPage();
     await user.type(screen.getByLabelText('Kategori baru'), 'Alat Tulis');
     await user.click(screen.getByRole('button', { name: 'Tambah kategori' }));
-    await screen.findByText('Kategori Alat Tulis ditambahkan.');
+    await screen.findAllByText('Kategori Alat Tulis ditambahkan');
 
     await user.click(within(rowOf(list, 'Alat Tulis')).getByText('Hapus'));
     await user.click(screen.getByRole('button', { name: 'Ya, hapus' }));

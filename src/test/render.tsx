@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router';
 import { afterEach } from 'vitest';
 
 import type { Session } from '../features/session/api/get-session';
+import { Toaster } from '../components/ui/sonner';
 import { SessionContext } from '../features/session/session-context';
 
 // Vitest tanpa globals tidak memicu pembersihan otomatis milik Testing Library.
@@ -32,6 +33,8 @@ function createWrapper(queryClient: QueryClient, route: string, session: Session
       <QueryClientProvider client={queryClient}>
         <SessionContext value={session}>
           <MemoryRouter initialEntries={[route]}>{children}</MemoryRouter>
+          {/* Toast sukses dirender di sini supaya tes bisa memeriksanya seperti pengguna melihatnya. */}
+          <Toaster />
         </SessionContext>
       </QueryClientProvider>
     );

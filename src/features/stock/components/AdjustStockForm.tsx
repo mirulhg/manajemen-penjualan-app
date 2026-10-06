@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { FormEvent } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { getAdjustmentPreview } from '../adjustment-preview';
 import { StockAdjustmentError } from '../api/adjust-stock';
@@ -40,8 +41,9 @@ export function AdjustStockForm({ product }: AdjustStockFormProps) {
 
   async function onSubmit(adjustment: StockAdjustment) {
     try {
-      await mutation.mutateAsync({ ...adjustment, quantity: String(adjustment.quantity) });
+      const updated = await mutation.mutateAsync({ ...adjustment, quantity: String(adjustment.quantity) });
       reset(EMPTY_FORM);
+      toast.success(`Stok ${updated.name} sekarang ${formatNumber(updated.stockQuantity)} ${updated.unit}`);
     } catch (error) {
       if (error instanceof StockAdjustmentError && error.code === 'NO_CHANGE') {
         setError('quantity', {
@@ -68,12 +70,6 @@ export function AdjustStockForm({ product }: AdjustStockFormProps) {
         {preview && <AdjustStockPreview {...preview} unit={product.unit} />}
       </div>
       <AdjustReasonField register={register} error={formState.errors.reason?.message} />
-      {hasSaved && (
-        <Alert variant="success" role="status" className="p-3">
-          Tersimpan. Stok {mutation.data.name} sekarang {formatNumber(mutation.data.stockQuantity)}{' '}
-          {mutation.data.unit}.
-        </Alert>
-      )}
       {hasUnexpectedError && (
         <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Isian Anda masih ada; coba simpan lagi.

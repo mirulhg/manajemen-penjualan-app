@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { FormField } from '../../../components/ui/FormField';
@@ -37,8 +38,9 @@ export function CategoryRenameForm({ category, onDone, onCancel }: CategoryRenam
   // Dipanggil hanya bila skema lolos; teks mentah dikirim ke API, yang memvalidasi ulang dengan skema yang sama.
   async function onSubmit() {
     try {
-      await mutation.mutateAsync({ id: category.id, name: getValues().name });
+      const renamed = await mutation.mutateAsync({ id: category.id, name: getValues().name });
       onDone();
+      toast.success(`Kategori diubah menjadi ${renamed.name}`);
     } catch (error) {
       if (error instanceof CategoryError && error.code !== 'CATEGORY_NOT_FOUND') {
         setError('name', { message: error.message });

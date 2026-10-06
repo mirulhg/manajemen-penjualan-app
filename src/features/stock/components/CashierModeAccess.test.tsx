@@ -46,13 +46,13 @@ describe('akses Mode Kasir di halaman stok', () => {
     expect(screen.getByRole('link', { name: 'Ubah barang' })).toBeTruthy();
   });
 
-  it('daftar stok untuk kasir: tanpa ringkasan nilai stok, Tambah barang, dan Kelola kategori', async () => {
+  it('daftar stok untuk kasir: tanpa ringkasan nilai stok, Tambah barang, dan Kategori', async () => {
     renderWithProviders(<StockListPage />, createTestQueryClient(), '/', CASHIER);
 
     expect(await screen.findByLabelText('Cari barang')).toBeTruthy();
     expect(screen.queryByText('Nilai stok')).toBeNull();
     expect(screen.queryByRole('link', { name: 'Tambah barang' })).toBeNull();
-    expect(screen.queryByRole('link', { name: 'Kelola kategori' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Kategori' })).toBeNull();
   });
 
   it('daftar stok untuk pemilik: ketiganya tampil', async () => {
@@ -60,6 +60,6 @@ describe('akses Mode Kasir di halaman stok', () => {
 
     expect(await screen.findByText('Nilai stok')).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Tambah barang' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Kelola kategori' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Kategori' })).toBeTruthy();
   });
 });

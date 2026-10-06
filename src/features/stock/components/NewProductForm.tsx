@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { Link } from 'react-router';
+import { toast } from 'sonner';
 
 import { formatNumber } from '../../../utils/format-number';
 import { CreateProductError } from '../api/create-product';
@@ -59,6 +59,7 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
   async function onSubmit() {
     try {
       const created = await mutation.mutateAsync(getValues());
+      toast.success(`${created.name} ditambahkan dengan stok ${formatNumber(created.stockQuantity)} ${created.unit}`);
       const draft = photoDraft;
       reset(EMPTY_FORM);
       setPhotoDraft(UNCHANGED_PHOTO);
@@ -91,17 +92,6 @@ export function NewProductForm({ categories, units }: NewProductFormProps) {
       <PriceAndLimitFields register={register} errors={formState.errors} />
       <SoldAtLossWarning purchasePriceText={purchasePriceText} sellingPriceText={sellingPriceText} />
       <ProductPhotoField productId={null} productName={nameText} draft={photoDraft} onChange={setPhotoDraft} />
-      {hasSaved && (
-        <Alert variant="success" role="status" className="p-3">
-          <p>
-            Tersimpan. {mutation.data.name} ditambahkan dengan stok{' '}
-            {formatNumber(mutation.data.stockQuantity)} {mutation.data.unit}.
-          </p>
-          <Button asChild variant="outline"><Link to={`/stok?q=${encodeURIComponent(mutation.data.sku)}`}>
-            Lihat di daftar stok
-          </Link></Button>
-        </Alert>
-      )}
       {hasUnexpectedError && (
         <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Isian Anda masih ada; coba simpan lagi.

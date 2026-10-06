@@ -22,31 +22,43 @@ export function StockList({ products }: StockListProps) {
   });
 
   return (
-    <ul
-      ref={(element) => {
-        if (element) setScrollMargin(element.offsetTop);
-      }}
-      className="relative rounded-md border border-border bg-card"
-      style={{ height: virtualizer.getTotalSize() }}
-    >
-      {virtualizer.getVirtualItems().map((row) => {
-        const product = products[row.index];
-        if (!product) return null;
+    <div className="rounded-md border border-border bg-card">
+      {/* Header kolom hanya di md ke atas; dekoratif karena tiap baris sudah memuat teks lengkap untuk pembaca layar. */}
+      <div
+        aria-hidden="true"
+        className="hidden grid-cols-12 border-b border-border px-4 py-2 text-sm font-medium text-muted-foreground md:grid"
+      >
+        <span className="col-span-5">Nama</span>
+        <span className="col-span-3">Kategori</span>
+        <span className="col-span-2 text-right">Stok</span>
+        <span className="col-span-2 pl-4">Status</span>
+      </div>
+      <ul
+        ref={(element) => {
+          if (element) setScrollMargin(element.offsetTop);
+        }}
+        className="relative"
+        style={{ height: virtualizer.getTotalSize() }}
+      >
+        {virtualizer.getVirtualItems().map((row) => {
+          const product = products[row.index];
+          if (!product) return null;
 
-        return (
-          <li
-            key={product.id}
-            ref={virtualizer.measureElement}
-            data-index={row.index}
-            aria-setsize={products.length}
-            aria-posinset={row.index + 1}
-            className="absolute left-0 top-0 w-full border-b border-border"
-            style={{ transform: `translateY(${row.start - scrollMargin}px)` }}
-          >
-            <StockListItem product={product} />
-          </li>
-        );
-      })}
-    </ul>
+          return (
+            <li
+              key={product.id}
+              ref={virtualizer.measureElement}
+              data-index={row.index}
+              aria-setsize={products.length}
+              aria-posinset={row.index + 1}
+              className="absolute left-0 top-0 w-full border-b border-border"
+              style={{ transform: `translateY(${row.start - scrollMargin}px)` }}
+            >
+              <StockListItem product={product} />
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
