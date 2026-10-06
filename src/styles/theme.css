@@ -133,6 +133,45 @@
   }
 }
 
+/*
+ * Vaul memasang durasi 0,5 detik lewat stylesheet yang disuntik saat runtime (spesifisitas rendah); selektor di bawah lebih
+ * spesifik sehingga menang tanpa !important. Gerak yang dipicu drag dilepas memakai style inline Vaul dan tidak terjangkau.
+ */
+:root {
+  --drawer-duration: var(--duration-slow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --drawer-duration: 0.01ms;
+  }
+}
+
+[data-slot='drawer-content'][data-vaul-drawer],
+[data-slot='drawer-overlay'][data-vaul-overlay][data-vaul-snap-points] {
+  animation-duration: var(--drawer-duration);
+  animation-timing-function: var(--ease-drawer);
+  transition-duration: var(--drawer-duration);
+  transition-timing-function: var(--ease-drawer);
+}
+
+/* Toast memakai token kartu; spesifisitas ditinggikan agar menang atas variabel bawaan Sonner tanpa !important. */
+[data-sonner-toaster][data-sonner-theme][data-x-position] {
+  --normal-bg: var(--card);
+  --normal-text: var(--card-foreground);
+  --normal-border: var(--border);
+  --success-bg: var(--card);
+  --success-text: var(--card-foreground);
+  --success-border: var(--border);
+  --border-radius: var(--radius-md);
+  z-index: var(--z-toast);
+  font-family: var(--font-sans);
+}
+
+[data-sonner-toaster] [data-sonner-toast] {
+  transition-duration: var(--duration-base);
+}
+
 /* Di luar @layer agar menang atas utility animasi tanpa perlu !important. */
 @media (prefers-reduced-motion: reduce) {
   *,
