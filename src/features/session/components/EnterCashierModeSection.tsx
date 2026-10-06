@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router';
 
+import { SectionCard } from '../../../components/ui/SectionCard';
 import { useEnterCashierMode } from '../api/use-session-mutations';
 import { useSession } from '../session-context';
 import { Alert } from '@/components/ui/alert';
@@ -24,14 +25,11 @@ export function EnterCashierModeSection() {
   }
 
   return (
-    <section aria-labelledby="cashier-mode-heading" className="space-y-3">
-      <h2 id="cashier-mode-heading" className="text-lg font-semibold">
-        Mode Kasir
-      </h2>
-      <p className="text-sm text-muted-foreground">
-        Kasir hanya bisa memakai kasir dan melihat daftar stok, tanpa harga beli atau laporan. Keluar dari mode ini
-        butuh PIN.
-      </p>
+    <SectionCard
+      id="cashier-mode-heading"
+      title="Mode Kasir"
+      description="Kasir hanya bisa memakai kasir dan melihat daftar stok, tanpa harga beli atau laporan. Keluar dari mode ini butuh PIN."
+    >
       {!hasPin && <p id="cashier-mode-hint">Buat PIN pemilik dulu sebelum masuk Mode Kasir.</p>}
       {mutation.isError && (
         <Alert variant="destructive" className="p-3">
@@ -41,6 +39,6 @@ export function EnterCashierModeSection() {
       <Button size="lg" type="button" onClick={handleEnter} disabled={!hasPin || mutation.isPending} aria-describedby={hasPin ? undefined : 'cashier-mode-hint'}>
         Masuk Mode Kasir
       </Button>
-    </section>
+    </SectionCard>
   );
 }

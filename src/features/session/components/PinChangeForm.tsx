@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { describeSessionError } from '../describe-session-error';
@@ -26,7 +27,6 @@ export function PinChangeForm() {
   >({ resolver: zodResolver(changePinSchema), defaultValues: EMPTY_FORM });
   const mutation = useChangePin();
   const isSaving = formState.isSubmitting || mutation.isPending;
-  const hasSaved = mutation.isSuccess && !formState.isDirty;
   const hasUnexpectedError = mutation.isError && !(mutation.error instanceof SessionError);
 
   // Dipanggil hanya bila skema lolos; teks mentah dikirim ke API, yang memvalidasi ulang.
@@ -35,6 +35,7 @@ export function PinChangeForm() {
     try {
       await mutation.mutateAsync({ oldPin, newPin });
       reset(EMPTY_FORM);
+      toast.success('PIN diubah');
     } catch (error) {
       const message = describeSessionError(error);
       if (message) setError(error instanceof SessionError && error.code === 'INVALID_PIN_FORMAT' ? 'newPin' : 'oldPin', { message });
@@ -61,11 +62,6 @@ export function PinChangeForm() {
         error={formState.errors.confirmPin?.message}
         registration={register('confirmPin')}
       />
-      {hasSaved && (
-        <Alert variant="success" role="status" className="p-3">
-          PIN diubah.
-        </Alert>
-      )}
       {hasUnexpectedError && (
         <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Coba simpan lagi.

@@ -1,7 +1,8 @@
-import type { ChangeEvent } from 'react';
+import { toast } from 'sonner';
 
 import { useSetAlertFlag } from '../api/use-session-mutations';
 import type { AlertFlagKey } from '../api/set-alert-preference';
+import { SettingSwitchRow } from '../../../components/ui/SettingSwitchRow';
 import { Alert } from '@/components/ui/alert';
 
 type AlertFlagToggleProps = {
@@ -14,17 +15,23 @@ type AlertFlagToggleProps = {
 export function AlertFlagToggle({ flag, checked, label, description }: AlertFlagToggleProps) {
   const mutation = useSetAlertFlag();
 
-  function handleToggle(event: ChangeEvent<HTMLInputElement>) {
-    mutation.mutate({ key: flag, value: event.target.checked });
+  function handleToggle(value: boolean) {
+    mutation.mutate(
+      { key: flag, value },
+      { onSuccess: () => toast.success(`${label}: ${value ? 'aktif' : 'nonaktif'}`) },
+    );
   }
 
   return (
     <div>
-      <label className="flex min-h-11 items-center gap-3">
-        <input type="checkbox" checked={checked} disabled={mutation.isPending} onChange={handleToggle} />
-        {label}
-      </label>
-      <p className="text-sm text-muted-foreground">{description}</p>
+      <SettingSwitchRow
+        id={`alert-flag-${flag}`}
+        label={label}
+        description={description}
+        checked={checked}
+        disabled={mutation.isPending}
+        onCheckedChange={handleToggle}
+      />
       {mutation.isError && (
         <Alert variant="destructive" className="mt-1 p-3">
           Pengaturan gagal disimpan. Coba lagi.

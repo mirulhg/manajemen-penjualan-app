@@ -20,12 +20,12 @@ async function submitDefault(value: string) {
 describe('pengaturan peringatan stok', () => {
   beforeEach(resetDatabaseWithSeed);
 
-  it('menyimpan batas default 10: pesan Tersimpan, peringatan baru terbuka, dan isian bersih', async () => {
+  it('menyimpan batas default 10: toast, peringatan baru terbuka, dan isian bersih', async () => {
     renderWithProviders(<AlertSettingsSection />);
 
     await submitDefault('10');
 
-    expect(await screen.findByText(/Tersimpan\. Status stok dan peringatan sudah diperbarui\./)).toBeTruthy();
+    expect(await screen.findByText(/Batas menipis disimpan\. Status stok dan peringatan sudah diperbarui\./)).toBeTruthy();
     expect((await db.settings.get('defaultMinStock'))?.value).toBe(10);
     expect(await getOpenAlerts()).toHaveLength(15);
   });
@@ -50,12 +50,13 @@ describe('pengaturan peringatan stok', () => {
   it('tiga pilihan menyimpan ke pengaturan; peringatan di Mode Kasir bawaannya mati', async () => {
     renderWithProviders(<AlertSettingsSection />);
 
-    expect(screen.getByLabelText('Tampilkan peringatan di Mode Kasir').getAttribute('type')).toBe('checkbox');
-    expect(screen.getByLabelText<HTMLInputElement>('Tampilkan peringatan di Mode Kasir').checked).toBe(false);
-    expect(screen.getByLabelText<HTMLInputElement>('Tampilkan lonceng peringatan').checked).toBe(true);
+    const cashierSwitch = screen.getByRole('switch', { name: 'Tampilkan peringatan di Mode Kasir' });
+    const bellSwitch = screen.getByRole('switch', { name: 'Tampilkan lonceng peringatan' });
+    expect(cashierSwitch.getAttribute('aria-checked')).toBe('false');
+    expect(bellSwitch.getAttribute('aria-checked')).toBe('true');
 
-    await userEvent.click(screen.getByLabelText('Tampilkan peringatan di Mode Kasir'));
-    await userEvent.click(screen.getByLabelText('Tampilkan lonceng peringatan'));
+    await userEvent.click(cashierSwitch);
+    await userEvent.click(bellSwitch);
 
     await waitFor(async () => {
       expect((await db.settings.get('alertsInCashierMode'))?.value).toBe(true);

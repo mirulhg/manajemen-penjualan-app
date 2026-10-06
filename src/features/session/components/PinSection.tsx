@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { SectionCard } from '../../../components/ui/SectionCard';
 import { useSession } from '../session-context';
 import { PinChangeForm } from './PinChangeForm';
 import { PinSetupForm } from './PinSetupForm';
@@ -16,10 +17,11 @@ export function PinSection() {
   }
 
   return (
-    <section aria-labelledby="pin-heading" className="space-y-3">
-      <h2 id="pin-heading" className="text-lg font-semibold">
-        PIN pemilik
-      </h2>
+    <SectionCard
+      id="pin-heading"
+      title="PIN pemilik"
+      description="PIN dipakai untuk keluar dari Mode Kasir. Simpan kode pemulihannya."
+    >
       {recoveryCode ? (
         <RecoveryCodeNotice code={recoveryCode}>
           <Button size="lg" type="button" onClick={handleDismiss}>
@@ -31,6 +33,6 @@ export function PinSection() {
       ) : (
         <PinSetupForm onCreated={setRecoveryCode} />
       )}
-    </section>
+    </SectionCard>
   );
 }

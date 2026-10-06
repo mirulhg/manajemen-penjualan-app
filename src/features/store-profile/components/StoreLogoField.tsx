@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { ImagePlus } from 'lucide-react';
+import { useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 
 import { BlobImage, compressPhoto, PhotoError } from '../../stock';
 import { LOGO_MAX_SIDE } from '../schema';
 import type { LogoDraft, StoreLogo } from '../schema';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
 type StoreLogoFieldProps = {
@@ -17,6 +17,7 @@ export function StoreLogoField({ storedLogo, draft, onChange }: StoreLogoFieldPr
   // Pesan penolakan dan status memproses hanya relevan untuk pemilihan file ini, jadi cukup state lokal.
   const [message, setMessage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const shown = draft.kind === 'replace' ? draft.logo : draft.kind === 'unchanged' ? storedLogo : null;
 
@@ -40,6 +41,10 @@ export function StoreLogoField({ storedLogo, draft, onChange }: StoreLogoFieldPr
     void handleFileChange(event);
   }
 
+  function handlePickLogo() {
+    fileInputRef.current?.click();
+  }
+
   function handleRemove() {
     setMessage(null);
     onChange(storedLogo ? { kind: 'remove' } : { kind: 'unchanged' });
@@ -47,9 +52,7 @@ export function StoreLogoField({ storedLogo, draft, onChange }: StoreLogoFieldPr
 
   return (
     <div>
-      <Label htmlFor="store-logo">
-        Logo toko (opsional)
-      </Label>
+      <p className="text-sm font-medium">Logo toko (opsional)</p>
       {shown && (
         <BlobImage
           blob={shown.blob}
@@ -60,24 +63,34 @@ export function StoreLogoField({ storedLogo, draft, onChange }: StoreLogoFieldPr
         />
       )}
       {draft.kind === 'remove' && <p className="my-2 text-muted-foreground">Logo akan dihapus saat perubahan disimpan.</p>}
+      {/* Input bawaan browser (teks Inggris) disembunyikan secara visual; tombol "Pilih logo" yang membukanya. */}
       <input
+        ref={fileInputRef}
         id="store-logo"
         type="file"
         accept="image/*"
+        aria-label="Logo toko (opsional)"
+        tabIndex={-1}
         onChange={handleFileChangeEvent}
         aria-describedby={message ? 'store-logo-error' : undefined}
-        className="mt-1 block min-h-11 w-full"
+        className="sr-only"
       />
+      <div className="mt-2 flex flex-wrap gap-2">
+        <Button variant="outline" type="button" onClick={handlePickLogo} disabled={isProcessing}>
+          <ImagePlus aria-hidden="true" />
+          Pilih logo
+        </Button>
+        {shown && (
+          <Button variant="ghost" type="button" onClick={handleRemove}>
+            Hapus logo
+          </Button>
+        )}
+      </div>
       {isProcessing && <p className="mt-1 text-sm text-muted-foreground">Memproses logo…</p>}
       {message && (
         <p id="store-logo-error" role="alert" className="mt-1 text-sm text-destructive">
           {message}
         </p>
-      )}
-      {shown && (
-        <Button variant="outline" className="mt-2" type="button" onClick={handleRemove}>
-          Hapus logo
-        </Button>
       )}
     </div>
   );

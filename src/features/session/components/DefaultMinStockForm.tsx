@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { FormField } from '../../../components/ui/FormField';
 import { useSetDefaultMinStock } from '../api/use-session-mutations';
@@ -19,12 +20,11 @@ export function DefaultMinStockForm() {
   });
   const mutation = useSetDefaultMinStock();
   const isSaving = formState.isSubmitting || mutation.isPending;
-  const hasSaved = mutation.isSuccess && !formState.isDirty;
 
   async function onSubmit(values: { defaultMinStock: number }) {
     await mutation.mutateAsync(values.defaultMinStock);
-    // Isian dianggap bersih setelah tersimpan, supaya pesan "Tersimpan" muncul sampai diubah lagi.
     reset({ defaultMinStock: String(values.defaultMinStock) });
+    toast.success('Batas menipis disimpan. Status stok dan peringatan sudah diperbarui.');
   }
 
   function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
@@ -43,11 +43,6 @@ export function DefaultMinStockForm() {
           <Input {...control} {...register('defaultMinStock')} type="text" inputMode="numeric" className="mt-1" />
         )}
       </FormField>
-      {hasSaved && (
-        <Alert variant="success" role="status" className="p-3">
-          Tersimpan. Status stok dan peringatan sudah diperbarui.
-        </Alert>
-      )}
       {mutation.isError && (
         <Alert variant="destructive" className="p-3">
           Penyimpanan di perangkat ini gagal. Isian tidak hilang; coba simpan lagi.

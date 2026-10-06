@@ -12,7 +12,7 @@ import { StoreProfileSection } from './StoreProfileSection';
 describe('StoreProfileSection', () => {
   beforeEach(resetDatabaseWithSeed);
 
-  it('menyimpan profil: pesan Tersimpan, tombol berubah, dan isian tetap', async () => {
+  it('menyimpan profil: toast, tombol berubah, dan isian tetap', async () => {
     const user = userEvent.setup();
     renderWithProviders(<StoreProfileSection />);
 
@@ -20,7 +20,7 @@ describe('StoreProfileSection', () => {
     await user.type(screen.getByLabelText('Telepon (opsional)'), '0812345678');
     await user.click(screen.getByRole('button', { name: 'Simpan profil' }));
 
-    expect(await screen.findByText(/Tersimpan\. Profil toko dipakai di kop laporan\./)).toBeTruthy();
+    expect(await screen.findByText(/Profil toko disimpan\. Dipakai di kop laporan\./)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Tersimpan' })).toBeTruthy();
     expect(await getStoreProfile()).toMatchObject({ name: 'Toko Sari Makmur', phone: '0812345678' });
   });

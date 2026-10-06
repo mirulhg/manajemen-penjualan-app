@@ -1,7 +1,9 @@
-import type { ChangeEvent } from 'react';
+import { toast } from 'sonner';
 
 import { useAllowOversell } from '../api/use-allow-oversell';
 import { useSetAllowOversell } from '../api/use-session-mutations';
+import { SectionCard } from '../../../components/ui/SectionCard';
+import { SettingSwitchRow } from '../../../components/ui/SettingSwitchRow';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 
@@ -9,8 +11,10 @@ export function OversellSetting() {
   const allowOversell = useAllowOversell();
   const mutation = useSetAllowOversell();
 
-  function handleToggle(event: ChangeEvent<HTMLInputElement>) {
-    mutation.mutate(event.target.checked);
+  function handleToggle(checked: boolean) {
+    mutation.mutate(checked, {
+      onSuccess: () => toast.success(`Jual melebihi stok ${checked ? 'diizinkan' : 'tidak diizinkan'}`),
+    });
   }
 
   function handleRetry() {
@@ -18,10 +22,7 @@ export function OversellSetting() {
   }
 
   return (
-    <section aria-labelledby="sales-heading" className="space-y-3">
-      <h2 id="sales-heading" className="text-lg font-semibold">
-        Penjualan
-      </h2>
+    <SectionCard id="sales-heading" title="Penjualan" description="Aturan saat kasir mencatat transaksi.">
       {allowOversell.isError ? (
         <Alert variant="destructive" className="p-3">
           <p>Pengaturan tidak bisa dibaca dari penyimpanan di perangkat ini.</p>
@@ -30,24 +31,20 @@ export function OversellSetting() {
           </Button>
         </Alert>
       ) : (
-        <>
-          <label className="flex min-h-11 items-center gap-3">
-            <input
-              type="checkbox"
-              checked={allowOversell.data === true}
-              disabled={allowOversell.isPending || mutation.isPending}
-              onChange={handleToggle}
-            />
-            Izinkan jual melebihi stok
-          </label>
-          <p className="text-sm text-muted-foreground">Stok bisa menjadi minus. Peringatan tetap muncul di kasir.</p>
-        </>
+        <SettingSwitchRow
+          id="allow-oversell"
+          label="Izinkan jual melebihi stok"
+          description="Stok bisa menjadi minus. Peringatan tetap muncul di kasir."
+          checked={allowOversell.data === true}
+          disabled={allowOversell.isPending || mutation.isPending}
+          onCheckedChange={handleToggle}
+        />
       )}
       {mutation.isError && (
         <Alert variant="destructive" className="p-3">
           Pengaturan gagal disimpan. Coba lagi.
         </Alert>
       )}
-    </section>
+    </SectionCard>
   );
 }

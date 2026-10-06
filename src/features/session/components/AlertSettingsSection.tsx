@@ -1,3 +1,4 @@
+import { SectionCard } from '../../../components/ui/SectionCard';
 import { useSession } from '../session-context';
 import { AlertFlagToggle } from './AlertFlagToggle';
 import { DefaultMinStockForm } from './DefaultMinStockForm';
@@ -6,10 +7,11 @@ export function AlertSettingsSection() {
   const { alertsBellEnabled, dailySummaryEnabled, alertsInCashierMode } = useSession();
 
   return (
-    <section aria-labelledby="alerts-heading" className="space-y-4">
-      <h2 id="alerts-heading" className="text-lg font-semibold">
-        Peringatan stok
-      </h2>
+    <SectionCard
+      id="alerts-heading"
+      title="Peringatan stok"
+      description="Kapan barang dianggap menipis dan siapa yang diberi tahu."
+    >
       <DefaultMinStockForm />
       <AlertFlagToggle
         flag="alertsBellEnabled"
@@ -30,6 +32,6 @@ export function AlertSettingsSection() {
         description="Kasir bisa melihat daftar barang menipis, tetapi tidak melihat daftar perlu restock."
       />
       <p className="text-sm text-muted-foreground">Jam tenang dan penerima: butuh akun online (fase berikutnya).</p>
-    </section>
+    </SectionCard>
   );
 }

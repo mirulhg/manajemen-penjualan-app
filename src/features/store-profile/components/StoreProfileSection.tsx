@@ -1,4 +1,5 @@
 import { useStoreProfile } from '../api/use-store-profile';
+import { SectionCard } from '../../../components/ui/SectionCard';
 import { StoreProfileForm } from './StoreProfileForm';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -11,10 +12,11 @@ export function StoreProfileSection() {
   }
 
   return (
-    <section aria-labelledby="store-profile-heading" className="space-y-3">
-      <h2 id="store-profile-heading" className="text-lg font-semibold">
-        Profil toko
-      </h2>
+    <SectionCard
+      id="store-profile-heading"
+      title="Profil toko"
+      description="Nama, alamat, telepon, dan logo untuk kop laporan dan daftar belanja."
+    >
       {isPending && (
         <div aria-hidden="true" className="space-y-3">
           <div className="h-11 rounded-md bg-border" />
@@ -31,6 +33,6 @@ export function StoreProfileSection() {
         </Alert>
       )}
       {!isPending && !isError && <StoreProfileForm profile={profile} />}
-    </section>
+    </SectionCard>
   );
 }
