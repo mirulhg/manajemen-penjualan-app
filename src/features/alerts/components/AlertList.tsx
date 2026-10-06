@@ -1,3 +1,4 @@
+import { AnimatePresence, m } from 'motion/react';
 import { useRef } from 'react';
 import { Link } from 'react-router';
 
@@ -8,6 +9,7 @@ import { StockStatusBadge } from '../../stock';
 import { useStockThreshold } from '../../stock';
 import { useMarkAlertsRead } from '../api/use-alerts';
 import { ChevronRight } from 'lucide-react';
+import { listItemMotion } from '@/lib/motion';
 
 type AlertListProps = {
   alerts: OpenAlert[];
@@ -27,24 +29,26 @@ export function AlertList({ alerts }: AlertListProps) {
   }
 
   return (
-    <ul ref={handleListRef} className="rounded-md border border-border bg-card">
-      {alerts.map(({ alert, product }) => (
-        <li key={alert.id} className="border-b border-border last:border-b-0">
-          <Link to={`/stok/${product.id}`} className="tap-row flex min-h-11 items-center justify-between gap-3 px-4 py-3">
-            <div className="min-w-0">
-              <p className="line-clamp-2 font-medium">{product.name}</p>
-              <p className="text-sm text-muted-foreground">
-                Stok {formatNumber(product.stockQuantity)} {product.unit} · Batas {formatNumber(product.minStock ?? defaultMinStock)}
-              </p>
-              <p className="text-sm text-muted-foreground">Sejak {formatDateTime(alert.openedAt)}</p>
-            </div>
-            <div className="flex shrink-0 items-center gap-2">
-              <StockStatusBadge status={alert.level} />
-              <ChevronRight aria-hidden="true" className="size-5 text-muted-foreground" />
-            </div>
-          </Link>
-        </li>
-      ))}
+    <ul ref={handleListRef} className="relative rounded-md border border-border bg-card">
+      <AnimatePresence initial={false} mode="popLayout">
+        {alerts.map(({ alert, product }) => (
+          <m.li key={alert.id} {...listItemMotion(alerts.length)} className="border-b border-border last:border-b-0">
+            <Link to={`/stok/${product.id}`} className="tap-row flex min-h-11 items-center justify-between gap-3 px-4 py-3">
+              <div className="min-w-0">
+                <p className="line-clamp-2 font-medium">{product.name}</p>
+                <p className="text-sm text-muted-foreground">
+                  Stok {formatNumber(product.stockQuantity)} {product.unit} · Batas {formatNumber(product.minStock ?? defaultMinStock)}
+                </p>
+                <p className="text-sm text-muted-foreground">Sejak {formatDateTime(alert.openedAt)}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <StockStatusBadge status={alert.level} />
+                <ChevronRight aria-hidden="true" className="size-5 text-muted-foreground" />
+              </div>
+            </Link>
+          </m.li>
+        ))}
+      </AnimatePresence>
     </ul>
   );
 }

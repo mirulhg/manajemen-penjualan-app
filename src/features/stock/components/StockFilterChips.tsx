@@ -1,5 +1,5 @@
-import { X } from 'lucide-react';
-
+import { FilterChips } from '@/components/ui/FilterChips';
+import type { FilterChip } from '@/components/ui/FilterChips';
 import type { StockFilters as StockFiltersValue } from '../parse-filter-params';
 import { STATUS_OPTIONS } from './filter-options';
 
@@ -8,7 +8,7 @@ type StockFilterChipsProps = {
   onChange: (patch: Partial<StockFiltersValue>) => void;
 };
 
-type Chip = { key: string; text: string; removeLabel: string; patch: Partial<StockFiltersValue> };
+type Chip = FilterChip<Partial<StockFiltersValue>>;
 
 function buildChips(filters: StockFiltersValue): Chip[] {
   const chips: Chip[] = [];
@@ -36,24 +36,5 @@ function buildChips(filters: StockFiltersValue): Chip[] {
 }
 
 export function StockFilterChips({ filters, onChange }: StockFilterChipsProps) {
-  const chips = buildChips(filters);
-  if (chips.length === 0) return null;
-
-  return (
-    <ul aria-label="Filter aktif" className="flex flex-wrap gap-2">
-      {chips.map((chip) => (
-        <li key={chip.key}>
-          <button
-            type="button"
-            aria-label={chip.removeLabel}
-            onClick={() => onChange(chip.patch)}
-            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-secondary pl-4 pr-3 text-sm font-medium hover:bg-muted"
-          >
-            {chip.text}
-            <X aria-hidden="true" className="size-4" />
-          </button>
-        </li>
-      ))}
-    </ul>
-  );
+  return <FilterChips chips={buildChips(filters)} onRemove={onChange} />;
 }

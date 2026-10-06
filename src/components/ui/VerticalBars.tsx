@@ -11,7 +11,7 @@ type VerticalBarsProps = {
 
 const MAX_LABELS = 12;
 
-// Batang menempel ke garis dasar di bawah; hanya ujung atas yang membulat. Jarak antarbatang 2px.
+// Batang menempel ke garis dasar di bawah; tingginya lewat scaleY (bukan height), jadi ujungnya tidak dibulatkan. Jarak antarbatang 2px.
 export function VerticalBars({ data, maxValue, active, onActivate, formatValue }: VerticalBarsProps) {
   const labelIndexes = new Set(visibleLabelIndexes(data.length, MAX_LABELS));
   const firstMaxIndex = data.findIndex((datum) => datum.value === maxValue);
@@ -29,7 +29,10 @@ export function VerticalBars({ data, maxValue, active, onActivate, formatValue }
               onPointerEnter={() => onActivate(index)}
               className={`relative h-full flex-1 ${active !== null && !isActive ? 'opacity-60' : ''}`}
             >
-              <div style={{ height: `${height}%` }} className="absolute inset-x-0 bottom-0 rounded-t bg-chart-1" />
+              <div
+                style={{ transform: `scaleY(${height / 100})` }}
+                className="absolute inset-0 origin-bottom bg-chart-1 transition-transform duration-(--duration-slow) ease-out"
+              />
               {showValue && (
                 <span
                   style={{ bottom: `${height}%` }}

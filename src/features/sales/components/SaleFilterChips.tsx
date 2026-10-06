@@ -1,5 +1,4 @@
-import { X } from 'lucide-react';
-
+import { FilterChips } from '@/components/ui/FilterChips';
 import { PAYMENT_METHOD_OPTIONS } from '../payment-method-options';
 import type { SaleFilters } from '../sale-filters';
 
@@ -25,23 +24,5 @@ export function SaleFilterChips({ filters, onChange }: SaleFilterChipsProps) {
     },
   ].filter((chip) => chip !== false);
 
-  if (chips.length === 0) return null;
-
-  return (
-    <ul aria-label="Filter aktif" className="flex flex-wrap gap-2">
-      {chips.map((chip) => (
-        <li key={chip.key}>
-          <button
-            type="button"
-            aria-label={chip.removeLabel}
-            onClick={() => onChange(chip.patch)}
-            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border bg-secondary pl-4 pr-3 text-sm font-medium hover:bg-muted"
-          >
-            {chip.text}
-            <X aria-hidden="true" className="size-4" />
-          </button>
-        </li>
-      ))}
-    </ul>
-  );
+  return <FilterChips chips={chips} onRemove={onChange} />;
 }

@@ -1,6 +1,8 @@
+import { AnimatePresence, m } from 'motion/react';
 import type { ReactNode } from 'react';
 
 import { useMediaQuery } from '../../hooks/use-media-query';
+import { listItemMotion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
 export type TableColumn<Row> = {
@@ -69,16 +71,18 @@ export function ResponsiveTable<Row>({ caption, columns, rows, getKey, summary }
         </table>
       </div>
       {!isTablet && (
-        <ul aria-label={caption} className="divide-y divide-border rounded-md border border-border bg-card print:hidden">
-          {rows.map((row) => (
-            <li key={getKey(row)} className="flex items-start justify-between gap-3 px-4 py-3">
-              <div className="min-w-0">
-                <p className="font-medium">{summary.title(row)}</p>
-                <p className="text-sm text-muted-foreground">{summary.detail(row)}</p>
-              </div>
-              <p className="shrink-0 font-semibold">{summary.value(row)}</p>
-            </li>
-          ))}
+        <ul aria-label={caption} className="relative divide-y divide-border rounded-md border border-border bg-card print:hidden">
+          <AnimatePresence initial={false} mode="popLayout">
+            {rows.map((row) => (
+              <m.li key={getKey(row)} {...listItemMotion(rows.length)} className="flex items-start justify-between gap-3 px-4 py-3">
+                <div className="min-w-0">
+                  <p className="font-medium">{summary.title(row)}</p>
+                  <p className="text-sm text-muted-foreground">{summary.detail(row)}</p>
+                </div>
+                <p className="shrink-0 font-semibold">{summary.value(row)}</p>
+              </m.li>
+            ))}
+          </AnimatePresence>
         </ul>
       )}
     </>
