@@ -138,6 +138,39 @@
   }
 }
 
+/* Skeleton muncul memudar tanpa bergeser; ia muncul setelah jeda, jadi tidak boleh melompat masuk. */
+@utility skeleton-fade {
+  transition-property: opacity;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-out);
+
+  @starting-style {
+    opacity: 0;
+  }
+}
+
+/* Batang skeleton dengan kilau: pseudo-element bergeser lewat transform saja. Reduced-motion: aturan global di bawah menjalankannya sekali lalu berhenti di luar batang. */
+@utility skeleton-bar {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--secondary);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(90deg, var(--secondary), var(--card), var(--secondary));
+    transform: translateX(-100%);
+    animation: skeleton-shimmer 1.6s linear infinite forwards;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
 /* Kertas cetak laporan; tanpa ini margin dan ukuran hasil cetak bergantung pada bawaan tiap browser. */
 @page {
   size: A4;

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 type ChartSectionProps = {
   title: string;
@@ -49,11 +50,8 @@ function ChartSectionBody({ isPending, error, isEmpty, onRetry, children }: Char
 
 export function ChartSkeleton() {
   return (
-    <div>
-      <p className="sr-only" role="status">
-        Memuat grafik
-      </p>
-      <div aria-hidden="true" className="h-52 rounded-md border border-border bg-card" />
-    </div>
+    <Skeleton label="Memuat grafik">
+      <div className="h-52 rounded-md border border-border skeleton-bar" />
+    </Skeleton>
   );
 }

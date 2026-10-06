@@ -1,13 +1,12 @@
+import { Skeleton } from '@/components/ui/Skeleton';
+
 export function SaleDetailSkeleton() {
   return (
-    <div>
-      <p className="sr-only" role="status">
-        Memuat detail transaksi
-      </p>
-      <div aria-hidden="true" className="space-y-4">
-        <div className="h-32 rounded-md border border-border bg-border" />
-        <div className="h-40 rounded-md border border-border bg-border" />
+    <Skeleton label="Memuat detail transaksi">
+      <div className="space-y-4">
+        <div className="h-32 rounded-md border border-border skeleton-bar" />
+        <div className="h-40 rounded-md border border-border skeleton-bar" />
       </div>
-    </div>
+    </Skeleton>
   );
 }
