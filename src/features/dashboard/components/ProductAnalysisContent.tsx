@@ -4,6 +4,7 @@ import { useAnalysisReadiness } from '../api/use-product-analysis';
 import { getDashboardRanges } from '../dashboard-range';
 import { useAnalysisParams } from '../hooks/use-analysis-params';
 import { DashboardSkeleton } from './DashboardSkeleton';
+import { BentoGrid } from '../../../components/ui/BentoGrid';
 import { PeriodSegmented } from '../../../components/ui/PeriodSegmented';
 import { RevenueProfitSection } from './RevenueProfitSection';
 import { SlowMoversSection } from './SlowMoversSection';
@@ -40,17 +41,22 @@ export function ProductAnalysisContent() {
   const { current } = getDashboardRanges(params.selection, new Date());
 
   return (
-    <div className="space-y-8">
-      <section aria-labelledby="analysis-period-heading" className="space-y-3">
+    // dense: Lambat laku dan Perkiraan stok mengisi dua kolom kosong di sebelah Terlaris; Omzet dan laba tetap satu baris penuh.
+    <BentoGrid className="lg:grid-flow-dense lg:grid-cols-4">
+      <section aria-labelledby="analysis-period-heading" className="space-y-3 lg:col-span-4">
         <h2 id="analysis-period-heading" className="text-lg font-semibold">
           Periode penjualan
         </h2>
         <PeriodSegmented selection={params.selection} onChange={params.setSelection} />
       </section>
-      <TopSellingSection range={current} />
-      <RevenueProfitSection range={current} ranking={params.ranking} onRankingChange={params.setRanking} />
+      <div className="lg:col-span-2">
+        <TopSellingSection range={current} />
+      </div>
+      <div className="lg:col-span-4">
+        <RevenueProfitSection range={current} ranking={params.ranking} onRankingChange={params.setRanking} />
+      </div>
       <SlowMoversSection threshold={params.threshold} onThresholdChange={params.setThreshold} />
       <StockForecastSection />
-    </div>
+    </BentoGrid>
   );
 }

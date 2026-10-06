@@ -24,10 +24,10 @@ export function DailySummaryCard() {
   }
 
   if (!dailySummaryEnabled || dailySummaryDismissedOn === today) return null;
-  if (isPending) return <div aria-hidden="true" className="mb-6 h-24 rounded-md border border-border bg-card" />;
+  if (isPending) return <div aria-hidden="true" className="md:col-span-2 h-24 rounded-md border border-border bg-card" />;
   if (error) {
     return (
-      <div role="alert" className="mb-6 rounded-md border border-border bg-card p-4">
+      <div role="alert" className="md:col-span-2 rounded-md border border-border bg-card p-4">
         <p>Ringkasan harian gagal dibaca. </p>
         <Button size="lg" type="button" onClick={handleRetry}>
           Coba lagi
@@ -37,7 +37,7 @@ export function DailySummaryCard() {
   }
 
   return (
-    <section aria-labelledby="daily-summary-heading" className="mb-6 space-y-3 rounded-md bg-primary p-4 text-primary-foreground">
+    <section aria-labelledby="daily-summary-heading" className="md:col-span-2 space-y-3 rounded-md bg-primary p-4 text-primary-foreground">
       <h2 id="daily-summary-heading" className="flex items-center gap-2 font-semibold text-accent">
         <TriangleAlert aria-hidden="true" className="size-5 shrink-0" />
         <span>

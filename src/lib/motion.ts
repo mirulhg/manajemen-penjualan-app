@@ -7,3 +7,6 @@ export const DURATION = {
   base: 0.2,
   slow: 0.3,
 } as const;
+
+// Elemen bertanda ini (grid bento) tidak masuk sebagai satu blok saat halaman dibuka; anak-anaknya yang masuk bergantian.
+export const STAGGER_CHILDREN_ATTRIBUTE = 'data-stagger-children';

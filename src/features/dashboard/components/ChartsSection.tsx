@@ -16,15 +16,21 @@ export function ChartsSection({ selection, granularity, onGranularityChange }: C
   const { current, previous } = getDashboardRanges(selection, new Date());
 
   return (
-    <div className="space-y-8">
-      <TrendSection
-        current={current}
-        previous={previous}
-        granularity={granularity}
-        onGranularityChange={onGranularityChange}
-      />
-      <CategorySection range={current} />
-      <HourSection range={current} />
-    </div>
+    <>
+      <div className="md:col-span-4">
+        <TrendSection
+          current={current}
+          previous={previous}
+          granularity={granularity}
+          onGranularityChange={onGranularityChange}
+        />
+      </div>
+      <div className="md:col-span-2">
+        <CategorySection range={current} />
+      </div>
+      <div className="md:col-span-2">
+        <HourSection range={current} />
+      </div>
+    </>
   );
 }

@@ -1,3 +1,4 @@
+import { BentoGrid } from '../../../components/ui/BentoGrid';
 import { DailySummaryCard } from '../../alerts';
 import { DashboardContent } from './DashboardContent';
 
@@ -6,8 +7,10 @@ export function DashboardPage() {
     <section>
       <title>Dasbor · Manajemen Stok</title>
       <h1 className="mb-4 text-xl font-semibold">Dasbor</h1>
-      <DailySummaryCard />
-      <DashboardContent />
+      <BentoGrid className="md:grid-cols-4">
+        <DailySummaryCard />
+        <DashboardContent />
+      </BentoGrid>
     </section>
   );
 }

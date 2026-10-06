@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from 'react';
+import type { ReactNode } from 'react';
 
 import { serializePeriodParams } from '../../../utils/date-period';
 import { PeriodSegmented } from '../../../components/ui/PeriodSegmented';
@@ -15,6 +16,15 @@ import { KpiSection } from './KpiSection';
 // Kode grafik dipisah ke chunk sendiri supaya kartu angka tidak menunggu SVG dan komponennya.
 const ChartsSection = lazy(() => import('./ChartsSection').then((module) => ({ default: module.ChartsSection })));
 
+// Isi dasbor adalah sel grid milik DashboardPage; keadaan selain isi mengisi satu baris penuh.
+type FullRowProps = {
+  children: ReactNode;
+};
+
+function FullRow({ children }: FullRowProps) {
+  return <div className="md:col-span-4">{children}</div>;
+}
+
 export function DashboardContent() {
   const { selection, granularity, setSelection, setGranularity } = useDashboardPeriod();
   const { data, isPending, error, refetch } = useDashboardData(selection);
@@ -25,9 +35,27 @@ export function DashboardContent() {
     void refetch();
   }
 
-  if (isPending) return <DashboardSkeleton />;
-  if (error) return <DashboardError error={error} onRetry={handleRetry} />;
-  if (!data.hasSales) return <DashboardEmpty />;
+  if (isPending) {
+    return (
+      <FullRow>
+        <DashboardSkeleton />
+      </FullRow>
+    );
+  }
+  if (error) {
+    return (
+      <FullRow>
+        <DashboardError error={error} onRetry={handleRetry} />
+      </FullRow>
+    );
+  }
+  if (!data.hasSales) {
+    return (
+      <FullRow>
+        <DashboardEmpty />
+      </FullRow>
+    );
+  }
 
   function handleKpiMounted(element: HTMLDivElement | null) {
     if (element) setHasShownKpi(true);
@@ -36,15 +64,25 @@ export function DashboardContent() {
   const historyQuery = serializePeriodParams(toHistorySelection(selection, new Date())).toString();
 
   return (
-    <div className="space-y-6">
-      <PeriodSegmented selection={selection} onChange={setSelection} />
-      <div ref={handleKpiMounted}>
+    <>
+      <div className="md:col-span-2">
+        <PeriodSegmented selection={selection} onChange={setSelection} />
+      </div>
+      <div ref={handleKpiMounted} className="md:col-span-4">
         <KpiSection selection={selection} metrics={data.period} previous={data.previous} animate={!hasShownKpi} />
       </div>
-      <Suspense fallback={<ChartSkeleton />}>
+      <Suspense
+        fallback={
+          <div className="md:col-span-4">
+            <ChartSkeleton />
+          </div>
+        }
+      >
         <ChartsSection selection={selection} granularity={granularity} onGranularityChange={setGranularity} />
       </Suspense>
-      <DashboardShortcuts historyQuery={historyQuery} />
-    </div>
+      <div className="md:col-span-4">
+        <DashboardShortcuts historyQuery={historyQuery} />
+      </div>
+    </>
   );
 }

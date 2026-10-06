@@ -18,7 +18,7 @@ export function KpiSection({ selection, metrics, previous, animate }: KpiSection
       <h2 id="period-heading" className="sr-only">
         Ringkasan periode
       </h2>
-      <dl aria-live="polite" className="grid grid-cols-2 gap-3">
+      <dl aria-live="polite" className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {METRICS.map((metric) => (
           <KpiCard
             key={metric.key}
