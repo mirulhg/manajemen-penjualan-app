@@ -24,6 +24,8 @@
   --ring: #222222;
   --chart-1: #ff6d1f;
   --tabbar-height: 3.5rem;
+  /* Hitung naik angka KPI Dasbor saat halaman dibuka (sekali per kunjungan). Di atas batas 300ms CLAUDE.md §7; disetujui Amirul. */
+  --duration-count: 700ms;
   --toast-offset: calc(var(--tabbar-height) + env(safe-area-inset-bottom) + 1rem);
 }
 

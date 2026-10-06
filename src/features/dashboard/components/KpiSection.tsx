@@ -7,9 +7,10 @@ type KpiSectionProps = {
   selection: PeriodSelection;
   metrics: SalesMetrics;
   previous: SalesMetrics;
+  animate: boolean;
 };
 
-export function KpiSection({ selection, metrics, previous }: KpiSectionProps) {
+export function KpiSection({ selection, metrics, previous, animate }: KpiSectionProps) {
   const hasNoSalesToday = selection.period === 'hari-ini' && metrics.revenue === 0;
 
   return (
@@ -25,6 +26,7 @@ export function KpiSection({ selection, metrics, previous }: KpiSectionProps) {
             current={metrics[metric.key]}
             previous={previous[metric.key]}
             hasNoSalesToday={hasNoSalesToday}
+            animate={animate}
           />
         ))}
       </dl>

@@ -10,6 +10,7 @@ import { seedSampleSales } from '../../sales/seed-sample-sales';
 import { SAMPLE_PRODUCT_SKUS } from '../../stock';
 import { OwnerOnly } from '../../session';
 import { createTestQueryClient, renderWithProviders } from '../../../test/render';
+import { setReducedMotion } from '../../../test/viewport';
 import { findProductBySku, resetDatabaseWithSeed } from '../../../test/reset-database';
 import { DashboardPage } from './DashboardPage';
 
@@ -221,5 +222,22 @@ describe('DashboardPage tata letak', () => {
 
     expect(await screen.findByRole('button', { name: 'Bulan ini' })).toBeTruthy();
     expect(screen.getByRole('button', { name: '7 hari' }).getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('angka KPI berhitung naik hanya saat dasbor dibuka; ganti periode menampilkan angka langsung', async () => {
+    setReducedMotion(false);
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    renderRoutes('/dasbor', false);
+
+    const countingValues = () => document.querySelectorAll('dd span[aria-hidden="true"]');
+    await waitFor(() => expect(countingValues().length).toBeGreaterThan(0));
+    await waitFor(() => expect(countingValues()).toHaveLength(0), { timeout: 2_000 });
+    expect(await screen.findByText('Rp 920.500')).toBeTruthy();
+
+    await user.click(screen.getByRole('button', { name: '30 hari' }));
+
+    expect(await screen.findByText('Rp 5.524.500')).toBeTruthy();
+    expect(countingValues()).toHaveLength(0);
+    setReducedMotion(true);
   });
 });

@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
 
 import { serializePeriodParams } from '../../../utils/date-period';
 import { PeriodSegmented } from '../../../components/ui/PeriodSegmented';
@@ -18,6 +18,8 @@ const ChartsSection = lazy(() => import('./ChartsSection').then((module) => ({ d
 export function DashboardContent() {
   const { selection, granularity, setSelection, setGranularity } = useDashboardPeriod();
   const { data, isPending, error, refetch } = useDashboardData(selection);
+  // Efek hitung naik hanya untuk tampilan pertama setelah halaman dibuka; sesudah angka tampil, remount karena ganti periode tidak mengulangnya.
+  const [hasShownKpi, setHasShownKpi] = useState(false);
 
   function handleRetry() {
     void refetch();
@@ -27,12 +29,18 @@ export function DashboardContent() {
   if (error) return <DashboardError error={error} onRetry={handleRetry} />;
   if (!data.hasSales) return <DashboardEmpty />;
 
+  function handleKpiMounted(element: HTMLDivElement | null) {
+    if (element) setHasShownKpi(true);
+  }
+
   const historyQuery = serializePeriodParams(toHistorySelection(selection, new Date())).toString();
 
   return (
     <div className="space-y-6">
       <PeriodSegmented selection={selection} onChange={setSelection} />
-      <KpiSection selection={selection} metrics={data.period} previous={data.previous} />
+      <div ref={handleKpiMounted}>
+        <KpiSection selection={selection} metrics={data.period} previous={data.previous} animate={!hasShownKpi} />
+      </div>
       <Suspense fallback={<ChartSkeleton />}>
         <ChartsSection selection={selection} granularity={granularity} onGranularityChange={setGranularity} />
       </Suspense>
