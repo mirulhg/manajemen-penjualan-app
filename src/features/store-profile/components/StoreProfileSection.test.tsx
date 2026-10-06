@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { db } from '../../../lib/db/database';
 import { getStoreProfile } from '../../../lib/db/settings';
@@ -23,6 +23,18 @@ describe('StoreProfileSection', () => {
     expect(await screen.findByText(/Profil toko disimpan\. Dipakai di kop laporan\./)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Tersimpan' })).toBeTruthy();
     expect(await getStoreProfile()).toMatchObject({ name: 'Toko Sari Makmur', phone: '0812345678' });
+  });
+
+  it('tombol "Pilih logo" membuka pemilih file, bukan input bawaan browser yang terlihat', async () => {
+    const user = userEvent.setup();
+    const click = vi.spyOn(HTMLInputElement.prototype, 'click');
+    renderWithProviders(<StoreProfileSection />);
+
+    await user.click(await screen.findByRole('button', { name: 'Pilih logo' }));
+
+    expect(click).toHaveBeenCalledTimes(1);
+    expect(screen.getByLabelText('Logo toko (opsional)').className).toContain('sr-only');
+    click.mockRestore();
   });
 
   it('nama terlalu pendek: pesan di bawah field, tidak tersimpan', async () => {

@@ -73,6 +73,19 @@ describe('SaleHistoryPage', () => {
     expect(screen.getAllByText('Selesai')).toHaveLength(2);
   });
 
+  it('keadaan kosong saat difilter menyebut metodenya; Hapus filter menghapus metode dan periode tetap', async () => {
+    const user = userEvent.setup();
+    await createTwoSales();
+    renderWithProviders(<SaleHistoryPage />, createTestQueryClient(), '/penjualan?periode=kemarin&metode=qris');
+
+    expect(await screen.findByText('Tidak ada transaksi QRIS di periode ini')).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Hapus filter' }));
+
+    expect(await screen.findByText('Belum ada transaksi di periode ini')).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Buka kasir' })).toBeTruthy();
+    expect(screen.getByLabelText<HTMLSelectElement>('Periode').value).toBe('kemarin');
+  });
+
   describe('di HP', () => {
     afterEach(() => {
       setViewportWidth(1280);

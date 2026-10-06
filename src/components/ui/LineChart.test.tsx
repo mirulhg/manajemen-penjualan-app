@@ -32,6 +32,28 @@ function renderChart(withComparison: boolean) {
   );
 }
 
+describe('LineChart label langsung', () => {
+  it('dua seri: nama pendek tiap seri ada di ujung kanan garis, selain legenda dan tabel', () => {
+    renderWithProviders(
+      <LineChart
+        title="Omzet per periode"
+        series={[
+          { name: 'Periode ini', shortName: 'Periode ini', points: CURRENT },
+          { name: 'Periode sebelumnya', shortName: 'Sebelumnya', points: PREVIOUS },
+        ]}
+        formatValue={(value) => `Rp ${value}`}
+        formatAxis={(value) => `Rp ${value}`}
+        labelHeader="Tanggal"
+      />,
+    );
+
+    const labels = screen.getAllByText('Sebelumnya');
+    expect(labels).toHaveLength(1);
+    expect(labels[0]?.closest('[aria-hidden="true"]')).not.toBeNull();
+    expect(screen.getAllByText('Periode ini').length).toBeGreaterThanOrEqual(2);
+  });
+});
+
 describe('LineChart', () => {
   it('tabel alternatif memuat nilai yang sama dengan data, termasuk hari bernilai 0', async () => {
     renderChart(true);
