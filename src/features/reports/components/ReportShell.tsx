@@ -1,8 +1,6 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router';
-
+import { BackButton } from '../../../components/layout/BackButton';
 import { StoreLetterhead } from './StoreLetterhead';
-import { Button } from '@/components/ui/button';
 
 type ReportShellProps = {
   title: string;
@@ -17,9 +15,7 @@ export function ReportShell({ title, filters, actions, children }: ReportShellPr
     <section className="space-y-6">
       <title>{`${title} · Manajemen Stok`}</title>
       <div className="space-y-4 print:hidden">
-        <Button asChild variant="ghost"><Link to="/laporan">
-          Kembali ke daftar laporan
-        </Link></Button>
+        <BackButton to="/laporan" label="Kembali ke daftar laporan" />
         {filters}
         {actions}
       </div>

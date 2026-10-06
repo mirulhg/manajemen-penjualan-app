@@ -10,6 +10,7 @@ import { ImportPreview } from './ImportPreview';
 import { ImportResult } from './ImportResult';
 import { NewProductSkeleton } from './NewProductSkeleton';
 import { StockListError } from './StockListError';
+import { Card, CardContent } from '@/components/ui/card';
 
 const HEADING = 'Impor Barang';
 
@@ -29,7 +30,15 @@ export function ImportProductsPage() {
   }
 
   function renderContent() {
-    if (rows === null) return <ImportFilePicker onRowsRead={setRows} />;
+    if (rows === null) {
+      return (
+        <Card>
+          <CardContent>
+            <ImportFilePicker onRowsRead={setRows} />
+          </CardContent>
+        </Card>
+      );
+    }
     if (products.isPending) return <NewProductSkeleton />;
     if (products.isError) return <StockListError error={products.error} onRetry={handleRetry} />;
 

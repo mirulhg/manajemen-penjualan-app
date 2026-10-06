@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
-import { Link, useLocation } from 'react-router';
-import { Button } from '@/components/ui/button';
+import { useLocation } from 'react-router';
+
+import { BackButton } from './BackButton';
 
 type SubpageLayoutProps = {
   title: string;
@@ -17,10 +18,10 @@ export function SubpageLayout({ title, heading, backTo, backLabel, children }: S
     <section>
       <title>{`${title} · Manajemen Stok`}</title>
       {/* state diteruskan agar filter dan urutan daftar stok bertahan di sepanjang rantai halaman. */}
-      <Button asChild variant="outline"><Link to={backTo} state={locationState}>
-        {backLabel}
-      </Link></Button>
-      <h1 className="mb-4 text-xl font-semibold">{heading}</h1>
+      <div className="mb-4 flex items-center gap-1">
+        <BackButton to={backTo} label={backLabel} state={locationState} />
+        <h1 className="text-xl font-semibold">{heading}</h1>
+      </div>
       {children}
     </section>
   );

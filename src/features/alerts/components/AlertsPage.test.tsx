@@ -37,7 +37,7 @@ describe('lonceng dan halaman peringatan', () => {
     const bell = await screen.findByRole('link', { name: 'Peringatan stok, 12 belum dibaca' });
     await userEvent.click(bell);
 
-    expect(await screen.findByRole('link', { name: 'Telur Ayam 1 kg' })).toBeTruthy();
+    expect(await screen.findByRole('link', { name: /^Telur Ayam 1 kg/ })).toBeTruthy();
     expect(screen.getAllByText('Habis', { selector: 'span' })).toHaveLength(4);
     expect(screen.getAllByText('Menipis', { selector: 'span' })).toHaveLength(8);
 
@@ -50,7 +50,7 @@ describe('lonceng dan halaman peringatan', () => {
   it('Habis di atas Menipis dan setiap nama menaut ke detail barang', async () => {
     renderApp('/peringatan');
 
-    const first = await screen.findByRole('link', { name: 'Teh Siap Minum 350 ml' });
+    const first = await screen.findByRole('link', { name: /^Teh Siap Minum 350 ml/ });
     expect(first.getAttribute('href')).toMatch(/^\/stok\/[0-9a-f-]{36}$/);
     const badges = screen.getAllByText(/^(Habis|Menipis)$/, { selector: 'span' }).map((badge) => badge.textContent);
     expect(badges.slice(0, 4)).toEqual(['Habis', 'Habis', 'Habis', 'Habis']);
@@ -90,7 +90,7 @@ describe('Mode Kasir', () => {
   it('bila diaktifkan: lonceng tampil dan halaman terbuka TANPA Daftar perlu restock dan tombol bagikan', async () => {
     renderApp('/peringatan', { isCashierMode: true, alertsInCashierMode: true });
 
-    expect(await screen.findByRole('link', { name: 'Telur Ayam 1 kg' })).toBeTruthy();
+    expect(await screen.findByRole('link', { name: /^Telur Ayam 1 kg/ })).toBeTruthy();
     expect(screen.getByRole('link', { name: /Peringatan stok, \d+ belum dibaca/ })).toBeTruthy();
     expect(screen.queryByText('Daftar perlu restock')).toBeNull();
     expect(screen.queryByRole('button', { name: 'Bagikan daftar' })).toBeNull();

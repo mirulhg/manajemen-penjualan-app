@@ -8,6 +8,7 @@ import { AdjustStockSummary } from './AdjustStockSummary';
 import { ProductNotFound } from './ProductNotFound';
 import { StockListError } from './StockListError';
 import { SubpageLayout } from '../../../components/layout/SubpageLayout';
+import { Card, CardContent } from '@/components/ui/card';
 
 export function AdjustStockPage() {
   const { productId = '' } = useParams();
@@ -46,7 +47,11 @@ export function AdjustStockPage() {
   return (
     <SubpageLayout heading="Penyesuaian Stok" title={`Sesuaikan ${product.name}`} backTo={detailPath} backLabel="Kembali ke detail barang">
       <AdjustStockSummary product={product} />
-      <AdjustStockForm product={product} />
+      <Card className="mt-4">
+        <CardContent>
+          <AdjustStockForm product={product} />
+        </CardContent>
+      </Card>
     </SubpageLayout>
   );
 }

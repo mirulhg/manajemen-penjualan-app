@@ -9,6 +9,7 @@ import { EditProductForm } from './EditProductForm';
 import { NewProductSkeleton } from './NewProductSkeleton';
 import { ProductNotFound } from './ProductNotFound';
 import { StockListError } from './StockListError';
+import { Card, CardContent } from '@/components/ui/card';
 
 const HEADING = 'Ubah Barang';
 
@@ -54,11 +55,15 @@ export function EditProductPage() {
 
   return (
     <SubpageLayout title={`Ubah ${product.data.name}`} heading={HEADING} backTo={backTo} backLabel={backLabel}>
-      <EditProductForm
-        product={product.data}
-        categories={categories.data}
-        units={getUnits(products.data)}
-      />
+      <Card>
+        <CardContent>
+          <EditProductForm
+            product={product.data}
+            categories={categories.data}
+            units={getUnits(products.data)}
+          />
+        </CardContent>
+      </Card>
     </SubpageLayout>
   );
 }

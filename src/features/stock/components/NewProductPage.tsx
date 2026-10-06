@@ -8,6 +8,7 @@ import { NewProductForm } from './NewProductForm';
 import { NewProductSkeleton } from './NewProductSkeleton';
 import { StockListError } from './StockListError';
 import { SubpageLayout } from '../../../components/layout/SubpageLayout';
+import { Card, CardContent } from '@/components/ui/card';
 
 export function NewProductPage() {
   const location = useLocation();
@@ -40,7 +41,11 @@ export function NewProductPage() {
 
   return (
     <SubpageLayout title="Tambah Barang" heading="Tambah Barang" backTo={backTo} backLabel="Kembali ke daftar stok">
-      <NewProductForm categories={categories.data} units={getUnits(products.data)} />
+      <Card>
+        <CardContent>
+          <NewProductForm categories={categories.data} units={getUnits(products.data)} />
+        </CardContent>
+      </Card>
     </SubpageLayout>
   );
 }

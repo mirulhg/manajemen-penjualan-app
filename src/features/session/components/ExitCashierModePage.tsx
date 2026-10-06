@@ -6,6 +6,7 @@ import { ExitWithPinForm } from './ExitWithPinForm';
 import { ExitWithRecoveryForm } from './ExitWithRecoveryForm';
 import { RecoveryCodeNotice } from './RecoveryCodeNotice';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 export function ExitCashierModePage() {
   const { isCashierMode } = useSession();
@@ -36,7 +37,11 @@ export function ExitCashierModePage() {
     <section className="space-y-4">
       <title>Keluar Mode Kasir · Manajemen Stok</title>
       <h1 className="text-xl font-semibold">Keluar Mode Kasir</h1>
-      {isUsingRecovery ? <ExitWithRecoveryForm onRecovered={setNewRecoveryCode} /> : <ExitWithPinForm />}
+      <Card>
+        <CardContent>
+          {isUsingRecovery ? <ExitWithRecoveryForm onRecovered={setNewRecoveryCode} /> : <ExitWithPinForm />}
+        </CardContent>
+      </Card>
       <Button variant="link" type="button" onClick={handleToggleRecovery}>
         {isUsingRecovery ? 'Pakai PIN' : 'Pakai kode pemulihan'}
       </Button>

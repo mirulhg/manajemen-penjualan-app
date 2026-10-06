@@ -1,6 +1,7 @@
 import { Tags } from 'lucide-react';
 
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { Card, CardContent } from '@/components/ui/card';
 import { SubpageLayout } from '../../../components/layout/SubpageLayout';
 import { useCategories } from '../api/use-categories';
 import { CategoriesSkeleton } from './CategoriesSkeleton';
@@ -28,7 +29,11 @@ export function CategoriesPage() {
   return (
     <SubpageLayout title="Kategori" heading="Kategori" backTo="/stok" backLabel="Kembali ke daftar stok">
       <div className="space-y-6">
-        <CategoryCreateForm />
+        <Card>
+          <CardContent>
+            <CategoryCreateForm />
+          </CardContent>
+        </Card>
         <CategoriesContent />
       </div>
     </SubpageLayout>

@@ -58,7 +58,7 @@ export function AdjustStockForm({ product }: AdjustStockFormProps) {
   }
 
   return (
-    <form onSubmit={handleFormSubmit} noValidate className="mt-6 space-y-4">
+    <form onSubmit={handleFormSubmit} noValidate className="space-y-4">
       <AdjustTypeFieldset register={register} />
       <AdjustQuantityField
         register={register}

@@ -2,6 +2,8 @@ import { ArrowLeftRight, ChevronRight, Package, Receipt, TrendingUp } from 'luci
 import type { LucideIcon } from 'lucide-react';
 import { Link } from 'react-router';
 
+import { SubpageLayout } from '../../../components/layout/SubpageLayout';
+
 type ReportLink = { to: string; name: string; description: string; icon: LucideIcon };
 
 const REPORTS: ReportLink[] = [
@@ -13,9 +15,7 @@ const REPORTS: ReportLink[] = [
 
 export function ReportsPage() {
   return (
-    <section>
-      <title>Laporan · Manajemen Stok</title>
-      <h1 className="mb-4 text-xl font-semibold">Laporan</h1>
+    <SubpageLayout title="Laporan" heading="Laporan" backTo="/dasbor" backLabel="Kembali ke dasbor">
       <ul className="space-y-3">
         {REPORTS.map((report) => (
           <li key={report.to} className="rounded-md border border-border bg-card">
@@ -32,6 +32,6 @@ export function ReportsPage() {
           </li>
         ))}
       </ul>
-    </section>
+    </SubpageLayout>
   );
 }

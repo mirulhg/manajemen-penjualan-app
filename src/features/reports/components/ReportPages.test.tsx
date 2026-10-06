@@ -55,7 +55,8 @@ describe('halaman laporan', () => {
     expect(screen.getByRole('link', { name: /Laba kotor/ }).getAttribute('href')).toBe('/laporan/laba-kotor');
     expect(screen.getByRole('link', { name: /Posisi stok/ }).getAttribute('href')).toBe('/laporan/stok');
     expect(screen.getByRole('link', { name: /Stok awal, masuk/ }).getAttribute('href')).toBe('/laporan/pergerakan-stok');
-    expect(screen.getAllByRole('link')).toHaveLength(4);
+    const reportLinks = screen.getAllByRole('link').filter((link) => link.getAttribute('href')?.startsWith('/laporan/'));
+    expect(reportLinks).toHaveLength(4);
     expect(screen.queryByText('Segera hadir')).toBeNull();
   });
 
