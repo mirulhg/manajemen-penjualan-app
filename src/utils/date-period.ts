@@ -31,6 +31,13 @@ export function parseLocalDate(text: string | null): Date | null {
   return isRealDate ? date : null;
 }
 
+// Rentang butuh dua tanggal yang valid; mulai dari hari ini supaya pilihan langsung berlaku.
+export function periodPatch(selection: PeriodSelection, period: Period): Partial<PeriodSelection> {
+  if (period !== 'rentang') return { period };
+  const today = toLocalDateText(new Date());
+  return { period, from: selection.from ?? today, to: selection.to ?? today };
+}
+
 export function startOfDay(date: Date, dayOffset = 0): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + dayOffset);
 }

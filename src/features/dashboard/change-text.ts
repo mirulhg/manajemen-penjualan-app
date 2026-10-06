@@ -11,9 +11,14 @@ export function describeChange(today: number, yesterday: number, newLabel = 'bar
   return `${today > yesterday ? 'naik' : 'turun'} ${rounded}%`;
 }
 
-// Untuk perbandingan periode: "turun 40,3% dibanding periode sebelumnya".
-export function describePeriodChange(current: number, previous: number): string {
-  const change = describeChange(current, previous, 'baru ada di periode ini');
-  if (/^(naik|turun) \d/.test(change)) return `${change} dibanding periode sebelumnya`;
-  return change === 'sama' ? 'sama dengan periode sebelumnya' : change;
+const NEW_IN_PERIOD = 'baru ada di periode ini';
+
+export type PeriodTrend = { text: string; direction: 'up' | 'down' | 'flat' };
+
+// Arah untuk ikon: teks tetap yang menjelaskan, ikon hanya pelengkap. Bukan merah/hijau karena turun belum tentu buruk.
+export function describePeriodTrend(current: number, previous: number): PeriodTrend {
+  const text = describeChange(current, previous, NEW_IN_PERIOD);
+  if (text.startsWith('naik') || text === NEW_IN_PERIOD) return { text, direction: 'up' };
+  if (text.startsWith('turun')) return { text, direction: 'down' };
+  return { text, direction: 'flat' };
 }

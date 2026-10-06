@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Outlet, Route, Routes } from 'react-router';
 
@@ -53,7 +54,7 @@ describe('DashboardPage', () => {
     expect(screen.getByRole('link', { name: 'Buka Kasir' }).getAttribute('href')).toBe('/kasir');
   });
 
-  it('transaksi hari ini tampil di kartu dan ringkasan periode, kemarin kosong ditulis sebagai teks', async () => {
+  it('periode Hari ini: transaksi tampil di kartu, pembanding kemarin kosong ditulis sebagai teks', async () => {
     const beras = await findProductBySku('SBK-001');
     const mi = await findProductBySku('MKR-001');
     const air = await findProductBySku('MNM-001');
@@ -71,14 +72,14 @@ describe('DashboardPage', () => {
       },
       NOW,
     );
-    renderRoutes('/dasbor', false);
+    renderRoutes('/dasbor?periode=hari-ini', false);
 
-    // Satu transaksi: omzet dan rata-rata sama-sama 162.000, masing-masing di kartu dan di ringkasan periode.
-    expect((await screen.findAllByText('Rp 162.000')).length).toBe(4);
-    // Omzet, rata-rata, dan laba kotor kemarin Rp 0; Transaksi kemarin 0 (bukan Rupiah).
-    expect(screen.getAllByText(/Kemarin Rp 0 · baru ada hari ini/).length).toBe(3);
-    expect(screen.getByText('Kemarin 0 · baru ada hari ini')).toBeTruthy();
-    expect(screen.getAllByText('Rp 15.100').length).toBe(2);
+    // Satu transaksi: omzet dan rata-rata sama-sama 162.000.
+    expect((await screen.findAllByText('Rp 162.000')).length).toBe(2);
+    // Omzet, rata-rata, dan laba kotor sebelumnya Rp 0; Transaksi sebelumnya 0 (bukan Rupiah).
+    expect(screen.getAllByText(/baru ada di periode ini · sebelumnya Rp 0/).length).toBe(3);
+    expect(screen.getByText('baru ada di periode ini · sebelumnya 0')).toBeTruthy();
+    expect(screen.getAllByText('Rp 15.100').length).toBe(1);
     expect(screen.getByRole('link', { name: 'Lihat transaksi' }).getAttribute('href')).toBe('/penjualan');
   });
 
@@ -135,7 +136,7 @@ describe('DashboardPage grafik', () => {
     // Legenda teks (li); nama seri yang sama juga ada di judul kolom tabel yang tersembunyi.
     const legend = await screen.findAllByText('Periode sebelumnya');
     expect(legend.some((element) => element.tagName === 'LI')).toBe(true);
-    expect(screen.getByText('turun 2,9% dibanding periode sebelumnya')).toBeTruthy();
+    expect(screen.getByText('turun 2,9% · sebelumnya Rp 5.689.500')).toBeTruthy();
     expect(await screen.findByText('Total Rp 5.524.500')).toBeTruthy();
     expect(await screen.findByRole('group', { name: /Jumlah transaksi per jam/ })).toBeTruthy();
     expect(screen.getByLabelText<HTMLSelectElement>('Skala waktu').value).toBe('harian');
@@ -173,10 +174,52 @@ describe('DashboardPage grafik', () => {
       },
       new Date(2026, 9, 2, 9, 0),
     );
-    renderRoutes('/dasbor', false);
+    renderRoutes('/dasbor?periode=hari-ini', false);
 
     await waitFor(() => {
       expect(screen.getAllByText('Belum ada penjualan di periode ini.')).toHaveLength(3);
     });
+    // Pagi hari bukan "turun 100%": keempat kartu menulis keterangan, bukan persentase.
+    expect(screen.getAllByText('Belum ada penjualan hari ini')).toHaveLength(4);
+    expect(screen.queryByText(/turun 100,0%/)).toBeNull();
+  });
+});
+
+describe('DashboardPage tata letak', () => {
+  beforeEach(async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(NOW);
+    await resetDatabaseWithSeed();
+    await seedSampleSales(SAMPLE_PRODUCT_SKUS, NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('bawaan 7 hari: KPI memuat nilai sebelumnya, dan bagian "Hari ini dibanding kemarin" tidak ada', async () => {
+    renderRoutes('/dasbor', false);
+
+    expect(await screen.findByText('Rp 920.500')).toBeTruthy();
+    expect(screen.getByRole('button', { name: '7 hari' }).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByText('turun 40,3% · sebelumnya Rp 1.542.500')).toBeTruthy();
+    expect(screen.getByText('turun 26,3% · sebelumnya 38')).toBeTruthy();
+    expect(screen.queryByText('Hari ini dibanding kemarin')).toBeNull();
+  });
+
+  it('"Lainnya" membuka Bulan ini, 12 bulan, dan Rentang; memilih salah satunya mengubah periode', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    renderRoutes('/dasbor', false);
+
+    await user.click(await screen.findByRole('button', { name: 'Lainnya' }));
+    const menu = await screen.findByRole('menu');
+    expect(within(menu).getByRole('menuitemradio', { name: 'Bulan ini' })).toBeTruthy();
+    expect(within(menu).getByRole('menuitemradio', { name: '12 bulan terakhir' })).toBeTruthy();
+    expect(within(menu).getByRole('menuitemradio', { name: 'Rentang tanggal' })).toBeTruthy();
+
+    await user.click(within(menu).getByRole('menuitemradio', { name: 'Bulan ini' }));
+
+    expect(await screen.findByRole('button', { name: 'Bulan ini' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: '7 hari' }).getAttribute('aria-pressed')).toBe('false');
   });
 });

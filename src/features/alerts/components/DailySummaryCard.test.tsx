@@ -42,9 +42,9 @@ describe('DailySummaryCard', () => {
   it('menampilkan jumlah habis dan menipis, omzet kemarin, dan tautan ke daftar perlu restock', async () => {
     renderCard();
 
-    expect(await screen.findByText('Barang habis 4 · menipis 8')).toBeTruthy();
+    expect(await screen.findByText('4 barang habis · 8 menipis')).toBeTruthy();
     expect(screen.getByText(/Kemarin: omzet Rp 0 dari 0 transaksi/)).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Lihat daftar perlu restock' }).getAttribute('href')).toBe('/peringatan');
+    expect(screen.getByRole('link', { name: 'Lihat daftar restock' }).getAttribute('href')).toBe('/peringatan');
   });
 
   it('hilang setelah "Tutup untuk hari ini", tetap hilang setelah dimuat ulang, dan muncul lagi esok hari', async () => {
@@ -52,7 +52,7 @@ describe('DailySummaryCard', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Tutup untuk hari ini' }));
 
     await waitFor(() => {
-      expect(screen.queryByText('Ringkasan hari ini')).toBeNull();
+      expect(screen.queryByText('4 barang habis · 8 menipis')).toBeNull();
     });
     expect((await db.settings.get('dailySummaryDismissedOn'))?.value).toBe('2026-10-04');
 
@@ -60,14 +60,14 @@ describe('DailySummaryCard', () => {
     cleanup();
     renderCard();
     await waitFor(() => {
-      expect(screen.queryByText('Ringkasan hari ini')).toBeNull();
+      expect(screen.queryByText('4 barang habis · 8 menipis')).toBeNull();
     });
 
     // Esok harinya kartu muncul lagi.
     cleanup();
     vi.setSystemTime(TOMORROW);
     renderCard();
-    expect(await screen.findByText('Ringkasan hari ini')).toBeTruthy();
+    expect(await screen.findByText('4 barang habis · 8 menipis')).toBeTruthy();
   });
 
   it('dimatikan di pengaturan: kartu tidak tampil', async () => {
@@ -75,8 +75,8 @@ describe('DailySummaryCard', () => {
     renderCard();
 
     await waitFor(() => {
-      expect(screen.queryByText('Ringkasan hari ini')).toBeNull();
+      expect(screen.queryByText('4 barang habis · 8 menipis')).toBeNull();
     });
-    expect(screen.queryByText('Barang habis 4 · menipis 8')).toBeNull();
+    expect(screen.queryByText('4 barang habis · 8 menipis')).toBeNull();
   });
 });

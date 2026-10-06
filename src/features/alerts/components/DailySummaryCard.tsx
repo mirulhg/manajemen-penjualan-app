@@ -1,3 +1,4 @@
+import { ChevronRight, TriangleAlert } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { toLocalDateText } from '../../../utils/date-period';
@@ -36,21 +37,30 @@ export function DailySummaryCard() {
   }
 
   return (
-    <section aria-labelledby="daily-summary-heading" className="mb-6 space-y-2 rounded-md border border-border bg-card p-4">
-      <h2 id="daily-summary-heading" className="font-semibold">
-        Ringkasan hari ini
+    <section aria-labelledby="daily-summary-heading" className="mb-6 space-y-3 rounded-md bg-primary p-4 text-primary-foreground">
+      <h2 id="daily-summary-heading" className="flex items-center gap-2 font-semibold text-accent">
+        <TriangleAlert aria-hidden="true" className="size-5 shrink-0" />
+        <span>
+          {formatNumber(data.soldOut)} barang habis · {formatNumber(data.low)} menipis
+        </span>
       </h2>
-      <p>
-        Barang habis {formatNumber(data.soldOut)} · menipis {formatNumber(data.low)}
-      </p>
-      <p className="text-muted-foreground">
+      <p className="text-sm text-primary-foreground/80">
         Kemarin: omzet {formatRupiah(data.yesterday.revenue)} dari {formatNumber(data.yesterday.transactionCount)} transaksi
       </p>
-      <div className="flex flex-wrap items-center gap-x-4">
-        <Button asChild variant="outline"><Link to="/peringatan">
-          Lihat daftar perlu restock
-        </Link></Button>
-        <Button variant="ghost" type="button" onClick={handleDismiss} disabled={dismiss.isPending}>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button asChild variant="secondary" className="bg-card hover:bg-card/90 focus-visible:outline-primary-foreground">
+          <Link to="/peringatan">
+            Lihat daftar restock
+            <ChevronRight aria-hidden="true" />
+          </Link>
+        </Button>
+        <Button
+          variant="ghost"
+          type="button"
+          onClick={handleDismiss}
+          disabled={dismiss.isPending}
+          className="text-primary-foreground hover:bg-primary-foreground/10 focus-visible:outline-primary-foreground"
+        >
           Tutup untuk hari ini
         </Button>
       </div>
