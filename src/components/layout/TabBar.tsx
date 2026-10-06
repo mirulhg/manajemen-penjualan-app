@@ -27,7 +27,7 @@ export function TabBar({ items }: TabBarProps) {
                   >
                     <item.icon aria-hidden="true" className="size-5" />
                   </span>
-                  <span className={isActive ? 'font-semibold' : 'text-muted-foreground'}>{item.label}</span>
+                  <span className={cn('font-medium', isActive ? 'text-foreground' : 'text-muted-foreground')}>{item.label}</span>
                 </>
               )}
             </NavLink>
