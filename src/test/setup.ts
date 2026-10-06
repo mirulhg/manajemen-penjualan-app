@@ -1,6 +1,11 @@
 import 'fake-indexeddb/auto';
 
+import { MotionGlobalConfig } from 'motion/react';
+
 import { installMatchMedia } from './viewport';
+
+// Test tidak boleh bergantung pada waktu animasi.
+MotionGlobalConfig.skipAnimations = true;
 
 // Berkas test non-komponen berjalan di environment node, tanpa window.
 if (typeof window !== 'undefined') {
