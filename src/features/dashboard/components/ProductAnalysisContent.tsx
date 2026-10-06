@@ -41,8 +41,8 @@ export function ProductAnalysisContent() {
   const { current } = getDashboardRanges(params.selection, new Date());
 
   return (
-    // dense: Lambat laku dan Perkiraan stok mengisi dua kolom kosong di sebelah Terlaris; Omzet dan laba tetap satu baris penuh.
-    <BentoGrid className="lg:grid-flow-dense lg:grid-cols-4">
+    // Urutan DOM = urutan visual (Tab mengikuti tampilan): Terlaris 2 kolom + Lambat laku + Perkiraan stok, lalu Omzet dan laba satu baris penuh.
+    <BentoGrid className="lg:grid-cols-4">
       <section aria-labelledby="analysis-period-heading" className="space-y-3 lg:col-span-4">
         <h2 id="analysis-period-heading" className="text-lg font-semibold">
           Periode penjualan
@@ -52,11 +52,11 @@ export function ProductAnalysisContent() {
       <div className="lg:col-span-2">
         <TopSellingSection range={current} />
       </div>
+      <SlowMoversSection threshold={params.threshold} onThresholdChange={params.setThreshold} />
+      <StockForecastSection />
       <div className="lg:col-span-4">
         <RevenueProfitSection range={current} ranking={params.ranking} onRankingChange={params.setRanking} />
       </div>
-      <SlowMoversSection threshold={params.threshold} onThresholdChange={params.setThreshold} />
-      <StockForecastSection />
     </BentoGrid>
   );
 }
