@@ -17,8 +17,9 @@ export function PayBar({ itemCount, total, isVisible }: PayBarProps) {
     <div
       inert={!isVisible}
       className={cn(
-        'fixed inset-x-0 bottom-tabbar z-sticky border-t border-border bg-card px-4 py-3 transition-[transform,opacity] duration-(--duration-base) ease-out md:bottom-0 print:hidden',
-        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0',
+        'fixed inset-x-0 bottom-tabbar z-sticky border-t border-border bg-card px-4 py-3 transition-[transform,opacity] ease-out md:bottom-0 print:hidden',
+        // Durasi mengikuti keadaan tujuan: masuk 300ms, keluar lebih cepat (200ms).
+        isVisible ? 'translate-y-0 opacity-100 duration-(--duration-slow)' : 'translate-y-full opacity-0 duration-(--duration-base)',
       )}
     >
       <div className="mx-auto flex max-w-3xl items-center gap-3">

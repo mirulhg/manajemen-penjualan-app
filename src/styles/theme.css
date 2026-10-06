@@ -48,7 +48,8 @@
 
   --duration-fast: 150ms;
   --duration-base: 200ms;
-  --duration-slow: 250ms;
+  --duration-slow: 300ms;
+  --duration-sheet: 500ms;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
@@ -123,7 +124,7 @@
   }
 }
 
-/* Pesan yang baru muncul (mis. error simpan): opacity + naik 4px. Hanya dipakai untuk kejadian jarang, bukan daftar atau hasil cari. */
+/* Pesan yang baru muncul (mis. error simpan): opacity + naik 8px. Hanya dipakai untuk kejadian jarang, bukan daftar atau hasil cari. */
 @utility enter-fade {
   transition-property: opacity, transform;
   transition-duration: var(--duration-base);
@@ -131,7 +132,7 @@
 
   @starting-style {
     opacity: 0;
-    transform: translateY(0.25rem);
+    transform: translateY(0.5rem);
   }
 }
 
@@ -175,7 +176,7 @@
  * spesifik sehingga menang tanpa !important. Gerak yang dipicu drag dilepas memakai style inline Vaul dan tidak terjangkau.
  */
 :root {
-  --drawer-duration: var(--duration-slow);
+  --drawer-duration: var(--duration-sheet);
 }
 
 @media (prefers-reduced-motion: reduce) {
