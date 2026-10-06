@@ -12,6 +12,7 @@ import { TabBar } from '../components/layout/TabBar';
 import { useUnreadAlertCount } from '../features/alerts';
 import { useSession } from '../features/session';
 import { useStoreProfile } from '../features/store-profile';
+import { CommandPaletteTrigger } from './command-palette/CommandPaletteTrigger';
 import { isWidePath } from './wide-routes';
 
 const OWNER_ITEMS: NavItem[] = [
@@ -51,6 +52,7 @@ export function AppLayout() {
         actions={
           <>
             <MainNav items={items} />
+            <CommandPaletteTrigger />
             {isBellVisible && <AlertBell count={unreadCount} href="/peringatan" />}
           </>
         }

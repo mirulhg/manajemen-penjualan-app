@@ -8,6 +8,7 @@ export { sortProducts } from './sort-products';
 export { getStockStatus } from './stock-status';
 export type { StockStatus } from './stock-status';
 export type { Product, StockMovement } from './schema';
+export type { StockFilters } from './parse-filter-params';
 export { StockListError } from './components/StockListError';
 export { StockStatusBadge } from './components/StockStatusBadge';
 export { compressPhoto, PhotoError } from './photo/compress-photo';
