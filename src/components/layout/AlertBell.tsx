@@ -13,7 +13,7 @@ const MAX_VISIBLE_COUNT = 99;
 // Tanpa pengetahuan domain: hanya menampilkan jumlah dan tujuan tautan. Teks tersembunyi untuk pembaca layar.
 export function AlertBell({ count, href }: AlertBellProps) {
   return (
-    <Link to={href} className="relative inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-foreground hover:bg-secondary">
+    <Link to={href} className="press relative inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-foreground hover:bg-secondary">
       <Bell aria-hidden="true" className="size-6" />
       {count > 0 && (
         <Badge variant="accent" aria-hidden="true" className="absolute right-0 top-1 min-w-5 px-1 font-semibold">
