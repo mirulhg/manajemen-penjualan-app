@@ -21,7 +21,7 @@ export function SaleHistoryItem({ sale }: SaleHistoryItemProps) {
       <Link
         to={`/penjualan/${sale.id}`}
         state={{ search: location.search }}
-        className="flex min-h-11 items-center justify-between gap-4 px-4 py-3"
+        className="flex min-h-11 items-center justify-between gap-4 px-4 py-3 transition-colors duration-(--duration-fast) ease-out active:bg-secondary"
       >
         <div className="min-w-0">
           <p className="font-medium">{sale.number}</p>
