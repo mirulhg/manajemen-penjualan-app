@@ -49,6 +49,8 @@ describe('CategoriesPage', () => {
     await user.click(screen.getByRole('button', { name: 'Tambah kategori' }));
 
     expect((await screen.findAllByText('Kategori Alat Tulis ditambahkan')).length).toBeGreaterThan(0);
+    // Toast muncul sebelum daftar selesai disegarkan; tunggu barisnya dulu.
+    await within(list).findByText('Alat Tulis');
     expect(within(rowOf(list, 'Alat Tulis')).getByText('0 barang aktif')).toBeTruthy();
 
     await user.type(screen.getByLabelText('Kategori baru'), 'alat tulis');
@@ -71,6 +73,7 @@ describe('CategoriesPage', () => {
     await user.type(screen.getByLabelText('Kategori baru'), 'Alat Tulis');
     await user.click(screen.getByRole('button', { name: 'Tambah kategori' }));
     await screen.findAllByText('Kategori Alat Tulis ditambahkan');
+    await within(list).findByText('Alat Tulis');
 
     await user.click(within(rowOf(list, 'Alat Tulis')).getByText('Hapus'));
     await user.click(screen.getByRole('button', { name: 'Ya, hapus' }));
