@@ -84,6 +84,29 @@ describe('DashboardPage', () => {
     expect(screen.getByRole('link', { name: 'Lihat transaksi' }).getAttribute('href')).toBe('/penjualan');
   });
 
+  it('bento Dasbor: grid 4 kolom, KPI dan grafik tren selebar penuh, kategori dan jam sibuk berdampingan', async () => {
+    const beras = await findProductBySku('SBK-001');
+    await createSaleAt(
+      {
+        items: [{ productId: beras.id, quantity: 1, discount: 0 }],
+        paymentMethod: 'tunai',
+        transactionDiscount: 0,
+        amountPaid: 74_000,
+        expectedTotal: 74_000,
+      },
+      NOW,
+    );
+    const { container } = renderRoutes('/dasbor?periode=hari-ini', false);
+
+    const trendHeading = await screen.findByRole('heading', { name: /Tren/ });
+    const grid = container.querySelector('[data-stagger-children]');
+    expect(grid?.className).toContain('md:grid-cols-4');
+    expect(screen.getByRole('heading', { name: 'Ringkasan periode', hidden: true }).closest('div')?.className).toContain('md:col-span-4');
+    expect(trendHeading.closest('div[class*="md:col-span"]')?.className).toContain('md:col-span-4');
+    expect(screen.getByRole('heading', { name: 'Omzet per kategori' }).closest('div[class*="md:col-span"]')?.className).toContain('md:col-span-2');
+    expect(screen.getByRole('heading', { name: 'Jam sibuk' }).closest('div[class*="md:col-span"]')?.className).toContain('md:col-span-2');
+  });
+
   it('link Lihat transaksi membawa periode yang dipilih', async () => {
     const beras = await findProductBySku('SBK-001');
     await createSaleAt(
