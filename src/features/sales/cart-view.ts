@@ -26,6 +26,8 @@ export type CartView = {
   transactionDiscountInvalid: boolean;
   cash: { amount: number; invalid: boolean; change: number; shortfall: number };
   blockReason: string | null;
+  // True bila alasan blok adalah uang kurang; pesannya sudah tampil di bawah kolom Uang diterima, jadi tidak diulang di tombol simpan.
+  isBlockedByCash: boolean;
 };
 
 // Teks kosong berarti 0; teks yang bukan angka Rupiah valid menghasilkan null.
@@ -33,19 +35,24 @@ function parseMoneyText(text: string): number | null {
   return text.trim() === '' ? 0 : parseRupiah(text);
 }
 
-function getBlockReason(view: Omit<CartView, 'blockReason'>, cart: CartState, allowOversell: boolean) {
-  if (view.lines.length === 0) return 'Keranjang masih kosong.';
-  if (view.lines.some((line) => line.isArchived)) return 'Ada barang yang sudah diarsipkan.';
+type Block = { text: string; isCashShortage: boolean };
+
+function getBlock(view: Omit<CartView, 'blockReason' | 'isBlockedByCash'>, cart: CartState, allowOversell: boolean): Block | null {
+  const other = (text: string): Block => ({ text, isCashShortage: false });
+  if (view.lines.length === 0) return other('Keranjang masih kosong.');
+  if (view.lines.some((line) => line.isArchived)) return other('Ada barang yang sudah diarsipkan.');
   if (view.transactionDiscountInvalid || view.lines.some((line) => line.discountInvalid)) {
-    return 'Isi diskon dengan angka, misalnya 4.000.';
+    return other('Isi diskon dengan angka, misalnya 4.000.');
   }
-  if (hasDiscountProblems(view.totals)) return 'Diskon melebihi nilai barang.';
+  if (hasDiscountProblems(view.totals)) return other('Diskon melebihi nilai barang.');
   if (!allowOversell && view.lines.some((line) => line.exceedsStock)) {
-    return 'Ada barang yang melebihi stok.';
+    return other('Ada barang yang melebihi stok.');
   }
   if (cart.paymentMethod === 'tunai') {
-    if (view.cash.invalid) return 'Isi uang diterima dengan angka.';
-    if (view.cash.shortfall > 0) return `Uang diterima kurang ${formatRupiah(view.cash.shortfall)}.`;
+    if (view.cash.invalid) return other('Isi uang diterima dengan angka.');
+    if (view.cash.shortfall > 0) {
+      return { text: `Uang diterima kurang ${formatRupiah(view.cash.shortfall)}.`, isCashShortage: true };
+    }
   }
   return null;
 }
@@ -97,7 +104,8 @@ export function getCartView(cart: CartState, products: Product[], allowOversell:
       shortfall: Math.max(0, totals.total - cashAmount),
     },
   };
-  return { ...partial, blockReason: getBlockReason(partial, cart, allowOversell) };
+  const block = getBlock(partial, cart, allowOversell);
+  return { ...partial, blockReason: block?.text ?? null, isBlockedByCash: block?.isCashShortage ?? false };
 }
 
 export function toCreateSaleInput(cart: CartState, view: CartView): CreateSaleInput {

@@ -1,26 +1,22 @@
+import { Minus, Plus, Trash2 } from 'lucide-react';
 import type { Dispatch } from 'react';
 
 import { formatNumber } from '../../../utils/format-number';
 import { formatRupiah } from '../../../utils/format-rupiah';
 import type { CartAction } from '../cart-reducer';
 import type { CartViewLine } from '../cart-view';
+import { CartLineDiscount } from './CartLineDiscount';
 import { Alert } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Button, buttonVariants } from '@/components/ui/button';
 
 type CartLineProps = {
   line: CartViewLine;
   dispatch: Dispatch<CartAction>;
 };
 
-
 export function CartLine({ line, dispatch }: CartLineProps) {
   const { product } = line;
-  const discountError = line.discountInvalid
-    ? 'Diskon harus berupa angka, misalnya 4.000.'
-    : line.discountExceedsLine
-      ? 'Diskon melebihi subtotal barang ini.'
-      : null;
 
   function handleQuantityChange(text: string) {
     if (/^\d+$/.test(text)) {
@@ -30,42 +26,52 @@ export function CartLine({ line, dispatch }: CartLineProps) {
 
   return (
     <li className="space-y-2 border-b border-border px-4 py-3 last:border-b-0">
-      <div className="flex items-baseline justify-between gap-4">
-        <p className="font-medium">{product.name}</p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="line-clamp-2 font-medium">{product.name}</p>
+          <p className="text-sm text-muted-foreground">
+            {formatRupiah(product.sellingPrice)} per {product.unit}
+          </p>
+        </div>
         <p className="shrink-0 font-medium">{formatRupiah(line.lineTotal)}</p>
       </div>
-      <p className="text-sm text-muted-foreground">
-        {formatRupiah(product.sellingPrice)} per {product.unit}
-      </p>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between gap-2">
+        <div className="inline-flex items-center rounded-md border border-input bg-card">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label={`Kurangi ${product.name}`}
+            onClick={() => dispatch({ type: 'decrease', productId: product.id, price: product.sellingPrice })}
+          >
+            <Minus aria-hidden="true" />
+          </Button>
+          <Input
+            type="text"
+            inputMode="numeric"
+            aria-label={`Jumlah ${product.name}`}
+            value={String(line.quantity)}
+            onChange={(event) => handleQuantityChange(event.target.value)}
+            className="w-14 rounded-none border-0 px-1 text-center"
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label={`Tambah ${product.name}`}
+            onClick={() => dispatch({ type: 'increase', productId: product.id, price: product.sellingPrice })}
+          >
+            <Plus aria-hidden="true" />
+          </Button>
+        </div>
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           size="icon"
-          aria-label={`Kurangi ${product.name}`}
-          onClick={() => dispatch({ type: 'decrease', productId: product.id, price: product.sellingPrice })}
+          aria-label={`Hapus ${product.name}`}
+          onClick={() => dispatch({ type: 'remove', productId: product.id })}
         >
-          −
-        </Button>
-        <Input
-          type="text"
-          inputMode="numeric"
-          aria-label={`Jumlah ${product.name}`}
-          value={String(line.quantity)}
-          onChange={(event) => handleQuantityChange(event.target.value)}
-          className="w-20 text-center"
-        />
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          aria-label={`Tambah ${product.name}`}
-          onClick={() => dispatch({ type: 'increase', productId: product.id, price: product.sellingPrice })}
-        >
-          +
-        </Button>
-        <Button variant="outline" className="ml-auto" type="button" onClick={() => dispatch({ type: 'remove', productId: product.id })}>
-          Hapus
+          <Trash2 aria-hidden="true" />
         </Button>
       </div>
       {line.priceChangedFrom !== null && (
@@ -79,36 +85,9 @@ export function CartLine({ line, dispatch }: CartLineProps) {
         </Alert>
       )}
       {line.exceedsStock && (
-        <p className="text-sm text-destructive">
-          Stok tidak cukup (tersedia {formatNumber(line.available)})
-        </p>
+        <p className="text-sm text-destructive">Stok tidak cukup (tersedia {formatNumber(line.available)})</p>
       )}
-      <details>
-        <summary className={buttonVariants({ variant: 'outline', className: 'cursor-pointer' })}>
-          Diskon
-        </summary>
-        <label className="text-sm font-medium" htmlFor={`discount-${product.id}`}>
-          Diskon {product.name} (Rp)
-        </label>
-        <Input
-          id={`discount-${product.id}`}
-          type="text"
-          inputMode="numeric"
-          autoComplete="off"
-          value={line.discountText}
-          aria-invalid={discountError ? true : undefined}
-          aria-describedby={discountError ? `discount-error-${product.id}` : undefined}
-          onChange={(event) =>
-            dispatch({ type: 'setLineDiscount', productId: product.id, text: event.target.value })
-          }
-          className="mt-1"
-        />
-        {discountError && (
-          <p id={`discount-error-${product.id}`} className="mt-1 text-sm text-destructive">
-            {discountError}
-          </p>
-        )}
-      </details>
+      <CartLineDiscount line={line} dispatch={dispatch} />
     </li>
   );
 }

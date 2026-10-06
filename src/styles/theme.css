@@ -123,6 +123,18 @@
   }
 }
 
+/* Pesan yang baru muncul (mis. error simpan): opacity + naik 4px. Hanya dipakai untuk kejadian jarang, bukan daftar atau hasil cari. */
+@utility enter-fade {
+  transition-property: opacity, transform;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-out);
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+}
+
 /* Kertas cetak laporan; tanpa ini margin dan ukuran hasil cetak bergantung pada bawaan tiap browser. */
 @page {
   size: A4;

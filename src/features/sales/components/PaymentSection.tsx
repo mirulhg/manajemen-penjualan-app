@@ -57,6 +57,7 @@ export function PaymentSection({ paymentMethod, cashText, view, dispatch }: Paym
             type="text"
             inputMode="numeric"
             autoComplete="off"
+            data-autofocus
             value={cashText}
             onChange={(event) => dispatch({ type: 'setCash', text: event.target.value })}
             className="mt-1"
@@ -69,7 +70,7 @@ export function PaymentSection({ paymentMethod, cashText, view, dispatch }: Paym
             ))}
           </div>
           {view.cash.shortfall > 0 ? (
-            <p className="mt-2">Uang kurang {formatRupiah(view.cash.shortfall)}</p>
+            <p className="mt-2 text-destructive">Uang kurang {formatRupiah(view.cash.shortfall)}</p>
           ) : (
             <p className="mt-2 text-xl font-semibold">Kembalian {formatRupiah(view.cash.change)}</p>
           )}

@@ -52,7 +52,7 @@ describe('CashierPage', () => {
     renderWithProviders(<CashierPage />);
 
     await search(user, 'telur');
-    await user.click(await screen.findByRole('button', { name: /^Telur Ayam 1 kg\s*SBK-005/ }));
+    await user.click(await screen.findByRole('button', { name: /^Telur Ayam 1 kg\s*Habis\s*SBK-005/ }));
 
     expect(screen.getByText('Stok tidak cukup (tersedia 0)')).toBeTruthy();
     expect(screen.getByText('Ada barang yang melebihi stok.')).toBeTruthy();

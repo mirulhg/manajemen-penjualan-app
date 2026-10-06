@@ -1,3 +1,4 @@
+import { Tag } from 'lucide-react';
 import type { Dispatch } from 'react';
 
 import { formatRupiah } from '../../../utils/format-rupiah';
@@ -25,7 +26,8 @@ export function SaleTotals({ view, transactionDiscountText, dispatch }: SaleTota
   return (
     <div className="space-y-2 rounded-md border border-border bg-card p-4">
       <details>
-        <summary className={buttonVariants({ variant: 'outline', className: 'cursor-pointer' })}>
+        <summary className={buttonVariants({ variant: 'ghost', className: 'cursor-pointer' })}>
+          <Tag aria-hidden="true" />
           Diskon transaksi
         </summary>
         <Label htmlFor="transaction-discount">

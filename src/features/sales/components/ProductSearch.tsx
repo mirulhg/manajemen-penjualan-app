@@ -6,7 +6,9 @@ import { formatRupiah } from '../../../utils/format-rupiah';
 import { filterProducts, sortProducts, useStockThreshold } from '../../stock';
 import type { Product } from '../../stock';
 import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 type ProductSearchProps = {
   products: Product[];
@@ -61,7 +63,12 @@ export function ProductSearch({ products, inputRef, onPick }: ProductSearchProps
               onClick={() => handlePick(product)}
               className="min-h-11 w-full rounded-md border border-input bg-card px-4 py-2 text-left tap-row hover:bg-secondary"
             >
-              <span className="block text-sm font-medium">{product.name}</span>
+              <span className="flex items-start justify-between gap-2">
+                <span className={cn('line-clamp-2 text-sm font-medium', product.stockQuantity <= 0 && 'text-muted-foreground')}>
+                  {product.name}
+                </span>
+                {product.stockQuantity <= 0 && <Badge variant="habis">Habis</Badge>}
+              </span>
               <span className="block text-sm text-muted-foreground">
                 {product.sku} · {formatRupiah(product.sellingPrice)} · Stok{' '}
                 {formatNumber(Math.max(0, product.stockQuantity))} {product.unit}
