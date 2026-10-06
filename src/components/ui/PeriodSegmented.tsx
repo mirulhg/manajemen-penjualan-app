@@ -1,4 +1,6 @@
 import { ChevronDown } from 'lucide-react';
+import { m } from 'motion/react';
+import { useId } from 'react';
 
 import { PERIOD_LABELS, periodPatch } from '../../utils/date-period';
 import type { Period, PeriodSelection } from '../../utils/date-period';
@@ -11,6 +13,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { INDICATOR_TRANSITION } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
 type PeriodSegmentedProps = {
@@ -25,6 +28,7 @@ const QUICK_LABELS: Partial<Record<Period, string>> = { 'hari-ini': 'Hari ini', 
 
 // Tiga pilihan satu ketuk + menu "Lainnya"; pilihan aktif dibedakan lewat latar, bukan bobot font (lebar teks tidak bergeser).
 export function PeriodSegmented({ selection, onChange }: PeriodSegmentedProps) {
+  const indicatorId = useId();
   const isMoreSelected = MORE_PERIODS.includes(selection.period);
 
   function handleMoreChange(value: string) {
@@ -43,11 +47,18 @@ export function PeriodSegmented({ selection, onChange }: PeriodSegmentedProps) {
               aria-pressed={selection.period === period}
               onClick={() => onChange(periodPatch(selection, period))}
               className={cn(
-                'min-h-11 flex-1 rounded-sm border border-transparent px-2 text-sm font-medium text-muted-foreground transition-colors duration-(--duration-fast) ease-out',
-                'aria-pressed:border-border aria-pressed:bg-card aria-pressed:text-foreground',
+                'relative min-h-11 flex-1 rounded-sm px-2 text-sm font-medium text-muted-foreground transition-colors duration-(--duration-fast) ease-out',
+                'aria-pressed:text-foreground',
               )}
             >
-              {QUICK_LABELS[period]}
+              {selection.period === period && (
+                <m.span
+                  layoutId={indicatorId}
+                  transition={INDICATOR_TRANSITION}
+                  className="absolute inset-0 rounded-sm border border-border bg-card"
+                />
+              )}
+              <span className="relative">{QUICK_LABELS[period]}</span>
             </button>
           ))}
         </div>

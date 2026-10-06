@@ -18,7 +18,7 @@ function DropdownMenuTrigger({
   )
 }
 
-// Muncul dari pemicunya (transform-origin dari Radix), --duration-base + --ease-out; hanya opacity dan scale.
+// Muncul dari pemicunya (transform-origin dari Radix): scale 0.96→1 + opacity, masuk 150ms, keluar 100ms, --ease-out.
 function DropdownMenuContent({
   className,
   sideOffset = 4,
@@ -30,7 +30,7 @@ function DropdownMenuContent({
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}
         className={cn(
-          "z-overlay max-h-(--radix-dropdown-menu-content-available-height) min-w-32 origin-(--radix-dropdown-menu-content-transform-origin) overflow-y-auto rounded-md border border-border bg-card p-1 text-card-foreground duration-(--duration-base) ease-out data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
+          "z-overlay max-h-(--radix-dropdown-menu-content-available-height) min-w-32 origin-(--radix-dropdown-menu-content-transform-origin) overflow-y-auto rounded-md border border-border bg-card p-1 text-card-foreground duration-(--duration-fast) ease-out data-[state=closed]:duration-(--duration-instant) data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-96 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-96",
           className
         )}
         {...props}

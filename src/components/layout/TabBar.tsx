@@ -1,5 +1,7 @@
+import { m } from 'motion/react';
 import { NavLink } from 'react-router';
 
+import { INDICATOR_TRANSITION } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import type { NavItem } from './nav-items';
 
@@ -19,13 +21,15 @@ export function TabBar({ items }: TabBarProps) {
             <NavLink to={item.to} className="press flex min-h-(--tabbar-height) flex-col items-center justify-center gap-0.5 px-1 text-xs">
               {({ isActive }) => (
                 <>
-                  <span
-                    className={cn(
-                      'flex h-7 w-14 items-center justify-center rounded-full transition-colors duration-(--duration-fast) ease-out',
-                      isActive && 'bg-accent text-accent-foreground',
+                  <span className={cn('relative flex h-7 w-14 items-center justify-center', isActive && 'text-accent-foreground')}>
+                    {isActive && (
+                      <m.span
+                        layoutId="tabbar-indicator"
+                        transition={INDICATOR_TRANSITION}
+                        className="absolute inset-0 rounded-full bg-accent"
+                      />
                     )}
-                  >
-                    <item.icon aria-hidden="true" className="size-5" />
+                    <item.icon aria-hidden="true" className="relative size-5" />
                   </span>
                   <span className={cn('font-medium', isActive ? 'text-foreground' : 'text-muted-foreground')}>{item.label}</span>
                 </>

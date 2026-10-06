@@ -8,5 +8,8 @@ export const DURATION = {
   slow: 0.3,
 } as const;
 
+// Indikator aktif (pil tab, latar pilihan) berpindah tanpa pantul; ±300ms.
+export const INDICATOR_TRANSITION = { type: 'spring', bounce: 0, duration: DURATION.slow } as const;
+
 // Elemen bertanda ini (grid bento) tidak masuk sebagai satu blok saat halaman dibuka; anak-anaknya yang masuk bergantian.
 export const STAGGER_CHILDREN_ATTRIBUTE = 'data-stagger-children';

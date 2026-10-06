@@ -48,6 +48,7 @@
 
   --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
 
+  --duration-instant: 100ms;
   --duration-fast: 150ms;
   --duration-base: 200ms;
   --duration-slow: 300ms;

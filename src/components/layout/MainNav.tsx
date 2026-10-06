@@ -1,5 +1,7 @@
+import { m } from 'motion/react';
 import { NavLink } from 'react-router';
 
+import { INDICATOR_TRANSITION } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 import type { NavItem } from './nav-items';
 
@@ -18,13 +20,24 @@ export function MainNav({ items }: MainNavProps) {
               to={item.to}
               className={({ isActive }) =>
                 cn(
-                  'inline-flex min-h-11 items-center gap-2 rounded-md px-3 font-medium transition-colors duration-(--duration-fast) ease-out',
-                  isActive ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:bg-secondary/60',
+                  'relative inline-flex min-h-11 items-center gap-2 rounded-md px-3 font-medium transition-colors duration-(--duration-fast) ease-out',
+                  isActive ? 'text-foreground' : 'text-muted-foreground hover:bg-secondary/60',
                 )
               }
             >
-              <item.icon aria-hidden="true" className="size-4" />
-              {item.label}
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <m.span
+                      layoutId="mainnav-indicator"
+                      transition={INDICATOR_TRANSITION}
+                      className="absolute inset-0 rounded-md bg-secondary"
+                    />
+                  )}
+                  <item.icon aria-hidden="true" className="relative size-4" />
+                  <span className="relative">{item.label}</span>
+                </>
+              )}
             </NavLink>
           </li>
         ))}
