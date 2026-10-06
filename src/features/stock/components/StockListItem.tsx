@@ -18,7 +18,7 @@ export function StockListItem({ product }: StockListItemProps) {
     <Link
       to={`/stok/${product.id}`}
       state={{ search: location.search }}
-      className="flex min-h-11 items-center justify-between gap-4 px-4 py-3 transition-colors duration-(--duration-fast) ease-out active:bg-secondary"
+      className="flex min-h-11 items-center justify-between gap-4 px-4 py-3 tap-row"
     >
       <div className="min-w-0">
         <p className="font-medium">

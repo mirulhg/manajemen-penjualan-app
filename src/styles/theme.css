@@ -23,6 +23,15 @@
   --input: #8f7f62;
   --ring: #222222;
   --chart-1: #ff6d1f;
+  --tabbar-height: 3.5rem;
+  --toast-offset: calc(var(--tabbar-height) + env(safe-area-inset-bottom) + 1rem);
+}
+
+/* Di layar lebar TabBar tidak ada, jadi toast tidak perlu naik di atasnya. */
+@media (min-width: 48rem) {
+  :root {
+    --toast-offset: 1.5rem;
+  }
 }
 
 @theme {
@@ -96,6 +105,22 @@
 /* Ruang aman layar HP (poni/bilah gesture) agar TabBar tidak tertutup bilah sistem. */
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Posisi di atas TabBar (tinggi tetap + area aman layar HP), untuk bar yang menempel di atasnya. */
+@utility bottom-tabbar {
+  bottom: calc(var(--tabbar-height) + env(safe-area-inset-bottom));
+}
+
+/* Baris daftar yang bisa diketuk: hanya latar yang berubah saat ditekan; baris lebar tidak dikecilkan seperti tombol. */
+@utility tap-row {
+  transition-property: background-color;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+
+  &:active {
+    background-color: var(--secondary);
+  }
 }
 
 /* Kertas cetak laporan; tanpa ini margin dan ukuran hasil cetak bergantung pada bawaan tiap browser. */

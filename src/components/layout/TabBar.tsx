@@ -16,7 +16,7 @@ export function TabBar({ items }: TabBarProps) {
       <ul className="flex">
         {items.map((item) => (
           <li key={item.to} className="flex-1">
-            <NavLink to={item.to} className="press flex min-h-14 flex-col items-center justify-center gap-0.5 px-1 text-xs">
+            <NavLink to={item.to} className="press flex min-h-(--tabbar-height) flex-col items-center justify-center gap-0.5 px-1 text-xs">
               {({ isActive }) => (
                 <>
                   <span
