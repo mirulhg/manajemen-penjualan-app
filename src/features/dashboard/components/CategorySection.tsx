@@ -20,10 +20,7 @@ export function CategorySection({ range }: CategorySectionProps) {
   return (
     <ChartSection
       title="Omzet per kategori"
-      isPending={isPending}
-      error={error}
-      isEmpty={!data || data.length === 0}
-      onRetry={handleRetry}
+      status={{ isPending, error, isEmpty: !data || data.length === 0, onRetry: handleRetry }}
     >
       <div className="space-y-2">
         <BarChart

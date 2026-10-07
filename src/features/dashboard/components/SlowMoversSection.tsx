@@ -31,7 +31,7 @@ export function SlowMoversSection({ threshold, onThresholdChange }: SlowMoversSe
   }
 
   return (
-    <ChartSection title="Lambat laku" isPending={isPending} error={error} isEmpty={false} onRetry={handleRetry}>
+    <ChartSection title="Lambat laku" status={{ isPending, error, isEmpty: false, onRetry: handleRetry }}>
       <div className="space-y-3">
         <FormField id="analysis-threshold" label="Tidak terjual dalam" error={undefined}>
           {(control) => (

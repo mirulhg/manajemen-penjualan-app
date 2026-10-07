@@ -21,7 +21,7 @@ export function TopSellingSection({ range }: TopSellingSectionProps) {
   const top = data ? topByQuantity(data, TOP_LIMIT) : [];
 
   return (
-    <ChartSection title="Terlaris" isPending={isPending} error={error} isEmpty={top.length === 0} onRetry={handleRetry}>
+    <ChartSection title="Terlaris" status={{ isPending, error, isEmpty: top.length === 0, onRetry: handleRetry }}>
       <BarChart
         title="10 produk dengan jumlah terjual terbanyak"
         data={top.map((row) => ({

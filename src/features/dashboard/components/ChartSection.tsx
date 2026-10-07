@@ -2,19 +2,23 @@ import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/Skeleton';
 
-type ChartSectionProps = {
-  title: string;
+type ChartStatus = {
   isPending: boolean;
   error: Error | null;
   isEmpty: boolean;
   onRetry: () => void;
+};
+
+type ChartSectionProps = {
+  title: string;
   // Kontrol kartu (mis. skala waktu), tampil di kanan judul.
   action?: ReactNode;
+  status: ChartStatus;
   children: ReactNode;
 };
 
 // Kerangka tiap grafik: judul, lalu salah satu dari skeleton, error, kosong, atau isi.
-export function ChartSection({ title, isPending, error, isEmpty, onRetry, action, children }: ChartSectionProps) {
+export function ChartSection({ title, action, status, children }: ChartSectionProps) {
   const headingId = `${title.replace(/\s+/g, '-').toLowerCase()}-heading`;
 
   return (
@@ -29,16 +33,18 @@ export function ChartSection({ title, isPending, error, isEmpty, onRetry, action
         </h2>
         {action}
       </div>
-      <ChartSectionBody isPending={isPending} error={error} isEmpty={isEmpty} onRetry={onRetry}>
+      <ChartSectionBody status={status}>
         {children}
       </ChartSectionBody>
     </section>
   );
 }
 
-type ChartSectionBodyProps = Omit<ChartSectionProps, 'title' | 'action'>;
+type ChartSectionBodyProps = Pick<ChartSectionProps, 'status' | 'children'>;
 
-function ChartSectionBody({ isPending, error, isEmpty, onRetry, children }: ChartSectionBodyProps) {
+function ChartSectionBody({ status, children }: ChartSectionBodyProps) {
+  const { isPending, error, isEmpty, onRetry } = status;
+
   if (isPending) return <ChartSkeleton />;
   if (error) {
     return (

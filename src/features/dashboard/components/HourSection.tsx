@@ -19,7 +19,7 @@ export function HourSection({ range }: HourSectionProps) {
   const hours = data ? trimHours(data) : [];
 
   return (
-    <ChartSection title="Jam sibuk" isPending={isPending} error={error} isEmpty={hours.length === 0} onRetry={handleRetry}>
+    <ChartSection title="Jam sibuk" status={{ isPending, error, isEmpty: hours.length === 0, onRetry: handleRetry }}>
       <BarChart
         title="Jumlah transaksi per jam"
         data={hours.map(({ hour, count }) => ({ label: String(hour).padStart(2, '0'), value: count }))}

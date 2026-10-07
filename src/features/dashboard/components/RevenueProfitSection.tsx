@@ -38,7 +38,7 @@ export function RevenueProfitSection({ range, ranking, onRankingChange }: Revenu
   const showPareto = ranking === 'omzet';
 
   return (
-    <ChartSection title="Omzet & laba" isPending={isPending} error={error} isEmpty={shown.length === 0} onRetry={handleRetry}>
+    <ChartSection title="Omzet & laba" status={{ isPending, error, isEmpty: shown.length === 0, onRetry: handleRetry }}>
       <div className="space-y-3">
         <FormField id="analysis-ranking" label="Urutkan berdasarkan" error={undefined}>
           {(control) => (

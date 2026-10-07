@@ -76,10 +76,7 @@ export function TrendSection({ current, previous, granularity, onGranularityChan
   return (
     <ChartSection
       title="Tren omzet"
-      isPending={isPending}
-      error={error}
-      isEmpty={!hasSales}
-      onRetry={handleRetry}
+      status={{ isPending, error, isEmpty: !hasSales, onRetry: handleRetry }}
       action={isCard ? <div className="w-36 [&_label]:sr-only [&_select]:mt-0">{scaleField}</div> : undefined}
     >
       <div className="space-y-3">

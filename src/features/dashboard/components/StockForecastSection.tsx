@@ -17,10 +17,7 @@ export function StockForecastSection() {
   return (
     <ChartSection
       title="Perkiraan stok habis"
-      isPending={isPending}
-      error={error}
-      isEmpty={!data || data.length === 0}
-      onRetry={handleRetry}
+      status={{ isPending, error, isEmpty: !data || data.length === 0, onRetry: handleRetry }}
     >
       <div className="space-y-3">
         <p className="text-muted-foreground">
