@@ -15,4 +15,11 @@ describe('SettingsPage', () => {
 
     expect(screen.getByText(`Versi ${packageJson.version}`)).toBeTruthy();
   });
+
+  it('menampilkan "developed by dev.myrules" dengan nama pengembang berfont tanda tangan', () => {
+    renderWithProviders(<SettingsPage />);
+
+    expect(screen.getByText('developed by', { exact: false }).textContent).toBe('developed by dev.myrules');
+    expect(screen.getByText('dev.myrules').className).toContain('font-signature');
+  });
 });

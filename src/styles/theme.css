@@ -47,6 +47,8 @@
   --color-status-habis-bg: #f9dccf;
 
   --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  /* Hanya untuk tanda tangan "dev.myrules" di Pengaturan (CLAUDE.md §7). */
+  --font-signature: 'Alex Brush', cursive;
 
   --duration-instant: 100ms;
   --duration-fast: 150ms;

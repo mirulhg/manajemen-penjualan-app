@@ -6,6 +6,7 @@ import { AlertSettingsSection } from './AlertSettingsSection';
 import { EnterCashierModeSection } from './EnterCashierModeSection';
 import { OversellSetting } from './OversellSetting';
 import { PinSection } from './PinSection';
+import { DeveloperSignature } from './DeveloperSignature';
 
 export function SettingsPage() {
   return (
@@ -25,7 +26,10 @@ export function SettingsPage() {
         <span className="flex-1">Kelola kategori</span>
         <ChevronRight aria-hidden="true" className="size-5 text-muted-foreground" />
       </Link>
-      <p className="text-sm text-muted-foreground">Versi {__APP_VERSION__}</p>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <p className="text-sm text-muted-foreground">Versi {__APP_VERSION__}</p>
+        <DeveloperSignature />
+      </div>
     </section>
   );
 }
