@@ -41,19 +41,23 @@ export function ProductAnalysisContent() {
   const { current } = getDashboardRanges(params.selection, new Date());
 
   return (
-    // Urutan DOM = urutan visual (Tab mengikuti tampilan): Terlaris 2 kolom + Lambat laku + Perkiraan stok, lalu Omzet dan laba satu baris penuh.
-    <BentoGrid className="lg:grid-cols-4">
+    // Urutan DOM = urutan visual (Tab mengikuti tampilan): Terlaris 2×2 di kiri, Lambat laku dan Perkiraan stok bertumpuk di kanan, lalu Omzet dan laba satu baris penuh.
+    <BentoGrid className="lg:grid-cols-4 lg:gap-4">
       <section aria-labelledby="analysis-period-heading" className="space-y-3 lg:col-span-4">
         <h2 id="analysis-period-heading" className="text-lg font-semibold">
           Periode penjualan
         </h2>
         <PeriodSegmented selection={params.selection} onChange={params.setSelection} />
       </section>
-      <div className="lg:col-span-2">
+      <div className="lg:col-span-2 lg:row-span-2">
         <TopSellingSection range={current} />
       </div>
-      <SlowMoversSection threshold={params.threshold} onThresholdChange={params.setThreshold} />
-      <StockForecastSection />
+      <div className="lg:col-span-2">
+        <SlowMoversSection threshold={params.threshold} onThresholdChange={params.setThreshold} />
+      </div>
+      <div className="lg:col-span-2">
+        <StockForecastSection />
+      </div>
       <div className="lg:col-span-4">
         <RevenueProfitSection range={current} ranking={params.ranking} onRankingChange={params.setRanking} />
       </div>
