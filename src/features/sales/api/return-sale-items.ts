@@ -13,9 +13,13 @@ import { loadActiveSale } from './load-active-sale';
 import { restoreStock } from './restore-stock';
 import { SaleActionError } from './sale-action-error';
 
-export async function returnSaleItems(saleId: string, input: ReturnSaleItemsInput): Promise<SaleReturn> {
+export function returnSaleItems(saleId: string, input: ReturnSaleItemsInput): Promise<SaleReturn> {
+  return returnSaleItemsAt(saleId, input, new Date());
+}
+
+// Waktu disuntikkan supaya data contoh bisa meretur transaksi di masa lalu lewat jalur yang sama dengan kasir.
+export async function returnSaleItemsAt(saleId: string, input: ReturnSaleItemsInput, now: Date): Promise<SaleReturn> {
   const request = returnSaleItemsInputSchema.parse(input);
-  const now = new Date();
   const nowIso = now.toISOString();
 
   return db.transaction(

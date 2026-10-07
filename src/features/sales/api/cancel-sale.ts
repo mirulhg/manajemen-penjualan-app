@@ -8,9 +8,14 @@ import { cancelSaleInputSchema } from '../schema';
 import { loadActiveSale } from './load-active-sale';
 import { restoreStock } from './restore-stock';
 
-export async function cancelSale(saleId: string, reason: string): Promise<Sale> {
+export function cancelSale(saleId: string, reason: string): Promise<Sale> {
+  return cancelSaleAt(saleId, reason, new Date());
+}
+
+// Waktu disuntikkan supaya data contoh bisa membatalkan transaksi di masa lalu lewat jalur yang sama dengan kasir.
+export async function cancelSaleAt(saleId: string, reason: string, now: Date): Promise<Sale> {
   const request = cancelSaleInputSchema.parse({ reason });
-  const nowIso = new Date().toISOString();
+  const nowIso = now.toISOString();
 
   return db.transaction(
     'rw',
