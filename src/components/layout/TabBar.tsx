@@ -1,7 +1,7 @@
 import { m } from 'motion/react';
 import { NavLink } from 'react-router';
 
-import { INDICATOR_TRANSITION } from '@/lib/motion';
+import { useIndicatorTransition } from '@/hooks/use-input-modality';
 import { cn } from '@/lib/utils';
 import type { NavItem } from './nav-items';
 
@@ -10,6 +10,8 @@ type TabBarProps = {
 };
 
 export function TabBar({ items }: TabBarProps) {
+  const indicatorTransition = useIndicatorTransition();
+
   return (
     <nav
       aria-label="Menu bawah"
@@ -25,7 +27,7 @@ export function TabBar({ items }: TabBarProps) {
                     {isActive && (
                       <m.span
                         layoutId="tabbar-indicator"
-                        transition={INDICATOR_TRANSITION}
+                        transition={indicatorTransition}
                         className="absolute inset-0 rounded-full bg-accent"
                       />
                     )}

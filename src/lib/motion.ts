@@ -8,6 +8,9 @@ export const DURATION = {
   slow: 0.3,
 } as const;
 
+// Indikator pindah seketika bila navigasi dipicu keyboard atau palette.
+export const INSTANT_TRANSITION = { duration: 0 } as const;
+
 // Indikator aktif (pil tab, latar pilihan) berpindah tanpa pantul; ±300ms.
 export const INDICATOR_TRANSITION = { type: 'spring', bounce: 0, duration: DURATION.slow } as const;
 

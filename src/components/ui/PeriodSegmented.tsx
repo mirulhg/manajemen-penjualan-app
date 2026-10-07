@@ -13,7 +13,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { INDICATOR_TRANSITION } from '@/lib/motion';
+import { useIndicatorTransition } from '@/hooks/use-input-modality';
 import { cn } from '@/lib/utils';
 
 type PeriodSegmentedProps = {
@@ -29,6 +29,7 @@ const QUICK_LABELS: Partial<Record<Period, string>> = { 'hari-ini': 'Hari ini', 
 // Tiga pilihan satu ketuk + menu "Lainnya"; pilihan aktif dibedakan lewat latar, bukan bobot font (lebar teks tidak bergeser).
 export function PeriodSegmented({ selection, onChange }: PeriodSegmentedProps) {
   const indicatorId = useId();
+  const indicatorTransition = useIndicatorTransition();
   const isMoreSelected = MORE_PERIODS.includes(selection.period);
 
   function handleMoreChange(value: string) {
@@ -54,7 +55,7 @@ export function PeriodSegmented({ selection, onChange }: PeriodSegmentedProps) {
               {selection.period === period && (
                 <m.span
                   layoutId={indicatorId}
-                  transition={INDICATOR_TRANSITION}
+                  transition={indicatorTransition}
                   className="absolute inset-0 rounded-sm border border-border bg-card"
                 />
               )}

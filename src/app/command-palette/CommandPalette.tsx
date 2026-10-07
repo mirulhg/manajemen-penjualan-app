@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
 import { useLastMonthSalesDownload } from '../../features/reports';
+import { markKeyboardInput } from '@/hooks/use-input-modality';
 import { CommandDialog, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command';
 import { PaletteProductGroup } from './PaletteProductGroup';
 import { PaletteRootItems } from './PaletteRootItems';
@@ -36,6 +37,7 @@ export function CommandPalette({ isOpen, isAnimated, onOpenChange, onCloseAutoFo
 
   function handleNavigate(to: string) {
     handleOpenChange(false);
+    markKeyboardInput();
     void navigate(to);
   }
 

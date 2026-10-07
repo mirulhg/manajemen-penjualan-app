@@ -1,7 +1,7 @@
 import { m } from 'motion/react';
 import { NavLink } from 'react-router';
 
-import { INDICATOR_TRANSITION } from '@/lib/motion';
+import { useIndicatorTransition } from '@/hooks/use-input-modality';
 import { cn } from '@/lib/utils';
 import type { NavItem } from './nav-items';
 
@@ -11,6 +11,8 @@ type MainNavProps = {
 
 // Navigasi header untuk layar lebar; di layar kecil diganti TabBar. NavLink memasang aria-current="page" pada link aktif.
 export function MainNav({ items }: MainNavProps) {
+  const indicatorTransition = useIndicatorTransition();
+
   return (
     <nav aria-label="Menu utama" className="hidden md:block">
       <ul className="flex gap-2">
@@ -30,7 +32,7 @@ export function MainNav({ items }: MainNavProps) {
                   {isActive && (
                     <m.span
                       layoutId="mainnav-indicator"
-                      transition={INDICATOR_TRANSITION}
+                      transition={indicatorTransition}
                       className="absolute inset-0 rounded-md bg-secondary"
                     />
                   )}

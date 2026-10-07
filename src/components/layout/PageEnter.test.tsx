@@ -5,6 +5,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PageEnter } from './PageEnter';
 
+function fireInput(type: 'keydown' | 'pointerdown') {
+  window.dispatchEvent(new Event(type));
+}
+
 type AnimateOptions = { delay: number };
 
 const { animate } = vi.hoisted(() => ({
@@ -32,6 +36,7 @@ describe('PageEnter', () => {
     animate.mockClear();
     // jsdom tidak punya Web Animations API; PageEnter melewatinya bila elemen tidak bisa dianimasikan.
     Element.prototype.animate = vi.fn();
+    fireInput('pointerdown');
   });
 
   it('halaman biasa: tiap blok tingkat atas masuk bergantian dengan jeda 40ms', () => {
@@ -44,6 +49,13 @@ describe('PageEnter', () => {
 
   it('Kasir tidak dianimasikan sama sekali', () => {
     renderPage('/kasir');
+
+    expect(animate).not.toHaveBeenCalled();
+  });
+
+  it('dibuka lewat keyboard atau palette: tampil langsung tanpa gerak', () => {
+    fireInput('keydown');
+    renderPage('/stok');
 
     expect(animate).not.toHaveBeenCalled();
   });

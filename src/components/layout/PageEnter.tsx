@@ -3,6 +3,7 @@ import { useLayoutEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useLocation } from 'react-router';
 
+import { getInputModality } from '@/hooks/use-input-modality';
 import { DURATION, EASE_OUT, STAGGER_CHILDREN_ATTRIBUTE } from '@/lib/motion';
 
 type PageEnterProps = {
@@ -52,6 +53,8 @@ function PageBlocks({ children }: PageEnterProps) {
     const wrapper = wrapperRef.current;
     // Tanpa Web Animations API (browser lama), halaman tampil langsung.
     if (!wrapper || typeof wrapper.animate !== 'function') return;
+    // Pindah halaman lewat keyboard atau palette: tampil langsung tanpa gerak.
+    if (getInputModality() === 'keyboard') return;
     const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const container = findContainer(wrapper);
     const playbacks = playEnter(expandBlocks(Array.from(container.children)), isReducedMotion);
