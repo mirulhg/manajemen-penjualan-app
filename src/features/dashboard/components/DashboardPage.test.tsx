@@ -81,7 +81,7 @@ describe('DashboardPage', () => {
     expect(screen.getAllByText(/baru ada di periode ini · sebelumnya Rp 0/).length).toBe(3);
     expect(screen.getByText('baru ada di periode ini · sebelumnya 0')).toBeTruthy();
     expect(screen.getAllByText('Rp 15.100').length).toBe(1);
-    expect(screen.getByRole('link', { name: 'Lihat transaksi' }).getAttribute('href')).toBe('/penjualan');
+    expect(screen.getByRole('link', { name: /^Lihat transaksi/ }).getAttribute('href')).toBe('/penjualan');
   });
 
   it('bento Dasbor lg: grid 4 kolom, Tren 3 + Jam sibuk 1, Kategori 2 + Pintasan 2', async () => {
@@ -122,7 +122,7 @@ describe('DashboardPage', () => {
     renderRoutes('/dasbor?periode=7-hari', false);
 
     await screen.findByText('Ringkasan periode');
-    expect(screen.getByRole('link', { name: 'Lihat transaksi' }).getAttribute('href')).toBe('/penjualan?periode=7-hari');
+    expect(screen.getByRole('link', { name: /^Lihat transaksi/ }).getAttribute('href')).toBe('/penjualan?periode=7-hari');
   });
 
   it('Mode Kasir di /dasbor: pesan khusus pemilik', async () => {
@@ -172,7 +172,7 @@ describe('DashboardPage grafik', () => {
     renderRoutes('/dasbor?periode=12-bulan', false);
 
     expect((await screen.findByLabelText<HTMLSelectElement>('Skala waktu')).value).toBe('bulanan');
-    expect(screen.getByRole('link', { name: 'Lihat transaksi' }).getAttribute('href')).toBe(
+    expect(screen.getByRole('link', { name: /^Lihat transaksi/ }).getAttribute('href')).toBe(
       '/penjualan?periode=rentang&dari=2025-11-01&sampai=2026-10-03',
     );
   });

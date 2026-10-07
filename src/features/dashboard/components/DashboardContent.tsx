@@ -90,7 +90,7 @@ export function DashboardContent() {
         <ChartsSection selection={selection} granularity={granularity} onGranularityChange={setGranularity} />
       </Suspense>
       <div className="md:col-span-full lg:col-span-2">
-        <DashboardShortcuts historyQuery={historyQuery} />
+        <DashboardShortcuts historyQuery={historyQuery} transactionCount={data.period.transactionCount} />
       </div>
     </>
   );
