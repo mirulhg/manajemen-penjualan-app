@@ -13,6 +13,8 @@ import { getNetSoldQuantities, planDemoSales } from './plan-demo-sales';
 
 const TODAY = new Date(2026, 9, 7, 12, 0, 0);
 const DEFAULT_MIN_STOCK = 5;
+// Dua kali memuat plus hash PIN (PBKDF2) bisa melewati 5 detik saat seluruh suite berjalan paralel.
+const SLOW_TEST_TIMEOUT_MS = 30_000;
 
 async function emptyDatabase() {
   await Promise.all(DEMO_TABLES.map((table) => table.clear()));
@@ -105,7 +107,7 @@ describe('data contoh', () => {
     await loadDemoData(TODAY);
 
     expect((await db.dailySales.toArray()).map(({ date, grossTotal, refundedTotal }) => [date, grossTotal, refundedTotal])).toEqual(first);
-  });
+  }, SLOW_TEST_TIMEOUT_MS);
 
   it('ada data: menolak memuat dan tidak mengubah apa pun', async () => {
     await loadDemoData(TODAY);
@@ -126,7 +128,7 @@ describe('data contoh', () => {
 
     expect(await db.settings.get('demoPin')).toBeUndefined();
     expect(await db.settings.get('ownerPin')).toBeTruthy();
-  });
+  }, SLOW_TEST_TIMEOUT_MS);
 
   it('hapus data contoh: database kosong lagi, flag dan PIN contoh hilang', async () => {
     await loadDemoData(TODAY);
@@ -136,7 +138,7 @@ describe('data contoh', () => {
       expect(await table.count()).toBe(0);
     }
     expect(await db.settings.count()).toBe(0);
-  });
+  }, SLOW_TEST_TIMEOUT_MS);
 
   it('hapus ditolak bila database bukan data contoh', async () => {
     await expect(clearDemoData()).rejects.toThrow('bukan berisi data contoh');

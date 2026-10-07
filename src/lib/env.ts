@@ -14,6 +14,11 @@ const envSchema = z.object({
     .enum(['true', 'false'])
     .default('false')
     .transform((value) => value === 'true'),
+  // Mode demo: banner info dan tombol "Muat data contoh" disorot. Tidak memuat data sendiri dan tidak menyentuh data asli.
+  VITE_DEMO: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((value) => value === 'true'),
   VITE_SEED_EXTRA_PRODUCTS: z.coerce.number().int().min(0).max(5000).default(0),
 });
 

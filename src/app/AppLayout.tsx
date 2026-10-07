@@ -10,6 +10,7 @@ import { PageEnter } from '../components/layout/PageEnter';
 import { PageShell } from '../components/layout/PageShell';
 import { TabBar } from '../components/layout/TabBar';
 import { useUnreadAlertCount } from '../features/alerts';
+import { DemoBanner } from '../features/demo-data';
 import { useSession } from '../features/session';
 import { useStoreProfile } from '../features/store-profile';
 import { CommandPaletteTrigger } from './command-palette/CommandPaletteTrigger';
@@ -33,7 +34,9 @@ export function AppLayout() {
   const { isCashierMode, alertsBellEnabled, alertsInCashierMode } = useSession();
   const { data: unreadCount = 0 } = useUnreadAlertCount();
   const { data: profile } = useStoreProfile();
-  const width = getPageWidth(useLocation().pathname);
+  const pathname = useLocation().pathname;
+  const width = getPageWidth(pathname);
+  const isCashierPath = pathname === '/kasir';
   const items = isCashierMode ? CASHIER_ITEMS : OWNER_ITEMS;
   // Kasir hanya melihat lonceng bila pemilik mengaktifkannya (isinya informasi belanja pemilik).
   const isBellVisible = alertsBellEnabled && (!isCashierMode || alertsInCashierMode);
@@ -58,6 +61,8 @@ export function AppLayout() {
         }
         tabBar={<TabBar items={items} />}
       >
+        {/* Kasir tidak berubah: banner data contoh tidak dipasang di halaman itu. */}
+        {!isCashierPath && <DemoBanner />}
         <PageEnter>
           <Outlet />
         </PageEnter>
