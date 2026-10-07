@@ -5,7 +5,7 @@ import '@fontsource/alex-brush';
 export function DeveloperSignature() {
   return (
     <p className="text-sm text-muted-foreground">
-      developed by <span className="font-signature text-2xl text-foreground">dev.myrules</span>
+      developed by <span className="font-signature text-lg text-foreground">dev.myrules</span>
     </p>
   );
 }
