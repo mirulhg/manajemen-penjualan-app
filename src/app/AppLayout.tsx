@@ -13,7 +13,7 @@ import { useUnreadAlertCount } from '../features/alerts';
 import { useSession } from '../features/session';
 import { useStoreProfile } from '../features/store-profile';
 import { CommandPaletteTrigger } from './command-palette/CommandPaletteTrigger';
-import { isWidePath } from './wide-routes';
+import { getPageWidth } from './wide-routes';
 
 const OWNER_ITEMS: NavItem[] = [
   { to: '/dasbor', label: 'Dasbor', icon: LayoutDashboard },
@@ -33,7 +33,7 @@ export function AppLayout() {
   const { isCashierMode, alertsBellEnabled, alertsInCashierMode } = useSession();
   const { data: unreadCount = 0 } = useUnreadAlertCount();
   const { data: profile } = useStoreProfile();
-  const width = isWidePath(useLocation().pathname) ? 'wide' : 'default';
+  const width = getPageWidth(useLocation().pathname);
   const items = isCashierMode ? CASHIER_ITEMS : OWNER_ITEMS;
   // Kasir hanya melihat lonceng bila pemilik mengaktifkannya (isinya informasi belanja pemilik).
   const isBellVisible = alertsBellEnabled && (!isCashierMode || alertsInCashierMode);

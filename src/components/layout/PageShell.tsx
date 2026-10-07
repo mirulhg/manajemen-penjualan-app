@@ -6,12 +6,16 @@ type PageShellProps = {
   // Navigasi desktop dan lonceng; digabung satu slot agar prop tetap ≤ 5.
   actions?: ReactNode;
   tabBar?: ReactNode;
-  // 'wide' melebar sampai lg untuk halaman dua kolom/tabel (Kasir, Stok, Riwayat).
-  width?: 'default' | 'wide';
+  // 'wide' melebar sampai lg untuk halaman dua kolom/tabel (Kasir, Stok, Riwayat); 'bento' sampai 6xl untuk grid kartu.
+  width?: 'default' | 'wide' | 'bento';
   children: ReactNode;
 };
 
-const WIDTH_CLASSES = { default: 'max-w-3xl', wide: 'max-w-3xl lg:max-w-5xl' } as const;
+const WIDTH_CLASSES = {
+  default: 'max-w-3xl',
+  wide: 'max-w-3xl lg:max-w-5xl',
+  bento: 'max-w-3xl lg:max-w-6xl',
+} as const;
 
 export function PageShell({ brand, actions, tabBar, width = 'default', children }: PageShellProps) {
   const widthClass = WIDTH_CLASSES[width];
