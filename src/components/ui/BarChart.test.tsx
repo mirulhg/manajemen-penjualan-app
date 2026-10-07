@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
@@ -71,5 +71,19 @@ describe('BarChart', () => {
       />,
     );
     expect(container.querySelector('figure')).toBeNull();
+  });
+
+  it('menyorot batang hanya untuk mouse, bukan sentuhan', () => {
+    const { container } = renderBars('horizontal');
+    const rows = container.querySelectorAll('ul > li');
+    const minuman = rows[1];
+    if (!minuman) throw new Error('Baris Minuman tidak ditemukan');
+
+    fireEvent.pointerEnter(minuman, { pointerType: 'touch' });
+    expect(minuman.className).not.toContain('opacity-60');
+    expect(rows[0]?.className).not.toContain('opacity-60');
+
+    fireEvent.pointerEnter(minuman, { pointerType: 'mouse' });
+    expect(rows[0]?.className).toContain('opacity-60');
   });
 });

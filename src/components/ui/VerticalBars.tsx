@@ -26,7 +26,8 @@ export function VerticalBars({ data, maxValue, active, onActivate, formatValue }
           return (
             <div
               key={datum.label}
-              onPointerEnter={() => onActivate(index)}
+              // Hanya mouse: sentuhan juga memicu pointerenter, sehingga redup "menempel" setelah jari diangkat.
+              onPointerEnter={(event) => event.pointerType === 'mouse' && onActivate(index)}
               className={`relative h-full flex-1 ${active !== null && !isActive ? 'opacity-60' : ''}`}
             >
               <div

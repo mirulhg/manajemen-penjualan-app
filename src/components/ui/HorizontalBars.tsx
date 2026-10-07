@@ -25,7 +25,8 @@ export function HorizontalBars({ data, maxValue, active, onActivate, formatValue
             <m.li
               key={datum.label}
               {...listItemMotion(data.length)}
-              onPointerEnter={() => onActivate(index)}
+              // Hanya mouse: sentuhan juga memicu pointerenter, sehingga redup "menempel" setelah jari diangkat.
+              onPointerEnter={(event) => event.pointerType === 'mouse' && onActivate(index)}
               // Redup lewat anak langsung: opacity li dipegang Motion (animate), jadi class di li akan tertimpa.
               className={active !== null && !isActive ? '*:opacity-60' : ''}
             >
