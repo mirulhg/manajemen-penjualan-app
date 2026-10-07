@@ -5,6 +5,9 @@ import { useIndicatorTransition } from '@/hooks/use-input-modality';
 import { cn } from '@/lib/utils';
 import type { NavItem } from './nav-items';
 
+// Sama dengan --radius-md (rounded-md). Motion hanya mengoreksi sudut yang melar saat pil berganti lebar bila radius ada di style, dalam px.
+const INDICATOR_RADIUS_PX = 6;
+
 type MainNavProps = {
   items: NavItem[];
 };
@@ -33,7 +36,8 @@ export function MainNav({ items }: MainNavProps) {
                     <m.span
                       layoutId="mainnav-indicator"
                       transition={indicatorTransition}
-                      className="absolute inset-0 rounded-md bg-secondary"
+                      style={{ borderRadius: INDICATOR_RADIUS_PX }}
+                      className="absolute inset-0 bg-secondary"
                     />
                   )}
                   <item.icon aria-hidden="true" className="relative size-4" />
