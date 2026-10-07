@@ -10,7 +10,7 @@ import { seedSampleSales } from '../../sales/seed-sample-sales';
 import { SAMPLE_PRODUCT_SKUS } from '../../stock';
 import { OwnerOnly } from '../../session';
 import { createTestQueryClient, renderWithProviders } from '../../../test/render';
-import { setReducedMotion } from '../../../test/viewport';
+import { setReducedMotion, setViewportWidth } from '../../../test/viewport';
 import { findProductBySku, resetDatabaseWithSeed } from '../../../test/reset-database';
 import { DashboardPage } from './DashboardPage';
 
@@ -106,6 +106,48 @@ describe('DashboardPage', () => {
     expect(trendHeading.closest('div[class*="col-span"]')?.className).toContain('lg:col-span-3');
     expect(screen.getByRole('heading', { name: 'Omzet per kategori' }).closest('div[class*="col-span"]')?.className).toContain('lg:col-span-2');
 
+  });
+
+  it('kartu restock ada: sel KPI 2 kolom di kanannya; ditutup: KPI satu baris penuh tanpa kartu restock', async () => {
+    const beras = await findProductBySku('SBK-001');
+    await createSaleAt(
+      { items: [{ productId: beras.id, quantity: 1, discount: 0 }], paymentMethod: 'tunai', transactionDiscount: 0, amountPaid: 74_000, expectedTotal: 74_000 },
+      NOW,
+    );
+    const withCard = renderWithProviders(<DashboardPage />, createTestQueryClient(), '/dasbor', { dailySummaryEnabled: true });
+    await screen.findByText('Ringkasan periode', { selector: 'h2' });
+    const kpiCell = withCard.container.querySelector('[class*="group-has-"]');
+
+    expect(withCard.container.querySelector('[data-slot="daily-summary"]')).not.toBeNull();
+    expect(kpiCell?.className).toContain('lg:col-span-4');
+    expect(kpiCell?.className).toContain('lg:group-has-[[data-slot=daily-summary]]/bento:col-span-2');
+    withCard.unmount();
+
+    const withoutCard = renderWithProviders(<DashboardPage />, createTestQueryClient(), '/dasbor', { dailySummaryEnabled: false });
+    await screen.findByText('Ringkasan periode', { selector: 'h2' });
+
+    expect(withoutCard.container.querySelector('[data-slot="daily-summary"]')).toBeNull();
+  });
+
+  it('pemilih periode hanya satu salinan: di header pada lg, di dalam grid pada HP', async () => {
+    const beras = await findProductBySku('SBK-001');
+    await createSaleAt(
+      { items: [{ productId: beras.id, quantity: 1, discount: 0 }], paymentMethod: 'tunai', transactionDiscount: 0, amountPaid: 74_000, expectedTotal: 74_000 },
+      NOW,
+    );
+
+    const desktop = renderWithProviders(<DashboardPage />, createTestQueryClient(), '/dasbor');
+    await screen.findByText('Ringkasan periode', { selector: 'h2' });
+    expect(screen.getAllByRole('group', { name: 'Periode' })).toHaveLength(1);
+    expect(desktop.container.querySelector('[data-stagger-children] [role="group"]')).toBeNull();
+    desktop.unmount();
+
+    setViewportWidth(390);
+    const phone = renderWithProviders(<DashboardPage />, createTestQueryClient(), '/dasbor');
+    await screen.findByText('Ringkasan periode', { selector: 'h2' });
+    expect(screen.getAllByRole('group', { name: 'Periode' })).toHaveLength(1);
+    expect(phone.container.querySelector('[data-stagger-children] [role="group"]')).not.toBeNull();
+    setViewportWidth(1280);
   });
 
   it('link Lihat transaksi membawa periode yang dipilih', async () => {
