@@ -8,18 +8,27 @@ type ChartSectionProps = {
   error: Error | null;
   isEmpty: boolean;
   onRetry: () => void;
+  // Kontrol kartu (mis. skala waktu), tampil di kanan judul.
+  action?: ReactNode;
   children: ReactNode;
 };
 
 // Kerangka tiap grafik: judul, lalu salah satu dari skeleton, error, kosong, atau isi.
-export function ChartSection({ title, isPending, error, isEmpty, onRetry, children }: ChartSectionProps) {
+export function ChartSection({ title, isPending, error, isEmpty, onRetry, action, children }: ChartSectionProps) {
   const headingId = `${title.replace(/\s+/g, '-').toLowerCase()}-heading`;
 
   return (
-    <section aria-labelledby={headingId} className="space-y-3">
-      <h2 id={headingId} className="text-lg font-semibold">
-        {title}
-      </h2>
+    // md ke atas: kartu bento yang mengisi tinggi selnya. Di HP tetap bagian polos seperti sebelumnya.
+    <section
+      aria-labelledby={headingId}
+      className="space-y-3 md:flex md:h-full md:flex-col md:rounded-md md:border md:border-border md:bg-card md:p-5"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <h2 id={headingId} className="text-lg font-semibold">
+          {title}
+        </h2>
+        {action}
+      </div>
       <ChartSectionBody isPending={isPending} error={error} isEmpty={isEmpty} onRetry={onRetry}>
         {children}
       </ChartSectionBody>
@@ -27,7 +36,7 @@ export function ChartSection({ title, isPending, error, isEmpty, onRetry, childr
   );
 }
 
-type ChartSectionBodyProps = Omit<ChartSectionProps, 'title'>;
+type ChartSectionBodyProps = Omit<ChartSectionProps, 'title' | 'action'>;
 
 function ChartSectionBody({ isPending, error, isEmpty, onRetry, children }: ChartSectionBodyProps) {
   if (isPending) return <ChartSkeleton />;

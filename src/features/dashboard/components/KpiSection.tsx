@@ -14,11 +14,11 @@ export function KpiSection({ selection, metrics, previous, animate }: KpiSection
   const hasNoSalesToday = selection.period === 'hari-ini' && metrics.revenue === 0;
 
   return (
-    <section aria-labelledby="period-heading">
+    <section aria-labelledby="period-heading" className="h-full">
       <h2 id="period-heading" className="sr-only">
         Ringkasan periode
       </h2>
-      <dl aria-live="polite" className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <dl aria-live="polite" className="grid h-full grid-cols-2 gap-3 lg:group-has-[[data-slot=daily-summary]]/bento:gap-4 lg:grid-cols-4 lg:group-has-[[data-slot=daily-summary]]/bento:grid-cols-2">
         {METRICS.map((metric) => (
           <KpiCard
             key={metric.key}

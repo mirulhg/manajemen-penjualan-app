@@ -23,7 +23,7 @@ export function KpiCard({ metric, current, previous, hasNoSalesToday, animate }:
   return (
     <div className="rounded-md border border-border bg-card p-4">
       <dt className="text-sm text-muted-foreground">{metric.label}</dt>
-      <dd className="mt-1 text-lg font-semibold wrap-anywhere sm:text-2xl">
+      <dd className="mt-1 text-lg font-semibold wrap-anywhere sm:text-2xl lg:text-3xl">
         <CountUpValue value={current} format={metric.format} animate={animate} />
       </dd>
       <dd className="mt-1 text-sm text-muted-foreground">

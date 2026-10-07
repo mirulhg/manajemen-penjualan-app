@@ -17,7 +17,7 @@ export function ChartsSection({ selection, granularity, onGranularityChange }: C
 
   return (
     <>
-      <div className="md:col-span-4">
+      <div className="md:col-span-full lg:col-span-3">
         <TrendSection
           current={current}
           previous={previous}
@@ -25,11 +25,11 @@ export function ChartsSection({ selection, granularity, onGranularityChange }: C
           onGranularityChange={onGranularityChange}
         />
       </div>
-      <div className="md:col-span-2">
-        <CategorySection range={current} />
-      </div>
-      <div className="md:col-span-2">
+      <div>
         <HourSection range={current} />
+      </div>
+      <div className="lg:col-span-2">
+        <CategorySection range={current} />
       </div>
     </>
   );

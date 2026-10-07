@@ -1,3 +1,4 @@
+import { useMediaQuery } from '../../../hooks/use-media-query';
 import { FormField } from '../../../components/ui/FormField';
 import { FIELD_CLASS } from '../../../components/ui/field-styles';
 import { LineChart } from '../../../components/ui/LineChart';
@@ -38,6 +39,7 @@ function findGranularity(value: string): Granularity {
 export function TrendSection({ current, previous, granularity, onGranularityChange }: TrendSectionProps) {
   const { data: rows, isPending, error, refetch } = useTrendRows(previous, current);
   const scale = granularity ?? defaultGranularity(current);
+  const isCard = useMediaQuery('(min-width: 48rem)');
 
   function handleRetry() {
     void refetch();
@@ -51,25 +53,37 @@ export function TrendSection({ current, previous, granularity, onGranularityChan
   const previousBuckets = rows ? bucketDailySales(rows, previous, scale) : [];
   const hasSales = currentBuckets.some((bucket) => bucket.metrics.transactionCount > 0);
 
+  // md ke atas: pemilih skala di header kartu (labelnya hanya untuk pembaca layar). Di HP tetap di atas grafik; satu salinan saja.
+  const scaleField = (
+    <FormField id="trend-scale" label="Skala waktu" error={undefined}>
+      {(control) => (
+        <select
+          {...control}
+          value={scale}
+          onChange={(event) => handleScaleChange(event.target.value)}
+          className={FIELD_CLASS}
+        >
+          {GRANULARITIES.map((option) => (
+            <option key={option} value={option}>
+              {GRANULARITY_LABELS[option]}
+            </option>
+          ))}
+        </select>
+      )}
+    </FormField>
+  );
+
   return (
-    <ChartSection title="Tren omzet" isPending={isPending} error={error} isEmpty={!hasSales} onRetry={handleRetry}>
+    <ChartSection
+      title="Tren omzet"
+      isPending={isPending}
+      error={error}
+      isEmpty={!hasSales}
+      onRetry={handleRetry}
+      action={isCard ? <div className="w-36 [&_label]:sr-only [&_select]:mt-0">{scaleField}</div> : undefined}
+    >
       <div className="space-y-3">
-        <FormField id="trend-scale" label="Skala waktu" error={undefined}>
-          {(control) => (
-            <select
-              {...control}
-              value={scale}
-              onChange={(event) => handleScaleChange(event.target.value)}
-              className={FIELD_CLASS}
-            >
-              {GRANULARITIES.map((option) => (
-                <option key={option} value={option}>
-                  {GRANULARITY_LABELS[option]}
-                </option>
-              ))}
-            </select>
-          )}
-        </FormField>
+        {!isCard && scaleField}
         <LineChart
           title="Omzet per periode"
           series={[

@@ -24,10 +24,10 @@ export function DailySummaryCard() {
   }
 
   if (!dailySummaryEnabled || dailySummaryDismissedOn === today) return null;
-  if (isPending) return <div aria-hidden="true" className="md:col-span-2 h-24 rounded-md border border-border bg-card" />;
+  if (isPending) return <div data-slot="daily-summary" aria-hidden="true" className="h-24 rounded-md border border-border bg-card md:col-span-full lg:col-span-2 lg:row-span-2 lg:h-auto" />;
   if (error) {
     return (
-      <div role="alert" className="md:col-span-2 rounded-md border border-border bg-card p-4">
+      <div data-slot="daily-summary" role="alert" className="rounded-md border border-border bg-card p-4 md:col-span-full lg:col-span-2 lg:row-span-2">
         <p>Ringkasan harian gagal dibaca. </p>
         <Button size="lg" type="button" onClick={handleRetry}>
           Coba lagi
@@ -37,16 +37,22 @@ export function DailySummaryCard() {
   }
 
   return (
-    <section aria-labelledby="daily-summary-heading" className="md:col-span-2 space-y-3 rounded-md bg-primary p-4 text-primary-foreground">
-      <h2 id="daily-summary-heading" className="flex items-center gap-2 font-semibold text-accent">
-        <TriangleAlert aria-hidden="true" className="size-5 shrink-0" />
-        <span>
-          {formatNumber(data.soldOut)} barang habis · {formatNumber(data.low)} menipis
-        </span>
-      </h2>
-      <p className="text-sm text-primary-foreground/80">
-        Kemarin: omzet {formatRupiah(data.yesterday.revenue)} dari {formatNumber(data.yesterday.transactionCount)} transaksi
-      </p>
+    <section
+      data-slot="daily-summary"
+      aria-labelledby="daily-summary-heading"
+      className="space-y-3 rounded-md bg-primary p-4 text-primary-foreground md:col-span-full lg:col-span-2 lg:row-span-2 lg:flex lg:flex-col lg:justify-between lg:space-y-0 lg:p-6"
+    >
+      <div className="space-y-3">
+        <h2 id="daily-summary-heading" className="flex items-center gap-2 font-semibold text-accent">
+          <TriangleAlert aria-hidden="true" className="size-5 shrink-0" />
+          <span>
+            {formatNumber(data.soldOut)} barang habis · {formatNumber(data.low)} menipis
+          </span>
+        </h2>
+        <p className="text-sm text-primary-foreground/80">
+          Kemarin: omzet {formatRupiah(data.yesterday.revenue)} dari {formatNumber(data.yesterday.transactionCount)} transaksi
+        </p>
+      </div>
       <div className="flex flex-wrap items-center gap-2">
         <Button asChild variant="secondary" className="bg-card hover:bg-card/90 focus-visible:outline-primary-foreground">
           <Link to="/peringatan">
