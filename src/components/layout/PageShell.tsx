@@ -20,8 +20,9 @@ export function PageShell({ brand, actions, tabBar, width = 'default', children 
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-sticky border-b border-border bg-card print:hidden">
         <div className={`mx-auto flex w-full ${widthClass} items-center justify-between gap-4 px-4 py-2`}>
-          <div className="flex min-w-0 items-center gap-2">{brand}</div>
-          <div className="flex items-center gap-2">{actions}</div>
+          {/* min-w-24: nama toko tidak menyusut jadi elipsis saja saat nav dan tombol Cari memenuhi header; di bawah itu terpotong dengan "…". */}
+          <div className="flex min-w-24 flex-1 items-center gap-2">{brand}</div>
+          <div className="flex shrink-0 items-center gap-2">{actions}</div>
         </div>
       </header>
       {/* pb-24 menyisakan ruang untuk TabBar (56px) beserta area aman layar HP; di layar lebar TabBar tidak ada. */}

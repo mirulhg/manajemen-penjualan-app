@@ -48,10 +48,10 @@ export function CommandPaletteTrigger() {
 
   return (
     <>
-      <Button type="button" variant="ghost" onClick={handlePointerOpen} aria-label="Cari atau buka halaman" className="min-h-11 min-w-11 px-0 md:hidden print:hidden">
+      <Button type="button" variant="ghost" onClick={handlePointerOpen} aria-label="Cari atau buka halaman" className="min-h-11 min-w-11 px-0 lg:hidden print:hidden">
         <Search aria-hidden="true" className="size-6" />
       </Button>
-      <Button type="button" variant="outline" onClick={handlePointerOpen} className="hidden gap-3 md:inline-flex print:hidden">
+      <Button type="button" variant="outline" onClick={handlePointerOpen} className="hidden gap-3 lg:inline-flex print:hidden">
         <Search aria-hidden="true" />
         Cari…
         <kbd className="text-xs text-muted-foreground">{SHORTCUT_LABEL}</kbd>
