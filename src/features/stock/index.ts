@@ -14,3 +14,6 @@ export { StockStatusBadge } from './components/StockStatusBadge';
 export { compressPhoto, PhotoError } from './photo/compress-photo';
 export type { CompressedPhoto } from './photo/compress-photo';
 export { BlobImage } from './components/BlobImage';
+export { buildProductRecords } from './build-product-records';
+export type { NewProductFields } from './build-product-records';
+export { resolveCategory } from './resolve-category';

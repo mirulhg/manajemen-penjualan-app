@@ -141,6 +141,9 @@ export const settingSchema = z.discriminatedUnion('key', [
   z.object({ key: z.literal('recoveryCode'), value: hashedSecretSchema }),
   z.object({ key: z.literal('pinAttempts'), value: pinAttemptsSchema }),
   z.object({ key: z.literal('storeProfile'), value: storeProfileSchema }),
+  // Data contoh (demo): penanda bahwa isi database berasal dari seed, dan PIN Mode Kasir yang dibuatkan untuknya.
+  z.object({ key: z.literal('isDemo'), value: z.boolean() }),
+  z.object({ key: z.literal('demoPin'), value: z.string() }),
 ]);
 
 // Rekap per tanggal lokal (YYYY-MM-DD), hanya dari transaksi yang tidak dibatalkan.
