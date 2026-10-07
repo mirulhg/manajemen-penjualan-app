@@ -33,13 +33,16 @@ export function VerticalBars({ data, maxValue, active, onActivate, formatValue }
                 style={{ transform: `scaleY(${height / 100})` }}
                 className="absolute inset-0 origin-bottom bg-chart-1 transition-transform duration-(--duration-slow) ease-out"
               />
+              {/* Label ikut terangkat lewat transform yang sama dengan batang (bukan bottom), supaya gerakannya serempak. */}
               {showValue && (
-                <span
-                  style={{ bottom: `${height}%` }}
-                  className="absolute left-1/2 -translate-x-1/2 pb-1 text-xs font-medium"
+                <div
+                  style={{ transform: `translateY(${-height}%)` }}
+                  className="absolute inset-0 transition-transform duration-(--duration-slow) ease-out"
                 >
-                  {formatValue(datum.value)}
-                </span>
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 pb-1 text-xs font-medium">
+                    {formatValue(datum.value)}
+                  </span>
+                </div>
               )}
             </div>
           );
