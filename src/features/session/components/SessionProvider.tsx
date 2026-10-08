@@ -1,8 +1,12 @@
+import { DatabaseZap } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import { useSessionQuery } from '../api/use-session';
 import { SessionContext } from '../session-context';
 import { Button } from '@/components/ui/button';
+import { ErrorScreen } from '@/components/ui/ErrorScreen';
+import { ReloadButton } from '@/components/ui/ReloadButton';
+import { PageShell } from '../../../components/layout/PageShell';
 
 type SessionProviderProps = {
   children: ReactNode;
@@ -18,16 +22,21 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
   if (error) {
     return (
-      <div role="alert" className="mx-auto max-w-3xl p-4">
-        <h1 className="text-xl font-semibold">Pengaturan perangkat tidak bisa dibaca</h1>
-        <p className="mt-2 text-muted-foreground">
-          Aplikasi gagal membaca pengaturan dari penyimpanan di perangkat ini. Coba lagi; jika masih gagal, muat
-          ulang halaman.
-        </p>
-        <Button size="lg" className="mt-4" type="button" onClick={handleRetry}>
-          Coba lagi
-        </Button>
-      </div>
+      <PageShell brand={<p className="text-lg font-semibold">Manajemen Stok</p>}>
+        <div role="alert">
+          <ErrorScreen
+            icon={DatabaseZap}
+            title="Data di perangkat ini tidak bisa dibuka"
+            description="Aplikasi gagal membaca pengaturan dari penyimpanan di perangkat ini. Coba lagi; kalau masih gagal, muat ulang halaman."
+            detail={error.message}
+          >
+            <Button size="lg" type="button" onClick={handleRetry}>
+              Coba lagi
+            </Button>
+            <ReloadButton variant="outline" />
+          </ErrorScreen>
+        </div>
+      </PageShell>
     );
   }
   if (!session) {
