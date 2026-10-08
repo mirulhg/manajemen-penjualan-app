@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import { createMemoryRouter, Link, Outlet, RouterProvider } from 'react-router';
@@ -26,7 +26,7 @@ function Broken(): never {
   throw new Error('halaman rusak');
 }
 
-function renderRouter(lazyCalls: { count: number }) {
+function renderRouter(lazyCalls: { count: number }, initialEntry = '/rusak') {
   const router = createMemoryRouter(
     [
       {
@@ -52,7 +52,7 @@ function renderRouter(lazyCalls: { count: number }) {
         ],
       },
     ],
-    { initialEntries: ['/rusak'] },
+    { initialEntries: [initialEntry] },
   );
   const session = {
     isCashierMode: false,
@@ -104,5 +104,27 @@ describe('boundary rute', () => {
     expect(calls.count).toBe(1);
     expect(screen.queryByText('isi lazy')).toBeNull();
     expect(await screen.findByRole('heading', { name: 'Versi baru tersedia' })).toBeTruthy();
+  });
+
+  // Terakhir di file: event offline mengubah status koneksi tingkat modul untuk sisa test di file ini.
+  it('offline: layar tanpa Coba lagi, lalu berganti sendiri ke Koneksi sudah kembali saat internet pulih', async () => {
+    renderRouter({ count: 0 }, '/');
+    act(() => {
+      window.dispatchEvent(new Event('offline'));
+    });
+
+    await userEvent.click(screen.getByRole('link', { name: 'Lazy' }));
+
+    expect(await screen.findByRole('heading', { name: 'Tidak ada koneksi internet' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Coba lagi' })).toBeNull();
+    expect(screen.getByRole('link', { name: 'Ke Dasbor' })).toBeTruthy();
+
+    act(() => {
+      window.dispatchEvent(new Event('online'));
+    });
+
+    expect(await screen.findByRole('heading', { name: 'Koneksi sudah kembali' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Muat ulang' })).toBeTruthy();
+    expect(screen.queryByRole('heading', { name: 'Versi baru tersedia' })).toBeNull();
   });
 });
