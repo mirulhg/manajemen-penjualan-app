@@ -6,6 +6,7 @@ const IMPORT_MESSAGES = [
   'Failed to fetch dynamically imported module: https://x.test/assets/Page-abc.js',
   'error loading dynamically imported module: https://x.test/assets/Page-abc.js',
   'Importing a module script failed.',
+  'Unable to preload CSS for /assets/SettingsPage-abc.css',
 ];
 
 describe('describeRouteError', () => {

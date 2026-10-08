@@ -2,11 +2,12 @@ import { isRouteErrorResponse } from 'react-router';
 
 export type RouteErrorKind = 'not-found' | 'new-version' | 'offline' | 'unexpected';
 
-// Pesan gagal impor modul dinamis: Chrome, Firefox, Safari.
+// Pesan gagal impor modul dinamis: Chrome, Firefox, Safari, dan pemuatan CSS halaman oleh Vite.
 const IMPORT_FAILURE_PATTERNS = [
   'Failed to fetch dynamically imported module',
   'error loading dynamically imported module',
   'Importing a module script failed',
+  'Unable to preload CSS',
 ];
 
 function isImportFailure(error: unknown) {
