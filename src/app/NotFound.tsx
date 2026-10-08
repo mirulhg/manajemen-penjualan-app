@@ -1,10 +1,16 @@
+import { MapPinOff } from 'lucide-react';
+
+import { ErrorScreen } from '@/components/ui/ErrorScreen';
+import { HomeLinkButton } from './HomeLinkButton';
+
 export function NotFound() {
   return (
-    <section>
-      <h1 className="text-xl font-semibold">Halaman tidak ditemukan</h1>
-      <p className="mt-2 text-muted-foreground">
-        Alamat yang dibuka tidak ada di aplikasi ini. Periksa kembali alamatnya.
-      </p>
-    </section>
+    <ErrorScreen
+      icon={MapPinOff}
+      title="Halaman tidak ditemukan"
+      description="Alamat ini tidak ada di aplikasi. Mungkin salah ketik, atau tautannya sudah lama."
+    >
+      <HomeLinkButton />
+    </ErrorScreen>
   );
 }
