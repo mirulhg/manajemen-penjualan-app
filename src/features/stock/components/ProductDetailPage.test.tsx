@@ -25,6 +25,22 @@ async function renderDetail(sku: string) {
 describe('ProductDetailPage: arsip dan riwayat harga', () => {
   beforeEach(resetDatabaseWithSeed);
 
+  it('stok minus: Nilai stok tertulis Rp 0, bukan negatif', async () => {
+    const product = await findProductBySku('SBK-001');
+    await db.products.update(product.id, { stockQuantity: -3 });
+    await renderDetail('SBK-001');
+
+    const label = await screen.findByText('Nilai stok');
+    expect(label.nextElementSibling?.textContent).toBe('Rp 0');
+  });
+
+  it('stok positif: Nilai stok = stok × harga beli', async () => {
+    await renderDetail('SBK-001');
+
+    const label = await screen.findByText('Nilai stok');
+    expect(label.nextElementSibling?.textContent).toBe('Rp 1.224.000');
+  });
+
   it('Arsipkan menyebut sisa stok, lalu barang berlabel Diarsipkan dan bisa dipulihkan', async () => {
     const user = userEvent.setup();
     const product = await renderDetail('SBK-001');

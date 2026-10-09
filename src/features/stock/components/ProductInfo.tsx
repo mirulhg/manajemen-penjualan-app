@@ -7,6 +7,7 @@ import { useSession } from '../../session';
 import { useStockThreshold } from '../hooks/use-stock-threshold';
 import type { Product } from '../schema';
 import { getStockStatus } from '../stock-status';
+import { getStockValue } from '../stock-value';
 import { StockStatusBadge } from './StockStatusBadge';
 
 type ProductInfoProps = {
@@ -37,7 +38,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
     { label: 'Harga jual', value: formatRupiah(product.sellingPrice) },
     ...(isCashierMode
       ? []
-      : [{ label: 'Nilai stok', value: formatRupiah(product.stockQuantity * product.purchasePrice) }]),
+      : [{ label: 'Nilai stok', value: formatRupiah(getStockValue(product.stockQuantity, product.purchasePrice)) }]),
     { label: 'Dibuat', value: formatDateTime(product.createdAt) },
     { label: 'Terakhir diperbarui', value: formatDateTime(product.updatedAt) },
   ];

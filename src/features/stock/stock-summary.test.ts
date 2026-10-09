@@ -16,6 +16,18 @@ describe('getStockSummary', () => {
     });
   });
 
+  it('stok minus tidak mengurangi nilai stok, tetapi tetap mengurangi total unit', () => {
+    const [first, ...others] = SEED_AS_PRODUCTS;
+    if (!first) throw new Error('seed kosong');
+    const withNegative = [{ ...first, stockQuantity: -3 }, ...others];
+
+    expect(getStockSummary(withNegative)).toEqual({
+      productCount: 30,
+      totalUnits: 406 - 18 - 3,
+      stockValue: 4_025_100 - 18 * 68_000,
+    });
+  });
+
   it('daftar kosong menghasilkan nol', () => {
     expect(getStockSummary([])).toEqual({ productCount: 0, totalUnits: 0, stockValue: 0 });
   });
