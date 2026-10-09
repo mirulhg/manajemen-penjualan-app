@@ -1,17 +1,19 @@
 // @vitest-environment jsdom
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
 
 import { createTestQueryClient, renderWithProviders } from '../../../test/render';
 import { HELP_GROUPS } from '../help-topics';
 import { HelpIndexPage } from './HelpIndexPage';
+import { HelpSheetHost } from './HelpSheetHost';
 import { HelpTopicPage } from './HelpTopicPage';
 
 function renderHelp(route: string, session: Parameters<typeof renderWithProviders>[3] = {}) {
   return renderWithProviders(
     <Routes>
-      <Route path="/bantuan" element={<HelpIndexPage />} />
+      <Route path="/bantuan" element={<><HelpIndexPage /><HelpSheetHost /></>} />
       <Route path="/bantuan/:slug" element={<HelpTopicPage notFound={<p>tidak ada</p>} />} />
       <Route path="/keluar-mode-kasir" element={<p>layar keluar</p>} />
     </Routes>,
@@ -28,7 +30,7 @@ describe('indeks Bantuan', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Bantuan' })).toBeTruthy();
     expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(HELP_GROUPS.length);
     expect(screen.getAllByRole('link')).toHaveLength(20);
-    expect(screen.getByRole('link', { name: /Mencatat penjualan di Kasir/ }).getAttribute('href')).toBe('/bantuan/kasir');
+    expect(screen.getByRole('link', { name: /Mencatat penjualan di Kasir/ }).getAttribute('href')).toBe('/bantuan?bantuan=kasir');
   });
 
   it('daftar topik satu kelompok dua kolom mulai lg', () => {
@@ -118,5 +120,18 @@ describe('halaman topik', () => {
     const steps = screen.getByRole('heading', { level: 2, name: 'Langkah' }).closest('section');
     expect(notes?.className).toContain('bg-secondary');
     expect(steps?.className).not.toContain('bg-secondary');
+  });
+
+  it('mengetuk baris topik membuka modal di halaman Bantuan tanpa pindah halaman', async () => {
+    const user = userEvent.setup();
+    renderHelp('/bantuan');
+
+    await user.click(screen.getByRole('link', { name: /Profil toko/ }));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Profil toko' });
+    expect(within(dialog).getByRole('link', { name: 'Buka Pengaturan' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 1, name: 'Bantuan', hidden: true })).toBeTruthy();
+    await user.click(within(dialog).getByRole('button', { name: 'Tutup' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   });
 });

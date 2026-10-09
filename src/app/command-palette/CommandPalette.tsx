@@ -3,6 +3,7 @@ import type { KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
+import { useHelpSheet } from '../../features/help';
 import { useLastMonthSalesDownload } from '../../features/reports';
 import { markKeyboardInput } from '@/hooks/use-input-modality';
 import { CommandDialog, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command';
@@ -23,6 +24,7 @@ type PaletteStep = 'root' | 'restock';
 export function CommandPalette({ isOpen, isAnimated, onOpenChange, onCloseAutoFocus }: CommandPaletteProps) {
   const navigate = useNavigate();
   const lastMonthSales = useLastMonthSalesDownload();
+  const { open: openHelp } = useHelpSheet();
   const [step, setStep] = useState<PaletteStep>('root');
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,6 +41,13 @@ export function CommandPalette({ isOpen, isAnimated, onOpenChange, onCloseAutoFo
     handleOpenChange(false);
     markKeyboardInput();
     void navigate(to);
+  }
+
+  // Modal terbuka di halaman yang sedang dibuka; palette ditutup lebih dulu.
+  function handleOpenHelp(slug: string) {
+    handleOpenChange(false);
+    markKeyboardInput();
+    openHelp(slug);
   }
 
   function handleStartRestock() {
@@ -89,6 +98,7 @@ export function CommandPalette({ isOpen, isAnimated, onOpenChange, onCloseAutoFo
             query={query}
             onNavigate={handleNavigate}
             onStartRestock={handleStartRestock}
+            onOpenHelp={handleOpenHelp}
             onDownloadLastMonthSales={handleDownloadLastMonthSales}
           />
         ) : (

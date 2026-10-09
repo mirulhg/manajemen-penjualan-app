@@ -11,12 +11,13 @@ type PaletteRootItemsProps = {
   query: string;
   onNavigate: (to: string) => void;
   onStartRestock: () => void;
+  onOpenHelp: (slug: string) => void;
   onDownloadLastMonthSales: () => void;
 };
 
 type PaletteAction = { label: string; icon: LucideIcon; keywords: string; run: () => void };
 
-export function PaletteRootItems({ query, onNavigate, onStartRestock, onDownloadLastMonthSales }: PaletteRootItemsProps) {
+export function PaletteRootItems({ query, onNavigate, onStartRestock, onOpenHelp, onDownloadLastMonthSales }: PaletteRootItemsProps) {
   const { isCashierMode, alertsBellEnabled, alertsInCashierMode } = useSession();
   const access = { isCashierMode, canCashierSeeAlerts: alertsBellEnabled && alertsInCashierMode };
   const pages = getVisiblePages(access).filter((page) =>
@@ -54,7 +55,7 @@ export function PaletteRootItems({ query, onNavigate, onStartRestock, onDownload
           ))}
         </CommandGroup>
       )}
-      <PaletteHelpGroup query={query} access={access} onNavigate={onNavigate} />
+      <PaletteHelpGroup query={query} access={access} onOpenHelp={onOpenHelp} />
       <PaletteProductGroup query={query} heading="Barang" mode="detail" onNavigate={onNavigate} />
     </>
   );

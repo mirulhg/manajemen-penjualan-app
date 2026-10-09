@@ -8,13 +8,13 @@ import { matchesQuery } from './palette-pages';
 type PaletteHelpGroupProps = {
   query: string;
   access: HelpAccess;
-  onNavigate: (to: string) => void;
+  onOpenHelp: (slug: string) => void;
 };
 
 const MAX_RESULTS = 5;
 
 // Hanya muncul setelah mengetik: tanpa kata cari, daftar awal cukup berisi halaman dan aksi.
-export function PaletteHelpGroup({ query, access, onNavigate }: PaletteHelpGroupProps) {
+export function PaletteHelpGroup({ query, access, onOpenHelp }: PaletteHelpGroupProps) {
   if (query.trim() === '') return null;
 
   const topics = getVisibleTopics(access)
@@ -25,7 +25,7 @@ export function PaletteHelpGroup({ query, access, onNavigate }: PaletteHelpGroup
   return (
     <CommandGroup heading="Bantuan">
       {topics.map((topic) => (
-        <CommandItem key={topic.slug} value={`bantuan-${topic.slug}`} onSelect={() => onNavigate(`/bantuan/${topic.slug}`)} className="min-h-11">
+        <CommandItem key={topic.slug} value={`bantuan-${topic.slug}`} onSelect={() => onOpenHelp(topic.slug)} className="min-h-11">
           <CircleQuestionMark aria-hidden="true" />
           {topic.title}
         </CommandItem>

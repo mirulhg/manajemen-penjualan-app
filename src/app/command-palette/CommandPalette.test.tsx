@@ -8,6 +8,7 @@ import { archiveProduct } from '../../features/stock/api/archive-product';
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from '@/components/ui/drawer';
 import { createTestQueryClient, renderWithProviders } from '../../test/render';
 import { findProductBySku, resetDatabaseWithSeed } from '../../test/reset-database';
+import { HelpSheetHost } from '../../features/help';
 import { CommandPaletteTrigger } from './CommandPaletteTrigger';
 
 function CurrentLocation() {
@@ -199,7 +200,7 @@ describe('palette perintah', () => {
     await waitFor(() => expect(lastPath()).toBe('/bantuan'));
   });
 
-  it('grup Bantuan hanya muncul setelah mengetik, dan "retur" membuka topiknya untuk pemilik', async () => {
+  it('grup Bantuan hanya muncul setelah mengetik, dan "retur" membuka topiknya sebagai modal di halaman ini', async () => {
     const user = userEvent.setup();
     renderPalette();
 
@@ -211,7 +212,7 @@ describe('palette perintah', () => {
     expect(within(dialog).getByText('Bantuan', { selector: '[cmdk-group-heading]' })).toBeTruthy();
     await user.click(option);
 
-    await waitFor(() => expect(lastPath()).toBe('/bantuan/retur-batal'));
+    await waitFor(() => expect(lastPath()).toBe('/dasbor?bantuan=retur-batal'));
   });
 
   it('topik khusus pemilik tidak muncul di Mode Kasir, topik untuk semua tetap muncul', async () => {
@@ -225,5 +226,18 @@ describe('palette perintah', () => {
     await user.clear(within(dialog).getByRole('combobox'));
     await user.keyboard('pin');
     expect(await within(dialog).findByRole('option', { name: 'Mode Kasir & PIN' })).toBeTruthy();
+  });
+
+  it('memilih topik Bantuan menutup palette dan membuka modal topik di halaman yang sedang dibuka', async () => {
+    const user = userEvent.setup();
+    renderPalette({ isCashierMode: false }, <HelpSheetHost />);
+
+    const dialog = await openWithKeyboard(user);
+    await user.keyboard('retur');
+    await user.click(await within(dialog).findByRole('option', { name: 'Retur dan batal transaksi' }));
+
+    expect(await screen.findByRole('dialog', { name: 'Retur dan batal transaksi' })).toBeTruthy();
+    expect(screen.queryByRole('combobox')).toBeNull();
+    expect(lastPath()).toBe('/dasbor?bantuan=retur-batal');
   });
 });
