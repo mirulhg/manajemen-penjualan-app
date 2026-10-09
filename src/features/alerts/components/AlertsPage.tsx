@@ -1,9 +1,9 @@
 import { HelpLink } from '../../help';
-import { OwnerOnly, useSession } from '../../session';
+import { canCashierSeeAlerts, OwnerOnly, useSession } from '../../session';
 import { AlertsContent } from './AlertsContent';
 
 export function AlertsPage() {
-  const { isCashierMode, alertsInCashierMode } = useSession();
+  const session = useSession();
   const page = (
     <section>
       <title>Peringatan Stok · Manajemen Stok</title>
@@ -16,5 +16,5 @@ export function AlertsPage() {
   );
 
   // Kasir hanya boleh bila pemilik mengaktifkannya; selain itu halaman ini seperti halaman pemilik lainnya.
-  return isCashierMode && alertsInCashierMode ? page : <OwnerOnly>{page}</OwnerOnly>;
+  return session.isCashierMode && canCashierSeeAlerts(session) ? page : <OwnerOnly>{page}</OwnerOnly>;
 }

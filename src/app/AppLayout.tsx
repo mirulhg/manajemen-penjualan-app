@@ -12,7 +12,7 @@ import { TabBar } from '../components/layout/TabBar';
 import { useUnreadAlertCount } from '../features/alerts';
 import { DemoBanner } from '../features/demo-data';
 import { HelpSheetHost } from '../features/help';
-import { useSession } from '../features/session';
+import { canCashierSeeAlerts, useSession } from '../features/session';
 import { useStoreProfile } from '../features/store-profile';
 import { CommandPaletteTrigger } from './command-palette/CommandPaletteTrigger';
 import { getPageWidth } from './wide-routes';
@@ -32,7 +32,8 @@ const CASHIER_ITEMS: NavItem[] = [
 ];
 
 export function AppLayout() {
-  const { isCashierMode, alertsBellEnabled, alertsInCashierMode } = useSession();
+  const session = useSession();
+  const { isCashierMode, alertsBellEnabled } = session;
   const { data: unreadCount = 0 } = useUnreadAlertCount();
   const { data: profile } = useStoreProfile();
   const pathname = useLocation().pathname;
@@ -40,7 +41,7 @@ export function AppLayout() {
   const isCashierPath = pathname === '/kasir';
   const items = isCashierMode ? CASHIER_ITEMS : OWNER_ITEMS;
   // Kasir hanya melihat lonceng bila pemilik mengaktifkannya (isinya informasi belanja pemilik).
-  const isBellVisible = alertsBellEnabled && (!isCashierMode || alertsInCashierMode);
+  const isBellVisible = isCashierMode ? canCashierSeeAlerts(session) : alertsBellEnabled;
 
   return (
     <>

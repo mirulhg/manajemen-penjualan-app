@@ -87,6 +87,13 @@ describe('Mode Kasir', () => {
     expect(screen.queryByRole('link', { name: /Peringatan stok/ })).toBeNull();
   });
 
+  it('izin Mode Kasir nyala tetapi lonceng mati: /peringatan tetap diblokir', async () => {
+    renderApp('/peringatan', { isCashierMode: true, alertsInCashierMode: true, alertsBellEnabled: false });
+
+    expect(await screen.findByText('Halaman ini hanya untuk pemilik')).toBeTruthy();
+    expect(screen.queryByRole('link', { name: /Peringatan stok/ })).toBeNull();
+  });
+
   it('bila diaktifkan: lonceng tampil dan halaman terbuka TANPA Daftar perlu restock dan tombol bagikan', async () => {
     renderApp('/peringatan', { isCashierMode: true, alertsInCashierMode: true });
 

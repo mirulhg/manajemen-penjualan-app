@@ -1,7 +1,7 @@
 import { Download, PackagePlus, PackageSearch, Upload } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
-import { useSession } from '../../features/session';
+import { canCashierSeeAlerts, useSession } from '../../features/session';
 import { CommandGroup, CommandItem } from '@/components/ui/command';
 import { getVisiblePages, matchesQuery } from './palette-pages';
 import { PaletteHelpGroup } from './PaletteHelpGroup';
@@ -18,8 +18,9 @@ type PaletteRootItemsProps = {
 type PaletteAction = { label: string; icon: LucideIcon; keywords: string; run: () => void };
 
 export function PaletteRootItems({ query, onNavigate, onStartRestock, onOpenHelp, onDownloadLastMonthSales }: PaletteRootItemsProps) {
-  const { isCashierMode, alertsBellEnabled, alertsInCashierMode } = useSession();
-  const access = { isCashierMode, canCashierSeeAlerts: alertsBellEnabled && alertsInCashierMode };
+  const session = useSession();
+  const { isCashierMode } = session;
+  const access = { isCashierMode, canCashierSeeAlerts: canCashierSeeAlerts(session) };
   const pages = getVisiblePages(access).filter((page) =>
     matchesQuery(query, page.label, page.keywords),
   );
