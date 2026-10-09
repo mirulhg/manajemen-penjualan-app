@@ -5,11 +5,10 @@ import { OwnerOnly } from '../../session';
 import { Button } from '@/components/ui/button';
 import { SubpageLayout } from '@/components/layout/SubpageLayout';
 import { getVisibleDestination } from '../help-destination';
-import { HELP_CONTENT } from '../help-content';
 import { findHelpTopic } from '../help-topics';
-import { canSeeTopic, filterSections } from '../help-visibility';
+import { canSeeTopic } from '../help-visibility';
 import { useHelpAccess } from '../use-help-access';
-import { HelpBlocks } from './HelpBlocks';
+import { HelpTopicContent } from './HelpTopicContent';
 
 type HelpTopicPageProps = {
   // Layar 404 milik aplikasi; fitur tidak boleh mengimpor app/.
@@ -26,18 +25,12 @@ export function HelpTopicPage({ notFound }: HelpTopicPageProps) {
   // Topik yang tak boleh dilihat kasir memakai layar yang sama dengan halaman pemilik lain.
   if (!canSeeTopic(topic, access)) return <OwnerOnly>{null}</OwnerOnly>;
 
-  const sections = filterSections(HELP_CONTENT[topic.slug], access.isCashierMode);
   const destination = getVisibleDestination(topic, access.isCashierMode, pathname);
 
   return (
     <SubpageLayout title={topic.title} heading={topic.title} back={{ to: '/bantuan', label: 'Semua topik' }}>
       <div className="max-w-prose space-y-6">
-        {sections.map((section) => (
-          <section key={section.heading} className="space-y-3">
-            <h2 className="text-lg font-semibold">{section.heading}</h2>
-            <HelpBlocks blocks={section.blocks} />
-          </section>
-        ))}
+        <HelpTopicContent slug={topic.slug} headingLevel="h2" />
         {destination && (
           <Button asChild size="lg">
             <Link to={destination.to}>{destination.label}</Link>

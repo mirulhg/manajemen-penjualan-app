@@ -31,6 +31,13 @@ describe('indeks Bantuan', () => {
     expect(screen.getByRole('link', { name: /Mencatat penjualan di Kasir/ }).getAttribute('href')).toBe('/bantuan/kasir');
   });
 
+  it('daftar topik satu kelompok dua kolom mulai lg', () => {
+    const { container } = renderHelp('/bantuan');
+    const lists = container.querySelectorAll('section ul');
+    expect(lists.length).toBe(HELP_GROUPS.length);
+    lists.forEach((list) => expect(list.className).toContain('lg:grid-cols-2'));
+  });
+
   it('kasir hanya melihat topik untuk semua, tanpa kelompok yang kosong', () => {
     renderHelp('/bantuan', { isCashierMode: true });
 
@@ -102,5 +109,14 @@ describe('halaman topik', () => {
   it('topik tanpa tujuan tidak punya tombol tujuan', () => {
     renderHelp('/bantuan/istilah');
     expect(screen.queryByRole('link', { name: /^Buka / })).toBeNull();
+  });
+
+  it('bagian "Perlu diketahui" tampil dalam kotak lembut, bagian lain tidak', () => {
+    renderHelp('/bantuan/kasir');
+
+    const notes = screen.getByRole('heading', { level: 2, name: 'Perlu diketahui' }).closest('section');
+    const steps = screen.getByRole('heading', { level: 2, name: 'Langkah' }).closest('section');
+    expect(notes?.className).toContain('bg-secondary');
+    expect(steps?.className).not.toContain('bg-secondary');
   });
 });

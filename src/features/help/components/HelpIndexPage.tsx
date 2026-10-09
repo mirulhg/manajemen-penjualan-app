@@ -23,7 +23,7 @@ export function HelpIndexPage() {
             <h2 id={`help-group-${group.id}`} className="text-lg font-semibold">
               {group.title}
             </h2>
-            <ul className="space-y-2">
+            <ul className="grid gap-2 lg:grid-cols-2">
               {groupTopics.map((topic) => (
                 <li key={topic.slug}>
                   <Link
