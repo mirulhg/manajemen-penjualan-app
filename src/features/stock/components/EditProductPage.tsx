@@ -30,7 +30,7 @@ export function EditProductPage() {
 
   if (product.isPending || products.isPending || categories.isPending) {
     return (
-      <SubpageLayout title={HEADING} heading={HEADING} backTo={backTo} backLabel={backLabel}>
+      <SubpageLayout title={HEADING} heading={HEADING} back={{ to: backTo, label: backLabel }}>
         <NewProductSkeleton />
       </SubpageLayout>
     );
@@ -39,7 +39,7 @@ export function EditProductPage() {
   if (product.isError || products.isError || categories.isError) {
     const error = product.error ?? products.error ?? categories.error;
     return (
-      <SubpageLayout title={HEADING} heading={HEADING} backTo={backTo} backLabel={backLabel}>
+      <SubpageLayout title={HEADING} heading={HEADING} back={{ to: backTo, label: backLabel }}>
         {error && <StockListError error={error} onRetry={handleRetry} />}
       </SubpageLayout>
     );
@@ -47,14 +47,14 @@ export function EditProductPage() {
 
   if (!product.data) {
     return (
-      <SubpageLayout title="Barang tidak ditemukan" heading={HEADING} backTo="/stok" backLabel="Kembali ke daftar stok">
+      <SubpageLayout title="Barang tidak ditemukan" heading={HEADING} back={{ to: '/stok', label: 'Kembali ke daftar stok' }}>
         <ProductNotFound />
       </SubpageLayout>
     );
   }
 
   return (
-    <SubpageLayout title={`Ubah ${product.data.name}`} heading={HEADING} backTo={backTo} backLabel={backLabel}>
+    <SubpageLayout title={`Ubah ${product.data.name}`} heading={HEADING} back={{ to: backTo, label: backLabel }}>
       <Card>
         <CardContent>
           <EditProductForm

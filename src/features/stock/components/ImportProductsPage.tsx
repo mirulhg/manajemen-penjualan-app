@@ -68,7 +68,7 @@ export function ImportProductsPage() {
   }
 
   return (
-    <SubpageLayout title={HEADING} heading={HEADING} backTo="/stok" backLabel="Kembali ke daftar stok">
+    <SubpageLayout title={HEADING} heading={HEADING} back={{ to: '/stok', label: 'Kembali ke daftar stok' }}>
       {renderContent()}
     </SubpageLayout>
   );

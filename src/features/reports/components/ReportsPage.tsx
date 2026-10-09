@@ -19,7 +19,7 @@ const REPORTS: ReportLink[] = [
 
 export function ReportsPage() {
   return (
-    <SubpageLayout title="Laporan" heading="Laporan" backTo="/dasbor" backLabel="Kembali ke dasbor">
+    <SubpageLayout title="Laporan" heading="Laporan" back={{ to: '/dasbor', label: 'Kembali ke dasbor' }}>
       <BentoGrid className="gap-3 md:grid-cols-2 lg:grid-cols-4 lg:gap-4">
         {REPORTS.map((report) => (
           <Link

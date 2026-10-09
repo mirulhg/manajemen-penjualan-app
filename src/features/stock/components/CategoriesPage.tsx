@@ -27,7 +27,7 @@ function CategoriesContent() {
 
 export function CategoriesPage() {
   return (
-    <SubpageLayout title="Kategori" heading="Kategori" backTo="/stok" backLabel="Kembali ke daftar stok">
+    <SubpageLayout title="Kategori" heading="Kategori" back={{ to: '/stok', label: 'Kembali ke daftar stok' }}>
       <div className="space-y-6">
         <Card>
           <CardContent>

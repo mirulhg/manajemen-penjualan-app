@@ -28,7 +28,7 @@ export function SaleDetailPage() {
 
   if (isPending) {
     return (
-      <SubpageLayout title="Detail transaksi" heading={HEADING} backTo={backTo} backLabel={BACK_LABEL}>
+      <SubpageLayout title="Detail transaksi" heading={HEADING} back={{ to: backTo, label: BACK_LABEL }}>
         <SaleDetailSkeleton />
       </SubpageLayout>
     );
@@ -36,7 +36,7 @@ export function SaleDetailPage() {
 
   if (error) {
     return (
-      <SubpageLayout title="Detail transaksi" heading={HEADING} backTo={backTo} backLabel={BACK_LABEL}>
+      <SubpageLayout title="Detail transaksi" heading={HEADING} back={{ to: backTo, label: BACK_LABEL }}>
         <StockListError error={error} onRetry={handleRetry} />
       </SubpageLayout>
     );
@@ -44,14 +44,14 @@ export function SaleDetailPage() {
 
   if (!detail) {
     return (
-      <SubpageLayout title="Transaksi tidak ditemukan" heading={HEADING} backTo={backTo} backLabel={BACK_LABEL}>
+      <SubpageLayout title="Transaksi tidak ditemukan" heading={HEADING} back={{ to: backTo, label: BACK_LABEL }}>
         <SaleNotFound />
       </SubpageLayout>
     );
   }
 
   return (
-    <SubpageLayout title={detail.sale.number} heading={HEADING} backTo={backTo} backLabel={BACK_LABEL}>
+    <SubpageLayout title={detail.sale.number} heading={HEADING} back={{ to: backTo, label: BACK_LABEL }}>
       <SaleDetailInfo sale={detail.sale} />
       <SaleDetailItems progress={detail.progress} />
       <SaleReturnsList returns={detail.returns} progress={detail.progress} />

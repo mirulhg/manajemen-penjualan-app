@@ -3,7 +3,7 @@ import { ProductAnalysisContent } from './ProductAnalysisContent';
 
 export function ProductAnalysisPage() {
   return (
-    <SubpageLayout title="Analisis Produk" heading="Analisis Produk" backTo="/dasbor" backLabel="Kembali ke dasbor">
+    <SubpageLayout title="Analisis Produk" heading="Analisis Produk" back={{ to: '/dasbor', label: 'Kembali ke dasbor' }}>
       <ProductAnalysisContent />
     </SubpageLayout>
   );
