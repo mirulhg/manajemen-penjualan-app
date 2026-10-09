@@ -37,6 +37,14 @@ describe('isi panduan', () => {
     HELP_TOPICS.forEach((topic) => expect(groups).toContain(topic.group));
   });
 
+  it('teks Lupa PIN dan nilai stok minus mengikuti perilaku terbaru', () => {
+    const modeKasir = collectText(HELP_CONTENT['mode-kasir']);
+    expect(modeKasir).toContain('ketuk "Lupa PIN?", isi kode pemulihan dan PIN baru, lalu tekan "Simpan PIN baru"');
+    expect(modeKasir).not.toContain('masuk Mode Kasir dulu');
+    expect(collectText(HELP_CONTENT.istilah)).toContain('Stok minus dihitung 0.');
+    expect(collectText(HELP_CONTENT['masalah-umum'])).toContain('di Pengaturan → "PIN pemilik" → "Lupa PIN?"');
+  });
+
   it('tidak menampilkan penanda khusus pemilik atau kasir sebagai teks', () => {
     HELP_TOPICS.forEach((topic) => {
       const text = collectText(HELP_CONTENT[topic.slug]);

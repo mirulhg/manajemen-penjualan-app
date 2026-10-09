@@ -32,7 +32,7 @@ export const ISTILAH_CONTENT = {
             { ownerOnly: true, cells: ['**Margin**', 'Laba kotor ÷ omzet, dalam persen.', '6.000 ÷ 74.000 = 8,1%'] },
             {
               ownerOnly: true,
-              cells: ['**Nilai stok / nilai persediaan**', 'Stok × harga beli, yaitu modal yang tertahan di barang.', '22 sak × Rp68.000 = Rp1.496.000'],
+              cells: ['**Nilai stok / nilai persediaan**', 'Stok × harga beli, yaitu modal yang tertahan di barang. Stok minus dihitung 0.', '22 sak × Rp68.000 = Rp1.496.000'],
             },
             { ownerOnly: true, cells: ['**Rata-rata transaksi**', 'Omzet ÷ jumlah transaksi, yaitu rata-rata belanja per pembeli.', '—'] },
             { ownerOnly: true, cells: ['**Stock opname**', 'Menghitung stok fisik lalu menyamakannya di aplikasi lewat "Koreksi".', '—'] },
@@ -98,7 +98,12 @@ export const ISTILAH_CONTENT = {
             },
             {
               question: 'Lupa PIN.',
-              answer: [{ type: 'paragraph', text: 'Pakai kode pemulihan. Lihat topik Mode Kasir & PIN → "Lupa PIN".' }],
+              answer: [
+                {
+                  type: 'paragraph',
+                  text: 'Pakai kode pemulihan: di Pengaturan → "PIN pemilik" → "Lupa PIN?", atau di layar Keluar Mode Kasir → "Pakai kode pemulihan". Lihat topik Mode Kasir & PIN → "Lupa PIN".',
+                },
+              ],
             },
             {
               ownerOnly: true,

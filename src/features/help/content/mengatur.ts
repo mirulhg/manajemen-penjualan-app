@@ -101,7 +101,7 @@ export const MENGATUR_CONTENT = {
         },
         {
           type: 'paragraph',
-          text: 'Kalau Anda lupa PIN saat **tidak** sedang di Mode Kasir: masuk Mode Kasir dulu (tidak butuh PIN), lalu ikuti langkah di atas.',
+          text: 'Kalau Anda lupa PIN saat **tidak** sedang di Mode Kasir: buka **Pengaturan** → "PIN pemilik", ketuk "Lupa PIN?", isi kode pemulihan dan PIN baru, lalu tekan "Simpan PIN baru". Catat kode pemulihan baru yang muncul.',
         },
       ],
     },
