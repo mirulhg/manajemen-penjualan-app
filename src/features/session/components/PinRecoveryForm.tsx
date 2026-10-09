@@ -1,10 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import type { z } from 'zod';
 
 import { SessionError } from '../api/session-error';
-import { useExitCashierMode, useResetPin } from '../api/use-session-mutations';
+import { useResetPin } from '../api/use-session-mutations';
 import { describeSessionError } from '../describe-session-error';
 import { recoverySchema } from '../schema';
 import type { RecoveryInput } from '../schema';
@@ -12,28 +13,27 @@ import { RecoveryFormFields } from './RecoveryFormFields';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 
-type ExitWithRecoveryFormProps = {
+type PinRecoveryFormProps = {
   onRecovered: (newRecoveryCode: string) => void;
+  onCancel: () => void;
 };
 
-export function ExitWithRecoveryForm({ onRecovered }: ExitWithRecoveryFormProps) {
+// "Lupa PIN?" di Pengaturan: memulihkan PIN dengan kode pemulihan tanpa keluar dari mode yang sedang aktif.
+export function PinRecoveryForm({ onRecovered, onCancel }: PinRecoveryFormProps) {
   const { register, handleSubmit, setError, getValues, formState } = useForm<
     RecoveryInput,
     unknown,
     z.output<typeof recoverySchema>
   >({ resolver: zodResolver(recoverySchema), defaultValues: { code: '', newPin: '', confirmPin: '' } });
   const reset = useResetPin();
-  const exit = useExitCashierMode();
-  const isSaving = formState.isSubmitting || reset.isPending || exit.isPending;
-  const failure = reset.error ?? exit.error;
-  const hasUnexpectedError = failure !== null && !(failure instanceof SessionError);
+  const isSaving = formState.isSubmitting || reset.isPending;
+  const hasUnexpectedError = reset.isError && !(reset.error instanceof SessionError);
 
-  // Kode baru diteruskan sebelum keluar mode: begitu mode berubah, halaman ini sudah berpindah.
   async function onSubmit() {
     const { code, newPin } = getValues();
     try {
       onRecovered(await reset.mutateAsync({ code, newPin }));
-      await exit.mutateAsync(newPin);
+      toast.success('PIN diganti');
     } catch (error) {
       const message = describeSessionError(error);
       if (message) setError(error instanceof SessionError && error.code === 'INVALID_PIN_FORMAT' ? 'newPin' : 'code', { message });
@@ -52,9 +52,14 @@ export function ExitWithRecoveryForm({ onRecovered }: ExitWithRecoveryFormProps)
           Penyimpanan di perangkat ini gagal. Coba lagi.
         </Alert>
       )}
-      <Button size="lg" type="submit" disabled={isSaving}>
-        {isSaving ? 'Memeriksa…' : 'Pulihkan dan keluar'}
-      </Button>
+      <div className="flex flex-wrap gap-2">
+        <Button size="lg" type="submit" disabled={isSaving}>
+          {isSaving ? 'Memeriksa…' : 'Simpan PIN baru'}
+        </Button>
+        <Button size="lg" variant="outline" type="button" disabled={isSaving} onClick={onCancel}>
+          Batal
+        </Button>
+      </div>
     </form>
   );
 }
