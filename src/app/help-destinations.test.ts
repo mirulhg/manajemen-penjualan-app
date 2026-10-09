@@ -8,20 +8,20 @@ import { routes } from './router';
 
 const TOPICS: readonly HelpTopicMeta[] = HELP_TOPICS;
 
-function getDestinations({ openPage }: HelpTopicMeta): string[] {
+function getDestinations({ openPage }: HelpTopicMeta) {
   if (!openPage) return [];
-  return typeof openPage === 'string' ? [openPage] : [openPage.owner, openPage.cashier];
+  return 'owner' in openPage ? [openPage.owner, openPage.cashier] : [openPage];
 }
 
-describe('tujuan "Buka halaman ini"', () => {
-  const destinations = TOPICS.flatMap((topic) => getDestinations(topic).map((path) => ({ slug: topic.slug, path })));
+describe('tujuan di kaki panduan', () => {
+  const destinations = TOPICS.flatMap((topic) => getDestinations(topic).map((destination) => ({ slug: topic.slug, ...destination })));
 
   it('setiap topik yang punya tujuan menunjuk rute sungguhan, bukan rute 404', () => {
     expect(destinations.length).toBeGreaterThan(0);
-    destinations.forEach(({ slug, path }) => {
-      const matches = matchRoutes(routes, path);
-      expect(matches, `${slug} → ${path}`).not.toBeNull();
-      expect(matches?.at(-1)?.route.path, `${slug} → ${path}`).not.toBe('*');
+    destinations.forEach(({ slug, to }) => {
+      const matches = matchRoutes(routes, to);
+      expect(matches, `${slug} → ${to}`).not.toBeNull();
+      expect(matches?.at(-1)?.route.path, `${slug} → ${to}`).not.toBe('*');
     });
   });
 

@@ -58,7 +58,7 @@ describe('halaman topik', () => {
     expect(screen.getByText(/Rp186\.000/)).toBeTruthy();
     expect(screen.getByText('Keranjang tidak disimpan.').tagName).toBe('STRONG');
     expect(container.textContent).not.toContain('**');
-    expect(screen.getByRole('link', { name: 'Buka halaman ini' }).getAttribute('href')).toBe('/kasir');
+    expect(screen.getByRole('link', { name: 'Buka Kasir' }).getAttribute('href')).toBe('/kasir');
   });
 
   it('pemilik melihat butir ringkasan stok, kasir melihat butir Mode Kasir', () => {
@@ -85,13 +85,13 @@ describe('halaman topik', () => {
     expect(screen.getByRole('heading', { name: 'Halaman ini hanya untuk pemilik' })).toBeTruthy();
   });
 
-  it('tombol "Buka halaman ini" Mode Kasir & PIN mengikuti mode', () => {
+  it('tombol tujuan Mode Kasir & PIN mengikuti mode', () => {
     const owner = renderHelp('/bantuan/mode-kasir');
-    expect(screen.getByRole('link', { name: 'Buka halaman ini' }).getAttribute('href')).toBe('/pengaturan');
+    expect(screen.getByRole('link', { name: 'Buka Pengaturan' }).getAttribute('href')).toBe('/pengaturan');
     owner.unmount();
 
     renderHelp('/bantuan/mode-kasir', { isCashierMode: true });
-    expect(screen.getByRole('link', { name: 'Buka halaman ini' }).getAttribute('href')).toBe('/keluar-mode-kasir');
+    expect(screen.getByRole('link', { name: 'Keluar Mode Kasir' }).getAttribute('href')).toBe('/keluar-mode-kasir');
   });
 
   it('slug yang tidak dikenal menampilkan elemen 404 dari app', () => {
@@ -99,8 +99,8 @@ describe('halaman topik', () => {
     expect(screen.getByText('tidak ada')).toBeTruthy();
   });
 
-  it('topik tanpa tujuan tidak punya tombol "Buka halaman ini"', () => {
+  it('topik tanpa tujuan tidak punya tombol tujuan', () => {
     renderHelp('/bantuan/istilah');
-    expect(screen.queryByRole('link', { name: 'Buka halaman ini' })).toBeNull();
+    expect(screen.queryByRole('link', { name: /^Buka / })).toBeNull();
   });
 });

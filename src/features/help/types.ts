@@ -20,6 +20,9 @@ export type HelpSection = HelpFlags & { heading: string; blocks: readonly HelpBl
 
 export type HelpGroup = 'memulai' | 'harian' | 'hasil' | 'mengatur' | 'istilah';
 
+// label adalah teks tombol lengkap, misalnya "Buka Kasir".
+export type HelpDestination = { to: string; label: string };
+
 export type HelpTopicMeta = {
   slug: string;
   title: string;
@@ -28,6 +31,6 @@ export type HelpTopicMeta = {
   // Kata yang biasa dicari pemilik toko, dipakai pencarian ⌘K selain judulnya.
   keywords: string;
   audience: 'owner' | 'all';
-  // Tujuan tombol "Buka halaman ini"; objek bila pemilik dan kasir dibawa ke halaman berbeda.
-  openPage?: string | { owner: string; cashier: string };
+  // Tujuan tombol di kaki panduan; pasangan owner/cashier bila pemilik dan kasir dibawa ke halaman berbeda.
+  openPage?: HelpDestination | { owner: HelpDestination; cashier: HelpDestination };
 };

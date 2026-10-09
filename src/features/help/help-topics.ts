@@ -24,7 +24,7 @@ export const HELP_TOPICS = [
     summary: 'Nama, alamat, telepon, dan logo toko dipakai di kepala (kop) laporan.',
     keywords: 'nama toko alamat logo kop telepon',
     audience: 'owner',
-    openPage: '/pengaturan',
+    openPage: { to: '/pengaturan', label: 'Buka Pengaturan' },
   },
   {
     slug: 'tambah-barang',
@@ -33,7 +33,7 @@ export const HELP_TOPICS = [
     summary: 'Mendaftarkan barang yang dijual di toko, lengkap dengan harga dan stok awalnya.',
     keywords: 'barang baru sku produk daftar',
     audience: 'owner',
-    openPage: '/stok/baru',
+    openPage: { to: '/stok/baru', label: 'Buka Tambah barang' },
   },
   {
     slug: 'impor-barang',
@@ -42,7 +42,7 @@ export const HELP_TOPICS = [
     summary: 'Memasukkan banyak barang sekaligus dari file Excel (.xlsx) atau CSV.',
     keywords: 'excel csv file banyak template',
     audience: 'owner',
-    openPage: '/stok/impor',
+    openPage: { to: '/stok/impor', label: 'Buka Impor barang' },
   },
   {
     slug: 'data-contoh',
@@ -51,7 +51,7 @@ export const HELP_TOPICS = [
     summary: 'Mengisi aplikasi dengan 20 barang dan 60 hari transaksi contoh, termasuk retur dan pembatalan.',
     keywords: 'contoh demo coba percobaan',
     audience: 'owner',
-    openPage: '/pengaturan',
+    openPage: { to: '/pengaturan', label: 'Buka Pengaturan' },
   },
   {
     slug: 'kasir',
@@ -60,7 +60,7 @@ export const HELP_TOPICS = [
     summary: 'Mencatat setiap penjualan.',
     keywords: 'jual bayar transaksi keranjang kembalian diskon',
     audience: 'all',
-    openPage: '/kasir',
+    openPage: { to: '/kasir', label: 'Buka Kasir' },
   },
   {
     slug: 'stok',
@@ -69,7 +69,7 @@ export const HELP_TOPICS = [
     summary: 'Melihat semua barang, jumlah stoknya, dan barang mana yang menipis atau habis.',
     keywords: 'daftar barang filter menipis habis cari',
     audience: 'all',
-    openPage: '/stok',
+    openPage: { to: '/stok', label: 'Buka Stok' },
   },
   {
     slug: 'barang-masuk',
@@ -78,7 +78,7 @@ export const HELP_TOPICS = [
     summary: 'Menambah stok saat barang datang dari supplier, atau menyamakan stok dengan hasil hitung fisik (stock opname).',
     keywords: 'restock supplier koreksi opname tambah stok',
     audience: 'owner',
-    openPage: '/stok',
+    openPage: { to: '/stok', label: 'Buka Stok' },
   },
   {
     slug: 'ubah-barang',
@@ -87,7 +87,7 @@ export const HELP_TOPICS = [
     summary: 'Memperbarui nama, SKU, kategori, satuan, batas menipis, harga, atau foto barang.',
     keywords: 'ubah harga arsip nama foto edit',
     audience: 'owner',
-    openPage: '/stok',
+    openPage: { to: '/stok', label: 'Buka Stok' },
   },
   {
     slug: 'riwayat',
@@ -96,7 +96,7 @@ export const HELP_TOPICS = [
     summary: 'Melihat semua transaksi yang sudah tercatat, lalu membuka detailnya untuk retur atau pembatalan.',
     keywords: 'transaksi penjualan periode filter daftar',
     audience: 'owner',
-    openPage: '/penjualan',
+    openPage: { to: '/penjualan', label: 'Buka Riwayat' },
   },
   {
     slug: 'retur-batal',
@@ -105,7 +105,7 @@ export const HELP_TOPICS = [
     summary: 'Mengembalikan sebagian barang (retur) atau membatalkan seluruh transaksi yang salah catat.',
     keywords: 'kembali refund salah batal hapus transaksi retur',
     audience: 'owner',
-    openPage: '/penjualan',
+    openPage: { to: '/penjualan', label: 'Buka Riwayat' },
   },
   {
     slug: 'peringatan',
@@ -114,7 +114,7 @@ export const HELP_TOPICS = [
     summary: 'Memberi tahu barang mana yang menipis atau habis, dan membantu menyusun daftar belanja ke supplier.',
     keywords: 'lonceng menipis habis belanja restock',
     audience: 'all',
-    openPage: '/peringatan',
+    openPage: { to: '/peringatan', label: 'Buka Peringatan stok' },
   },
   {
     slug: 'dasbor',
@@ -123,7 +123,7 @@ export const HELP_TOPICS = [
     summary: 'Melihat kinerja toko secara sekilas, dibandingkan dengan periode sebelumnya.',
     keywords: 'omzet laba ringkasan grafik periode',
     audience: 'owner',
-    openPage: '/dasbor',
+    openPage: { to: '/dasbor', label: 'Buka Dasbor' },
   },
   {
     slug: 'analisis-produk',
@@ -132,7 +132,7 @@ export const HELP_TOPICS = [
     summary: 'Mengetahui barang mana yang paling laku, mana yang lambat laku, kapan stok akan habis, dan barang mana yang paling menguntungkan.',
     keywords: 'terlaris lambat laku perkiraan habis untung',
     audience: 'owner',
-    openPage: '/dasbor/produk',
+    openPage: { to: '/dasbor/produk', label: 'Buka Analisis produk' },
   },
   {
     slug: 'laporan',
@@ -141,7 +141,7 @@ export const HELP_TOPICS = [
     summary: 'Membuat laporan resmi untuk pembukuan atau untuk diserahkan ke pihak lain, lengkap dengan kop toko.',
     keywords: 'cetak pdf unduh excel csv hpp pajak',
     audience: 'owner',
-    openPage: '/laporan',
+    openPage: { to: '/laporan', label: 'Buka Laporan' },
   },
   {
     slug: 'kategori',
@@ -150,7 +150,7 @@ export const HELP_TOPICS = [
     summary: 'Mengelompokkan barang, misalnya Sembako atau Minuman, untuk penyaringan di Stok dan untuk laporan per kategori.',
     keywords: 'kelompok ganti nama hapus barang',
     audience: 'owner',
-    openPage: '/kategori',
+    openPage: { to: '/kategori', label: 'Buka Kategori' },
   },
   {
     slug: 'pengaturan',
@@ -159,7 +159,7 @@ export const HELP_TOPICS = [
     summary: 'Aturan penjualan, profil toko, peringatan stok, PIN, dan Mode Kasir dalam satu halaman.',
     keywords: 'setelan jual melebihi stok batas default versi',
     audience: 'owner',
-    openPage: '/pengaturan',
+    openPage: { to: '/pengaturan', label: 'Buka Pengaturan' },
   },
   {
     slug: 'mode-kasir',
@@ -168,7 +168,10 @@ export const HELP_TOPICS = [
     summary: 'Supaya karyawan bisa memakai Kasir dan melihat stok tanpa bisa melihat harga beli, laba, laporan, atau mengubah pengaturan.',
     keywords: 'pin kasir karyawan lupa kode pemulihan',
     audience: 'all',
-    openPage: { owner: '/pengaturan', cashier: '/keluar-mode-kasir' },
+    openPage: {
+      owner: { to: '/pengaturan', label: 'Buka Pengaturan' },
+      cashier: { to: '/keluar-mode-kasir', label: 'Keluar Mode Kasir' },
+    },
   },
   {
     slug: 'istilah',

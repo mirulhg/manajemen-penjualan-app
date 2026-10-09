@@ -1,21 +1,15 @@
 import type { ReactNode } from 'react';
-import { Link, useParams } from 'react-router';
+import { Link, useLocation, useParams } from 'react-router';
 
 import { OwnerOnly } from '../../session';
 import { Button } from '@/components/ui/button';
 import { SubpageLayout } from '@/components/layout/SubpageLayout';
+import { getVisibleDestination } from '../help-destination';
 import { HELP_CONTENT } from '../help-content';
 import { findHelpTopic } from '../help-topics';
 import { canSeeTopic, filterSections } from '../help-visibility';
-import type { HelpTopicMeta } from '../types';
 import { useHelpAccess } from '../use-help-access';
 import { HelpBlocks } from './HelpBlocks';
-
-function getOpenPage(topic: HelpTopicMeta, isCashierMode: boolean): string | null {
-  if (!topic.openPage) return null;
-  if (typeof topic.openPage === 'string') return topic.openPage;
-  return isCashierMode ? topic.openPage.cashier : topic.openPage.owner;
-}
 
 type HelpTopicPageProps = {
   // Layar 404 milik aplikasi; fitur tidak boleh mengimpor app/.
@@ -25,6 +19,7 @@ type HelpTopicPageProps = {
 export function HelpTopicPage({ notFound }: HelpTopicPageProps) {
   const { slug = '' } = useParams();
   const access = useHelpAccess();
+  const pathname = useLocation().pathname;
   const topic = findHelpTopic(slug);
 
   if (!topic) return notFound;
@@ -32,7 +27,7 @@ export function HelpTopicPage({ notFound }: HelpTopicPageProps) {
   if (!canSeeTopic(topic, access)) return <OwnerOnly>{null}</OwnerOnly>;
 
   const sections = filterSections(HELP_CONTENT[topic.slug], access.isCashierMode);
-  const openPage = getOpenPage(topic, access.isCashierMode);
+  const destination = getVisibleDestination(topic, access.isCashierMode, pathname);
 
   return (
     <SubpageLayout title={topic.title} heading={topic.title} back={{ to: '/bantuan', label: 'Semua topik' }}>
@@ -43,9 +38,9 @@ export function HelpTopicPage({ notFound }: HelpTopicPageProps) {
             <HelpBlocks blocks={section.blocks} />
           </section>
         ))}
-        {openPage && (
-          <Button asChild variant="outline">
-            <Link to={openPage}>Buka halaman ini</Link>
+        {destination && (
+          <Button asChild size="lg">
+            <Link to={destination.to}>{destination.label}</Link>
           </Button>
         )}
       </div>
