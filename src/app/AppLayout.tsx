@@ -11,6 +11,7 @@ import { PageShell } from '../components/layout/PageShell';
 import { TabBar } from '../components/layout/TabBar';
 import { useUnreadAlertCount } from '../features/alerts';
 import { DemoBanner } from '../features/demo-data';
+import { HelpSheetHost } from '../features/help';
 import { useSession } from '../features/session';
 import { useStoreProfile } from '../features/store-profile';
 import { CommandPaletteTrigger } from './command-palette/CommandPaletteTrigger';
@@ -67,6 +68,7 @@ export function AppLayout() {
           <Outlet />
         </PageEnter>
       </PageShell>
+      <HelpSheetHost />
     <Toaster offset={{ bottom: 'var(--toast-offset)' }} mobileOffset={{ bottom: 'var(--toast-offset)' }} />
     </>
   );
