@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { db } from '../../../lib/db/database';
-import { renderWithProviders } from '../../../test/render';
+import { createTestQueryClient, renderWithProviders } from '../../../test/render';
 import { resetDatabaseWithSeed } from '../../../test/reset-database';
 import { NewProductForm } from './NewProductForm';
 
@@ -34,5 +34,14 @@ describe('NewProductForm', () => {
     expect(screen.getByLabelText<HTMLInputElement>('Nama barang').value).toBe('Beras Murah 5 kg');
     expect(screen.getByLabelText<HTMLInputElement>('Harga beli (Rp)').value).toBe('60.000');
     expect(await db.products.count()).toBe(30);
+  });
+
+  it('petunjuk batas menipis menyebut batas default dari pengaturan', () => {
+    const first = renderWithProviders(<NewProductForm categories={[]} units={[]} />);
+    expect(screen.getByText('Kosongkan untuk memakai batas default 5.')).toBeTruthy();
+    first.unmount();
+
+    renderWithProviders(<NewProductForm categories={[]} units={[]} />, createTestQueryClient(), '/', { defaultMinStock: 7 });
+    expect(screen.getByText('Kosongkan untuk memakai batas default 7.')).toBeTruthy();
   });
 });

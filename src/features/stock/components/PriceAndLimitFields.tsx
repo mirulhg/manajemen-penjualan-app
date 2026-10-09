@@ -1,6 +1,7 @@
 import type { FieldErrors, UseFormRegister } from 'react-hook-form';
 
 import { FormField } from '../../../components/ui/FormField';
+import { useSession } from '../../session';
 import type { ProductFieldsInput } from '../schema';
 import { Input } from '@/components/ui/input';
 
@@ -10,12 +11,14 @@ type PriceAndLimitFieldsProps = {
 };
 
 export function PriceAndLimitFields({ register, errors }: PriceAndLimitFieldsProps) {
+  const { defaultMinStock } = useSession();
+
   return (
     <>
       <FormField
         id="product-min-stock"
         label="Batas stok menipis (opsional)"
-        hint="Kosongkan untuk memakai batas default 5."
+        hint={`Kosongkan untuk memakai batas default ${defaultMinStock}.`}
         error={errors.minStock?.message}
       >
         {(control) => (
