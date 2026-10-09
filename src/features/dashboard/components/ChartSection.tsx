@@ -2,11 +2,15 @@ import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/Skeleton';
 
+const DEFAULT_EMPTY_TEXT = 'Belum ada penjualan di periode ini.';
+
 type ChartStatus = {
   isPending: boolean;
   error: Error | null;
   isEmpty: boolean;
   onRetry: () => void;
+  // Teks keadaan kosong bila bagian ini tidak mengikuti periode yang dipilih.
+  emptyText?: string;
 };
 
 type ChartSectionProps = {
@@ -43,7 +47,7 @@ export function ChartSection({ title, action, status, children }: ChartSectionPr
 type ChartSectionBodyProps = Pick<ChartSectionProps, 'status' | 'children'>;
 
 function ChartSectionBody({ status, children }: ChartSectionBodyProps) {
-  const { isPending, error, isEmpty, onRetry } = status;
+  const { isPending, error, isEmpty, onRetry, emptyText = DEFAULT_EMPTY_TEXT } = status;
 
   if (isPending) return <ChartSkeleton />;
   if (error) {
@@ -59,7 +63,7 @@ function ChartSectionBody({ status, children }: ChartSectionBodyProps) {
       </div>
     );
   }
-  if (isEmpty) return <p className="text-muted-foreground">Belum ada penjualan di periode ini.</p>;
+  if (isEmpty) return <p className="text-muted-foreground">{emptyText}</p>;
   return children;
 }
 

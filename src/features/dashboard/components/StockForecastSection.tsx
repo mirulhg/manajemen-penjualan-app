@@ -17,7 +17,13 @@ export function StockForecastSection() {
   return (
     <ChartSection
       title="Perkiraan stok habis"
-      status={{ isPending, error, isEmpty: !data || data.length === 0, onRetry: handleRetry }}
+      status={{
+        isPending,
+        error,
+        isEmpty: !data || data.length === 0,
+        onRetry: handleRetry,
+        emptyText: `Belum ada penjualan dalam ${FORECAST_DAYS} hari terakhir.`,
+      }}
     >
       <div className="space-y-3">
         <p className="text-muted-foreground">
