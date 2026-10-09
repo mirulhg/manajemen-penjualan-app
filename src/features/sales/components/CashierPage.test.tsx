@@ -122,4 +122,12 @@ describe('CashierPage', () => {
 
     expect(await screen.findByText('Tidak ada barang yang cocok.')).toBeTruthy();
   });
+
+  it('menampilkan tombol bantuan tepat di sebelah judul', async () => {
+    renderWithProviders(<CashierPage />);
+
+    const heading = screen.getByRole('heading', { level: 1, name: 'Kasir' });
+    const help = await screen.findByRole('link', { name: 'Bantuan: Mencatat penjualan di Kasir' });
+    expect(heading.parentElement?.contains(help)).toBe(true);
+  });
 });

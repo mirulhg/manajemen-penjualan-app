@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import { Tags } from 'lucide-react';
 
 import { EmptyState } from '../../../components/ui/EmptyState';
@@ -27,7 +28,7 @@ function CategoriesContent() {
 
 export function CategoriesPage() {
   return (
-    <SubpageLayout title="Kategori" heading="Kategori" back={{ to: '/stok', label: 'Kembali ke daftar stok' }}>
+    <SubpageLayout title="Kategori" heading="Kategori" action={<HelpLink topic="kategori" />} back={{ to: '/stok', label: 'Kembali ke daftar stok' }}>
       <div className="space-y-6">
         <Card>
           <CardContent>

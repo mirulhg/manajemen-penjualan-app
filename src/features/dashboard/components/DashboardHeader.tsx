@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import { useMediaQuery } from '../../../hooks/use-media-query';
 import { PeriodSegmented } from '../../../components/ui/PeriodSegmented';
 import { formatLocalDate } from '../../../utils/format-date-time';
@@ -16,7 +17,10 @@ export function DashboardHeader() {
   return (
     <div className="mb-4 flex flex-col gap-4 lg:mb-6 lg:flex-row lg:items-end lg:justify-between">
       <div>
-        <h1 className="text-xl font-semibold">Dasbor</h1>
+        <div className="flex items-center gap-1">
+          <h1 className="text-xl font-semibold">Dasbor</h1>
+          <HelpLink topic="dasbor" />
+        </div>
         <p className="hidden text-sm text-muted-foreground lg:block">
           {formatLocalDate(toLocalDateText(new Date()))} · {describePeriodComparison(selection.period)}
         </p>

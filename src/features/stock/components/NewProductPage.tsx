@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import { useLocation } from 'react-router';
 
 import { useCategoryNames } from '../api/use-categories';
@@ -24,7 +25,7 @@ export function NewProductPage() {
 
   if (products.isPending || categories.isPending) {
     return (
-      <SubpageLayout title="Tambah Barang" heading="Tambah Barang" back={{ to: backTo, label: 'Kembali ke daftar stok' }}>
+      <SubpageLayout title="Tambah Barang" heading="Tambah Barang" action={<HelpLink topic="tambah-barang" />} back={{ to: backTo, label: 'Kembali ke daftar stok' }}>
         <NewProductSkeleton />
       </SubpageLayout>
     );
@@ -33,14 +34,14 @@ export function NewProductPage() {
   if (products.isError || categories.isError) {
     const error = products.error ?? categories.error;
     return (
-      <SubpageLayout title="Tambah Barang" heading="Tambah Barang" back={{ to: backTo, label: 'Kembali ke daftar stok' }}>
+      <SubpageLayout title="Tambah Barang" heading="Tambah Barang" action={<HelpLink topic="tambah-barang" />} back={{ to: backTo, label: 'Kembali ke daftar stok' }}>
         {error && <StockListError error={error} onRetry={handleRetry} />}
       </SubpageLayout>
     );
   }
 
   return (
-    <SubpageLayout title="Tambah Barang" heading="Tambah Barang" back={{ to: backTo, label: 'Kembali ke daftar stok' }}>
+    <SubpageLayout title="Tambah Barang" heading="Tambah Barang" action={<HelpLink topic="tambah-barang" />} back={{ to: backTo, label: 'Kembali ke daftar stok' }}>
       <Card>
         <CardContent>
           <NewProductForm categories={categories.data} units={getUnits(products.data)} />

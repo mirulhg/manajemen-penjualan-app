@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import { useState } from 'react';
 
 import { SubpageLayout } from '../../../components/layout/SubpageLayout';
@@ -68,7 +69,7 @@ export function ImportProductsPage() {
   }
 
   return (
-    <SubpageLayout title={HEADING} heading={HEADING} back={{ to: '/stok', label: 'Kembali ke daftar stok' }}>
+    <SubpageLayout title={HEADING} heading={HEADING} action={<HelpLink topic="impor-barang" />} back={{ to: '/stok', label: 'Kembali ke daftar stok' }}>
       {renderContent()}
     </SubpageLayout>
   );

@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import type { ReactNode } from 'react';
 import { BackButton } from '../../../components/layout/BackButton';
 import { StoreLetterhead } from './StoreLetterhead';
@@ -21,7 +22,10 @@ export function ReportShell({ title, filters, actions, children }: ReportShellPr
       </div>
       <article className="space-y-6">
         <StoreLetterhead />
-        <h1 className="text-xl font-semibold">{title}</h1>
+        <div className="flex items-center gap-1">
+          <h1 className="text-xl font-semibold">{title}</h1>
+          <HelpLink topic="laporan" />
+        </div>
         {children}
       </article>
     </section>

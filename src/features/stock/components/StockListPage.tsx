@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import { Tags, Upload } from 'lucide-react';
 import { Link } from 'react-router';
 
@@ -13,7 +14,10 @@ export function StockListPage() {
     <section>
       <title>Stok Barang · Manajemen Stok</title>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-xl font-semibold">Stok Barang</h1>
+        <div className="flex items-center gap-1">
+          <h1 className="text-xl font-semibold">Stok Barang</h1>
+          <HelpLink topic="stok" />
+        </div>
         {!isCashierMode && (
           <div className="flex flex-wrap items-center gap-1">
             <Button asChild variant="ghost">

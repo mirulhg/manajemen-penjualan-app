@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import { ArrowLeftRight, ChevronRight, Package, Receipt, TrendingUp } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Link } from 'react-router';
@@ -19,7 +20,7 @@ const REPORTS: ReportLink[] = [
 
 export function ReportsPage() {
   return (
-    <SubpageLayout title="Laporan" heading="Laporan" back={{ to: '/dasbor', label: 'Kembali ke dasbor' }}>
+    <SubpageLayout title="Laporan" heading="Laporan" action={<HelpLink topic="laporan" />} back={{ to: '/dasbor', label: 'Kembali ke dasbor' }}>
       <BentoGrid className="gap-3 md:grid-cols-2 lg:grid-cols-4 lg:gap-4">
         {REPORTS.map((report) => (
           <Link

@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router';
 
@@ -36,7 +37,10 @@ export function ExitCashierModePage() {
   return (
     <section className="space-y-4">
       <title>Keluar Mode Kasir · Manajemen Stok</title>
-      <h1 className="text-xl font-semibold">Keluar Mode Kasir</h1>
+      <div className="flex items-center gap-1">
+        <h1 className="text-xl font-semibold">Keluar Mode Kasir</h1>
+        <HelpLink topic="mode-kasir" />
+      </div>
       <Card>
         <CardContent>
           {isUsingRecovery ? <ExitWithRecoveryForm onRecovered={setNewRecoveryCode} /> : <ExitWithPinForm />}

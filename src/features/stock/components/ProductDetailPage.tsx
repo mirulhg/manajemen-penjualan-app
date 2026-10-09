@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import { useLocation, useParams } from 'react-router';
 
 import { useSession } from '../../session';
@@ -27,7 +28,7 @@ export function ProductDetailPage() {
 
   if (isPending) {
     return (
-      <SubpageLayout title="Detail barang" heading="Detail Barang" back={{ to: listPath, label: 'Kembali ke daftar stok' }}>
+      <SubpageLayout title="Detail barang" heading="Detail Barang" action={<HelpLink topic="stok" />} back={{ to: listPath, label: 'Kembali ke daftar stok' }}>
         <ProductDetailSkeleton />
       </SubpageLayout>
     );
@@ -35,7 +36,7 @@ export function ProductDetailPage() {
 
   if (error) {
     return (
-      <SubpageLayout title="Detail barang" heading="Detail Barang" back={{ to: listPath, label: 'Kembali ke daftar stok' }}>
+      <SubpageLayout title="Detail barang" heading="Detail Barang" action={<HelpLink topic="stok" />} back={{ to: listPath, label: 'Kembali ke daftar stok' }}>
         <StockListError error={error} onRetry={handleRetry} />
       </SubpageLayout>
     );
@@ -43,14 +44,14 @@ export function ProductDetailPage() {
 
   if (!product) {
     return (
-      <SubpageLayout title="Barang tidak ditemukan" heading="Detail Barang" back={{ to: listPath, label: 'Kembali ke daftar stok' }}>
+      <SubpageLayout title="Barang tidak ditemukan" heading="Detail Barang" action={<HelpLink topic="stok" />} back={{ to: listPath, label: 'Kembali ke daftar stok' }}>
         <ProductNotFound />
       </SubpageLayout>
     );
   }
 
   return (
-    <SubpageLayout title={product.name} heading="Detail Barang" back={{ to: listPath, label: 'Kembali ke daftar stok' }}>
+    <SubpageLayout title={product.name} heading="Detail Barang" action={<HelpLink topic="stok" />} back={{ to: listPath, label: 'Kembali ke daftar stok' }}>
       <ProductPhoto productId={product.id} productName={product.name} />
       <ProductInfo product={product} />
       {!isCashierMode && <ProductOwnerSection product={product} locationState={locationState} />}

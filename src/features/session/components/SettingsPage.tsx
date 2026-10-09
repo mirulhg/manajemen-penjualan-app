@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import { ChevronRight, Tags } from 'lucide-react';
 import { Link } from 'react-router';
 
@@ -13,7 +14,10 @@ export function SettingsPage() {
   return (
     <section className="space-y-4">
       <title>Pengaturan · Manajemen Stok</title>
-      <h1 className="text-xl font-semibold">Pengaturan</h1>
+      <div className="flex items-center gap-1">
+        <h1 className="text-xl font-semibold">Pengaturan</h1>
+        <HelpLink topic="pengaturan" />
+      </div>
       <OversellSetting />
       <StoreProfileSection />
       <AlertSettingsSection />

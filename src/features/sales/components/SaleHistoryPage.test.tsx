@@ -35,7 +35,10 @@ describe('SaleHistoryPage', () => {
     renderWithProviders(<SaleHistoryPage />, undefined, '/penjualan');
 
     expect(await screen.findByText('2 transaksi · Omzet Rp 216.000')).toBeTruthy();
-    const items = screen.getAllByRole('link').map((link) => link.textContent ?? '');
+    const items = screen
+      .getAllByRole('link')
+      .filter((link) => link.getAttribute('href')?.startsWith('/penjualan/'))
+      .map((link) => link.textContent ?? '');
     expect(items[0]).toContain(qris.number);
     expect(items[1]).toContain(cash.number);
   });

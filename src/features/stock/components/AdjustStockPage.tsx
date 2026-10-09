@@ -1,3 +1,4 @@
+import { HelpLink } from '../../help';
 import { useLocation, useParams } from 'react-router';
 
 import { useProduct } from '../api/use-product';
@@ -22,7 +23,7 @@ export function AdjustStockPage() {
 
   if (isPending) {
     return (
-      <SubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" back={{ to: detailPath, label: 'Kembali ke detail barang' }}>
+      <SubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" action={<HelpLink topic="barang-masuk" />} back={{ to: detailPath, label: 'Kembali ke detail barang' }}>
         <AdjustStockSkeleton />
       </SubpageLayout>
     );
@@ -30,7 +31,7 @@ export function AdjustStockPage() {
 
   if (error) {
     return (
-      <SubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" back={{ to: detailPath, label: 'Kembali ke detail barang' }}>
+      <SubpageLayout heading="Penyesuaian Stok" title="Sesuaikan stok" action={<HelpLink topic="barang-masuk" />} back={{ to: detailPath, label: 'Kembali ke detail barang' }}>
         <StockListError error={error} onRetry={handleRetry} />
       </SubpageLayout>
     );
@@ -38,14 +39,14 @@ export function AdjustStockPage() {
 
   if (!product) {
     return (
-      <SubpageLayout heading="Penyesuaian Stok" title="Barang tidak ditemukan" back={{ to: getListPath(location.state), label: 'Kembali ke daftar stok' }}>
+      <SubpageLayout heading="Penyesuaian Stok" title="Barang tidak ditemukan" action={<HelpLink topic="barang-masuk" />} back={{ to: getListPath(location.state), label: 'Kembali ke daftar stok' }}>
         <ProductNotFound />
       </SubpageLayout>
     );
   }
 
   return (
-    <SubpageLayout heading="Penyesuaian Stok" title={`Sesuaikan ${product.name}`} back={{ to: detailPath, label: 'Kembali ke detail barang' }}>
+    <SubpageLayout heading="Penyesuaian Stok" title={`Sesuaikan ${product.name}`} action={<HelpLink topic="barang-masuk" />} back={{ to: detailPath, label: 'Kembali ke detail barang' }}>
       <AdjustStockSummary product={product} />
       <Card className="mt-4">
         <CardContent>
