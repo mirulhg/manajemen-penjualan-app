@@ -1,4 +1,5 @@
 import { createBrowserRouter, Outlet } from 'react-router';
+import type { RouteObject } from 'react-router';
 
 import { OwnerOnly } from '../features/session';
 import { AppLayout } from './AppLayout';
@@ -7,7 +8,7 @@ import { RootError } from './RootError';
 import { RouteError } from './RouteError';
 import { UjiError } from './UjiError';
 
-export const router = createBrowserRouter([
+export const routes: RouteObject[] = [
   {
     element: <AppLayout />,
     ErrorBoundary: RootError,
@@ -196,4 +197,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+export const router = createBrowserRouter(routes);
