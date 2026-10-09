@@ -190,6 +190,6 @@ export const HELP_TOPICS = [
 
 export type HelpTopicSlug = (typeof HELP_TOPICS)[number]['slug'];
 
-export function findHelpTopic(slug: string): HelpTopicMeta | undefined {
+export function findHelpTopic(slug: string): (typeof HELP_TOPICS)[number] | undefined {
   return HELP_TOPICS.find((topic) => topic.slug === slug);
 }

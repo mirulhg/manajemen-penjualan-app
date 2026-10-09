@@ -48,6 +48,21 @@ export const router = createBrowserRouter([
             },
           },
           {
+            path: 'bantuan',
+            lazy: async () => {
+              const { HelpIndexPage } = await import('../features/help/components/HelpIndexPage');
+              return { Component: HelpIndexPage };
+            },
+          },
+          {
+            // Slug tak dikenal menampilkan NotFound; topik khusus pemilik dijaga di dalam halamannya, bukan OwnerOnly rute.
+            path: 'bantuan/:slug',
+            lazy: async () => {
+              const { HelpTopicRoute } = await import('./HelpTopicRoute');
+              return { Component: HelpTopicRoute };
+            },
+          },
+          {
             path: 'keluar-mode-kasir',
             lazy: async () => {
               const { ExitCashierModePage } = await import('../features/session/components/ExitCashierModePage');
