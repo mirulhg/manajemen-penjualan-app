@@ -1,5 +1,5 @@
 import { HelpLink } from '../../help';
-import { ChevronRight, Tags } from 'lucide-react';
+import { ChevronRight, CircleQuestionMark, Tags } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { DemoDataSection } from '../../demo-data';
@@ -24,6 +24,14 @@ export function SettingsPage() {
       <PinSection />
       <EnterCashierModeSection />
       <DemoDataSection />
+      <Link
+        to="/bantuan"
+        className="tap-row flex min-h-12 items-center gap-3 rounded-md border border-border bg-card px-4 py-2 font-medium"
+      >
+        <CircleQuestionMark aria-hidden="true" className="size-5 text-muted-foreground" />
+        <span className="flex-1">Bantuan &amp; panduan</span>
+        <ChevronRight aria-hidden="true" className="size-5 text-muted-foreground" />
+      </Link>
       <Link
         to="/kategori"
         className="tap-row flex min-h-12 items-center gap-3 rounded-md border border-border bg-card px-4 py-2 font-medium"

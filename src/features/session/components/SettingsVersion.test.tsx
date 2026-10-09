@@ -22,4 +22,10 @@ describe('SettingsPage', () => {
     expect(screen.getByText('developed by', { exact: false }).textContent).toBe('developed by dev.myrules');
     expect(screen.getByText('dev.myrules').className).toContain('font-signature');
   });
+
+  it('punya baris "Bantuan & panduan" ke halaman Bantuan', () => {
+    renderWithProviders(<SettingsPage />);
+
+    expect(screen.getByRole('link', { name: 'Bantuan & panduan' }).getAttribute('href')).toBe('/bantuan');
+  });
 });

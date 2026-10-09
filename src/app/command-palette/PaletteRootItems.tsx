@@ -4,6 +4,7 @@ import type { LucideIcon } from 'lucide-react';
 import { useSession } from '../../features/session';
 import { CommandGroup, CommandItem } from '@/components/ui/command';
 import { getVisiblePages, matchesQuery } from './palette-pages';
+import { PaletteHelpGroup } from './PaletteHelpGroup';
 import { PaletteProductGroup } from './PaletteProductGroup';
 
 type PaletteRootItemsProps = {
@@ -17,7 +18,8 @@ type PaletteAction = { label: string; icon: LucideIcon; keywords: string; run: (
 
 export function PaletteRootItems({ query, onNavigate, onStartRestock, onDownloadLastMonthSales }: PaletteRootItemsProps) {
   const { isCashierMode, alertsBellEnabled, alertsInCashierMode } = useSession();
-  const pages = getVisiblePages({ isCashierMode, canCashierSeeAlerts: alertsBellEnabled && alertsInCashierMode }).filter((page) =>
+  const access = { isCashierMode, canCashierSeeAlerts: alertsBellEnabled && alertsInCashierMode };
+  const pages = getVisiblePages(access).filter((page) =>
     matchesQuery(query, page.label, page.keywords),
   );
 
@@ -52,6 +54,7 @@ export function PaletteRootItems({ query, onNavigate, onStartRestock, onDownload
           ))}
         </CommandGroup>
       )}
+      <PaletteHelpGroup query={query} access={access} onNavigate={onNavigate} />
       <PaletteProductGroup query={query} heading="Barang" mode="detail" onNavigate={onNavigate} />
     </>
   );

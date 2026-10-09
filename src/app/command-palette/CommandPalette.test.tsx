@@ -111,7 +111,7 @@ describe('palette perintah', () => {
     const dialog = await openWithKeyboard(user);
 
     const labels = within(dialog).getAllByRole('option').map((option) => option.textContent);
-    expect(labels).toEqual(['Kasir', 'Stok', 'Keluar Mode Kasir']);
+    expect(labels).toEqual(['Kasir', 'Stok', 'Bantuan', 'Keluar Mode Kasir']);
     expect(within(dialog).queryByText('Aksi')).toBeNull();
   });
 
@@ -186,5 +186,44 @@ describe('palette perintah', () => {
     await user.keyboard('{Control>}k{/Control}');
 
     expect(screen.queryByRole('combobox')).toBeNull();
+  });
+
+  it('item "Bantuan" ada di grup Halaman untuk pemilik dan membuka indeks Bantuan', async () => {
+    const user = userEvent.setup();
+    renderPalette();
+
+    const dialog = await openWithKeyboard(user);
+    await user.keyboard('bantuan');
+    await user.click(within(dialog).getByRole('option', { name: 'Bantuan' }));
+
+    await waitFor(() => expect(lastPath()).toBe('/bantuan'));
+  });
+
+  it('grup Bantuan hanya muncul setelah mengetik, dan "retur" membuka topiknya untuk pemilik', async () => {
+    const user = userEvent.setup();
+    renderPalette();
+
+    const dialog = await openWithKeyboard(user);
+    expect(within(dialog).queryByText('Bantuan', { selector: '[cmdk-group-heading]' })).toBeNull();
+
+    await user.keyboard('retur');
+    const option = await within(dialog).findByRole('option', { name: 'Retur dan batal transaksi' });
+    expect(within(dialog).getByText('Bantuan', { selector: '[cmdk-group-heading]' })).toBeTruthy();
+    await user.click(option);
+
+    await waitFor(() => expect(lastPath()).toBe('/bantuan/retur-batal'));
+  });
+
+  it('topik khusus pemilik tidak muncul di Mode Kasir, topik untuk semua tetap muncul', async () => {
+    const user = userEvent.setup();
+    renderPalette({ isCashierMode: true });
+
+    const dialog = await openWithKeyboard(user);
+    await user.keyboard('retur');
+    expect(within(dialog).queryByRole('option', { name: 'Retur dan batal transaksi' })).toBeNull();
+
+    await user.clear(within(dialog).getByRole('combobox'));
+    await user.keyboard('pin');
+    expect(await within(dialog).findByRole('option', { name: 'Mode Kasir & PIN' })).toBeTruthy();
   });
 });
