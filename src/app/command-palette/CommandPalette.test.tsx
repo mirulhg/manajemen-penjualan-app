@@ -112,8 +112,19 @@ describe('palette perintah', () => {
     const dialog = await openWithKeyboard(user);
 
     const labels = within(dialog).getAllByRole('option').map((option) => option.textContent);
-    expect(labels).toEqual(['Kasir', 'Stok', 'Bantuan', 'Keluar Mode Kasir']);
+    expect(labels).toEqual(['Kasir', 'Stok', 'Apa yang baru', 'Bantuan', 'Keluar Mode Kasir']);
     expect(within(dialog).queryByText('Aksi')).toBeNull();
+  });
+
+  it('mengetik "pembaruan": halaman "Apa yang baru" dan topik panduannya muncul, dan memilih halamannya membuka /pembaruan', async () => {
+    const user = userEvent.setup();
+    renderPalette();
+
+    const dialog = await openWithKeyboard(user);
+    await user.type(within(dialog).getByRole('combobox'), 'pembaruan');
+    await user.click(await within(dialog).findByRole('option', { name: 'Apa yang baru' }));
+
+    expect(lastPath()).toBe('/pembaruan');
   });
 
   it('"Barang masuk…" berpindah ke daftar barang; memilih barang membuka halaman sesuaikan; Backspace kembali', async () => {

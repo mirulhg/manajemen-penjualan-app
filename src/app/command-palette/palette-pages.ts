@@ -1,4 +1,4 @@
-import { ArrowLeftRight, Bell, ChartColumn, CircleQuestionMark, FileText, History, LayoutDashboard, LogOut, Package, Receipt, Settings, ShoppingCart, Tags, TrendingUp } from 'lucide-react';
+import { ArrowLeftRight, Bell, ChartColumn, CircleQuestionMark, FileText, History, LayoutDashboard, LogOut, Package, Receipt, Settings, ShoppingCart, Sparkles, Tags, TrendingUp } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export type PalettePage = {
@@ -25,6 +25,7 @@ const OWNER_PAGES: PalettePage[] = [
   { to: '/peringatan', label: 'Peringatan', icon: Bell, keywords: 'stok menipis habis restock' },
   { to: '/kategori', label: 'Kategori', icon: Tags, keywords: 'kelompok barang' },
   { to: '/pengaturan', label: 'Pengaturan', icon: Settings, keywords: 'pin toko profil' },
+  { to: '/pembaruan', label: 'Apa yang baru', icon: Sparkles, keywords: 'versi pembaruan update perubahan changelog segera hadir rencana fitur baru' },
   { to: '/bantuan', label: 'Bantuan', icon: CircleQuestionMark, keywords: 'panduan cara pakai tolong' },
 ];
 
@@ -32,6 +33,7 @@ const CASHIER_PAGES: PalettePage[] = [
   { to: '/kasir', label: 'Kasir', icon: ShoppingCart, keywords: 'jual bayar' },
   { to: '/stok', label: 'Stok', icon: Package, keywords: 'barang produk' },
   { to: '/peringatan', label: 'Peringatan', icon: Bell, keywords: 'stok menipis habis restock' },
+  { to: '/pembaruan', label: 'Apa yang baru', icon: Sparkles, keywords: 'versi pembaruan update perubahan changelog segera hadir rencana fitur baru' },
   { to: '/bantuan', label: 'Bantuan', icon: CircleQuestionMark, keywords: 'panduan cara pakai tolong' },
   { to: '/keluar-mode-kasir', label: 'Keluar Mode Kasir', icon: LogOut, keywords: 'pin pemilik' },
 ];

@@ -10,6 +10,7 @@ import { PageEnter } from '../components/layout/PageEnter';
 import { PageShell } from '../components/layout/PageShell';
 import { TabBar } from '../components/layout/TabBar';
 import { useUnreadAlertCount } from '../features/alerts';
+import { UpdateNotice } from '../features/changelog';
 import { DemoBanner } from '../features/demo-data';
 import { HelpSheetHost } from '../features/help';
 import { canCashierSeeAlerts, useSession } from '../features/session';
@@ -70,6 +71,7 @@ export function AppLayout() {
         </PageEnter>
       </PageShell>
       <HelpSheetHost />
+      <UpdateNotice isCashierMode={isCashierMode} />
     <Toaster offset={{ bottom: 'var(--toast-offset)' }} mobileOffset={{ bottom: 'var(--toast-offset)' }} />
     </>
   );
