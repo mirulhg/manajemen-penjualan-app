@@ -1,4 +1,4 @@
-import { parseBold } from '../parse-bold';
+import { parseBold } from '@/utils/parse-bold';
 
 type HelpRichTextProps = {
   text: string;
