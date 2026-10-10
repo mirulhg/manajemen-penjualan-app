@@ -23,6 +23,7 @@ async function settle() {
 describe('UpdateNotice', () => {
   beforeEach(async () => {
     await resetDatabaseWithSeed();
+    await db.settings.delete('notifiedVersion');
     toast.dismiss();
   });
 

@@ -1,11 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
+import packageJson from '../../../package.json' with { type: 'json' };
 import { CHANGELOG_ENTRIES } from './changelog-entries';
 import { CURRENT_RELEASE } from './current-release';
 import { ROADMAP_ITEMS } from './roadmap-items';
 import { getVisibleEntries, getVisibleRoadmap } from './visibility';
 
 describe('data changelog', () => {
+  it('entri teratas dan CURRENT_RELEASE sama dengan versi di package.json', () => {
+    expect(CHANGELOG_ENTRIES[0]?.latestVersion).toBe(packageJson.version);
+    expect(CURRENT_RELEASE.version).toBe(packageJson.version);
+  });
+
   it('latestVersion unik dan tanggal tidak naik ke bawah', () => {
     const versions = CHANGELOG_ENTRIES.map((entry) => entry.latestVersion);
     expect(new Set(versions).size).toBe(versions.length);

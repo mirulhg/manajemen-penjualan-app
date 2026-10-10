@@ -15,6 +15,7 @@ vi.mock('../current-release', () => ({
 describe('UpdateNotice di Mode Kasir', () => {
   beforeEach(async () => {
     await resetDatabaseWithSeed();
+    await db.settings.delete('notifiedVersion');
     toast.dismiss();
   });
 
