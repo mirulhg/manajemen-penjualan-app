@@ -174,6 +174,15 @@ export const HELP_TOPICS = [
     },
   },
   {
+    slug: 'pembaruan',
+    title: 'Apa yang baru & Segera hadir',
+    group: 'mengatur',
+    summary: 'Melihat perubahan di setiap versi aplikasi dan fitur yang sedang disiapkan.',
+    keywords: 'versi pembaruan update perubahan rencana segera hadir',
+    audience: 'all',
+    openPage: { to: '/pembaruan', label: 'Buka Pembaruan' },
+  },
+  {
     slug: 'istilah',
     title: 'Kamus istilah',
     group: 'istilah',

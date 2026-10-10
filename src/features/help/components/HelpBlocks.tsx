@@ -1,5 +1,5 @@
 import type { HelpBlock, HelpListItem } from '../types';
-import { HelpRichText } from './HelpRichText';
+import { RichText } from '@/components/ui/RichText';
 
 type HelpBlocksProps = {
   // Sudah disaring menurut mode oleh pemanggil (filterSections).
@@ -12,12 +12,12 @@ function ItemList({ items, isOrdered }: { items: readonly HelpListItem[]; isOrde
     <Tag className={isOrdered ? 'list-decimal space-y-2 pl-6' : 'list-disc space-y-2 pl-6'}>
       {items.map((item) => (
         <li key={item.text}>
-          <HelpRichText text={item.text} />
+          <RichText text={item.text} />
           {item.children && (
             <ul className="mt-1 list-disc space-y-1 pl-5">
               {item.children.map((child) => (
                 <li key={child}>
-                  <HelpRichText text={child} />
+                  <RichText text={child} />
                 </li>
               ))}
             </ul>
@@ -33,7 +33,7 @@ function BlockView({ block }: { block: HelpBlock }) {
     case 'paragraph':
       return (
         <p>
-          <HelpRichText text={block.text} />
+          <RichText text={block.text} />
         </p>
       );
     case 'steps':
@@ -58,7 +58,7 @@ function BlockView({ block }: { block: HelpBlock }) {
                 <tr key={row.cells[0]} className="border-t border-border align-top">
                   {row.cells.map((cell, index) => (
                     <td key={cell} className={index === 1 ? 'min-w-56 px-3 py-2' : 'min-w-32 px-3 py-2'}>
-                      <HelpRichText text={cell} />
+                      <RichText text={cell} />
                     </td>
                   ))}
                 </tr>

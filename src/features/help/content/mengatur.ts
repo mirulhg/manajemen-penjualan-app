@@ -146,7 +146,52 @@ export const MENGATUR_CONTENT = {
             { text: '**PIN pemilik** dan **Mode Kasir:** lihat topik Mode Kasir & PIN.' },
             { text: '**Data contoh:** lihat topik Mencoba dengan data contoh.' },
             { text: '**"Kelola kategori":** membuka halaman Kategori.' },
-            { text: '**Versi aplikasi:** tertulis di paling bawah. Sebutkan nomor ini saat melaporkan masalah.' },
+            {
+              text: '**"Apa yang baru":** daftar perubahan di setiap versi dan fitur yang akan datang. **Versi aplikasi** tertulis di paling bawah; sebutkan nomor ini saat melaporkan masalah.',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  pembaruan: [
+    {
+      heading: 'Untuk apa',
+      blocks: [
+        {
+          type: 'paragraph',
+          text: 'Mengetahui apa saja yang berubah setiap kali aplikasi diperbarui, dan fitur apa yang sedang disiapkan.',
+        },
+      ],
+    },
+    {
+      heading: 'Langkah',
+      blocks: [
+        {
+          type: 'steps',
+          items: [
+            { text: 'Buka **Pengaturan** → "Apa yang baru", atau tekan Cari (Ctrl K / ⌘K) lalu ketik "pembaruan".' },
+            {
+              text: 'Tab **"Apa yang baru"** berisi perubahan di setiap versi, dari yang terbaru. Versi yang sedang Anda pakai diberi tanda "Versi Anda".',
+            },
+            { text: 'Tab **"Segera hadir"** berisi fitur yang sedang disiapkan.' },
+          ],
+        },
+      ],
+    },
+    {
+      heading: 'Perlu diketahui',
+      blocks: [
+        {
+          type: 'list',
+          items: [
+            {
+              text: 'Setelah aplikasi diperbarui, muncul pemberitahuan "Diperbarui ke versi …" satu kali. Tekan "Lihat yang baru" untuk membuka halaman ini.',
+            },
+            {
+              text: 'Di tab "Segera hadir", **Berikutnya** berarti akan dikerjakan dalam waktu dekat, **Direncanakan** sudah pasti tetapi belum dijadwalkan, dan **Dipertimbangkan** masih dinilai sehingga bisa berubah atau batal.',
+            },
+            { ownerOnly: true, text: 'Selama ada versi baru yang belum Anda lihat, tanda **"Baru"** muncul di Pengaturan.' },
           ],
         },
       ],

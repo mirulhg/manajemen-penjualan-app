@@ -30,9 +30,9 @@ describe('isi panduan', () => {
     HELP_TOPICS.forEach((topic) => expect(HELP_CONTENT[topic.slug].length).toBeGreaterThan(0));
   });
 
-  it('memuat 20 topik dengan slug unik dan kelompok yang dikenal', () => {
-    expect(HELP_TOPICS).toHaveLength(20);
-    expect(new Set(HELP_TOPICS.map((topic) => topic.slug)).size).toBe(20);
+  it('memuat 21 topik dengan slug unik dan kelompok yang dikenal', () => {
+    expect(HELP_TOPICS).toHaveLength(21);
+    expect(new Set(HELP_TOPICS.map((topic) => topic.slug)).size).toBe(21);
     const groups = HELP_GROUPS.map((group) => group.id);
     HELP_TOPICS.forEach((topic) => expect(groups).toContain(topic.group));
   });
@@ -59,9 +59,9 @@ describe('penyaringan menurut mode', () => {
 
   it('kasir hanya melihat topik untuk semua, dan peringatan hanya bila diizinkan', () => {
     const titles = getVisibleTopics(cashier).map((topic) => topic.title);
-    expect(titles).toEqual(['Mencatat penjualan di Kasir', 'Melihat daftar stok', 'Mode Kasir & PIN', 'Kamus istilah', 'Tanya jawab']);
+    expect(titles).toEqual(['Mencatat penjualan di Kasir', 'Melihat daftar stok', 'Mode Kasir & PIN', 'Apa yang baru & Segera hadir', 'Kamus istilah', 'Tanya jawab']);
     expect(getVisibleTopics({ ...cashier, canCashierSeeAlerts: true }).map((topic) => topic.slug)).toContain('peringatan');
-    expect(getVisibleTopics(owner)).toHaveLength(20);
+    expect(getVisibleTopics(owner)).toHaveLength(21);
   });
 
   it('menyembunyikan baris istilah pemilik dari kasir', () => {

@@ -33,6 +33,7 @@ describe('label tujuan', () => {
       kategori: 'Buka Kategori',
       pengaturan: 'Buka Pengaturan',
       'mode-kasir': 'Buka Pengaturan',
+      pembaruan: 'Buka Pembaruan',
       istilah: null,
       'masalah-umum': null,
     };

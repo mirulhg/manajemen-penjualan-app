@@ -1,10 +1,10 @@
 import { parseBold } from '@/utils/parse-bold';
 
-type HelpRichTextProps = {
+type RichTextProps = {
   text: string;
 };
 
-export function HelpRichText({ text }: HelpRichTextProps) {
+export function RichText({ text }: RichTextProps) {
   return (
     <>
       {parseBold(text).map((segment, index) =>

@@ -64,6 +64,14 @@ export const routes: RouteObject[] = [
             },
           },
           {
+            // Terbuka untuk pemilik dan kasir; poin khusus pemilik disaring di dalam halamannya.
+            path: 'pembaruan',
+            lazy: async () => {
+              const { ChangelogPage } = await import('../features/changelog/components/ChangelogPage');
+              return { Component: ChangelogPage };
+            },
+          },
+          {
             path: 'keluar-mode-kasir',
             lazy: async () => {
               const { ExitCashierModePage } = await import('../features/session/components/ExitCashierModePage');

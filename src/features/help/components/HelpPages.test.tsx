@@ -24,12 +24,12 @@ function renderHelp(route: string, session: Parameters<typeof renderWithProvider
 }
 
 describe('indeks Bantuan', () => {
-  it('pemilik melihat 5 kelompok dan 20 topik dengan ringkasan', () => {
+  it('pemilik melihat 5 kelompok dan 21 topik dengan ringkasan', () => {
     renderHelp('/bantuan');
 
     expect(screen.getByRole('heading', { level: 1, name: 'Bantuan' })).toBeTruthy();
     expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(HELP_GROUPS.length);
-    expect(screen.getAllByRole('link')).toHaveLength(20);
+    expect(screen.getAllByRole('link')).toHaveLength(21);
     expect(screen.getByRole('link', { name: /Mencatat penjualan di Kasir/ }).getAttribute('href')).toBe('/bantuan?bantuan=kasir');
   });
 
@@ -44,7 +44,7 @@ describe('indeks Bantuan', () => {
     renderHelp('/bantuan', { isCashierMode: true });
 
     const titles = screen.getAllByRole('link').map((link) => within(link).getByText(/./, { selector: 'span.font-medium' }).textContent);
-    expect(titles).toEqual(['Mencatat penjualan di Kasir', 'Melihat daftar stok', 'Mode Kasir & PIN', 'Kamus istilah', 'Tanya jawab']);
+    expect(titles).toEqual(['Mencatat penjualan di Kasir', 'Melihat daftar stok', 'Mode Kasir & PIN', 'Apa yang baru & Segera hadir', 'Kamus istilah', 'Tanya jawab']);
     expect(screen.queryByRole('heading', { name: 'Memulai' })).toBeNull();
     expect(screen.queryByRole('heading', { name: 'Melihat hasil' })).toBeNull();
   });
