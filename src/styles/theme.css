@@ -15,6 +15,9 @@
   --muted-foreground: #5c5649;
   --accent: #ff6d1f;
   --accent-foreground: #222222;
+  /* Oranye gelap khusus untuk TEKS di latar terang (background/card); jangan dipakai di atas secondary. */
+  --accent-text: #b4470f;
+  --subtle-foreground: #6e6a5a;
   --destructive: #b42318;
   --destructive-bg: #fbe3dc;
   --success: #1f6b3a;
@@ -73,6 +76,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-text: var(--accent-text);
+  --color-subtle-foreground: var(--subtle-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-bg: var(--destructive-bg);
   --color-success: var(--success);

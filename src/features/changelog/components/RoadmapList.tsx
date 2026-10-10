@@ -14,7 +14,7 @@ const GROUPS: readonly { status: RoadmapStatus; title: string }[] = [
 export function RoadmapList({ items }: RoadmapListProps) {
   return (
     <div className="space-y-6">
-      <p className="text-muted-foreground">{'Rencana dapat berubah. Fitur yang sudah tersedia akan pindah ke "Apa yang baru".'}</p>
+      <p className="text-accent-text">{'Rencana dapat berubah. Fitur yang sudah tersedia akan pindah ke "Apa yang baru".'}</p>
       {GROUPS.map((group) => {
         const groupItems = items.filter((item) => item.status === group.status);
         if (groupItems.length === 0) return null;
@@ -32,7 +32,7 @@ export function RoadmapList({ items }: RoadmapListProps) {
                       <h3 className="font-semibold">{item.title}</h3>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground">{item.description}</p>
+                      <p className="text-subtle-foreground">{item.description}</p>
                     </CardContent>
                   </Card>
                 </li>

@@ -30,7 +30,7 @@ export function ChangelogList({ entries, currentVersion }: ChangelogListProps) {
                 </p>
               </CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-1.5 pl-5">
+                <ul className="list-disc space-y-1.5 pl-5 text-subtle-foreground">
                   {entry.items.map((item) => (
                     <li key={item.text}>
                       <RichText text={item.text} />

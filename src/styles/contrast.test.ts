@@ -37,6 +37,11 @@ const TEXT_PAIRS: [string, string][] = [
   ['muted-foreground', 'background'],
   ['muted-foreground', 'card'],
   ['muted-foreground', 'secondary'],
+  // Teks catatan dan poin Pembaruan; sengaja tidak dipasangkan dengan secondary.
+  ['accent-text', 'background'],
+  ['accent-text', 'card'],
+  ['subtle-foreground', 'background'],
+  ['subtle-foreground', 'card'],
   ['secondary-foreground', 'secondary'],
   ['primary-foreground', 'primary'],
   ['accent-foreground', 'accent'],
